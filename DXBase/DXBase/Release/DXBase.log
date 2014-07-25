@@ -1,0 +1,48 @@
+﻿Build started 7/24/2014 3:35:17 AM.
+     1>Project "E:\class\GSPFinalProject\DXBase\DXBase\DXBase.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt DXFrame.cpp DXTest.cpp RenVector.cpp ResourceManager.cpp InputHandler.cpp SoundFrame.cpp WinMain.cpp
+         DXFrame.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>DXFrame.cpp(356): error C2664: 'ID3DXFont::DrawTextW' : cannot convert parameter 2 from 'const char *' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXFrame.cpp(366): warning C4244: 'argument' : conversion from 'DWORD' to 'FLOAT', possible loss of data
+     1>DXFrame.cpp(367): warning C4244: 'argument' : conversion from 'DWORD' to 'FLOAT', possible loss of data
+     1>DXFrame.cpp(368): warning C4244: 'argument' : conversion from 'DWORD' to 'FLOAT', possible loss of data
+     1>DXFrame.cpp(385): error C2664: 'ID3DXFont::DrawTextW' : cannot convert parameter 2 from 'const char *' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>DXFrame.cpp(393): warning C4244: '=' : conversion from 'DWORD' to 'float', possible loss of data
+     1>DXFrame.cpp(396): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>DXFrame.cpp(475): error C2664: 'D3DXCreateTextureFromFileExW' : cannot convert parameter 2 from 'LPCSTR' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+         DXTest.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+         RenVector.cpp
+         ResourceManager.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>ResourceManager.cpp(45): warning C4018: '<' : signed/unsigned mismatch
+     1>ResourceManager.cpp(111): warning C4018: '<' : signed/unsigned mismatch
+     1>ResourceManager.cpp(119): warning C4018: '<' : signed/unsigned mismatch
+         InputHandler.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>InputHandler.cpp(78): warning C4244: '=' : conversion from 'float' to 'WORD', possible loss of data
+     1>InputHandler.cpp(79): warning C4244: '=' : conversion from 'float' to 'WORD', possible loss of data
+         SoundFrame.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+         WinMain.cpp
+         C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>WinMain.cpp(22): error C2731: 'WinMain' : function cannot be overloaded
+                 WinMain.cpp(19) : see declaration of 'WinMain'
+     1>WinMain.cpp(36): error C2440: '=' : cannot convert from 'const char [8]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>WinMain.cpp(69): error C2664: 'CreateWindowExW' : cannot convert parameter 2 from 'const char [8]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>WinMain.cpp(101): error C2664: 'CreateWindowExW' : cannot convert parameter 2 from 'const char [8]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>WinMain.cpp(252): error C2664: 'UnregisterClassW' : cannot convert parameter 1 from 'const char [8]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>Done Building Project "E:\class\GSPFinalProject\DXBase\DXBase\DXBase.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:04.43
