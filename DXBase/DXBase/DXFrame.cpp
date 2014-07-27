@@ -128,6 +128,24 @@ void DXFrame::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed)
 	
 }
 
+void DXFrame::rotateCam(cam& camr, float dist, float rot, float angle) {
+	D3DXMATRIX total;
+	D3DXMATRIX temp;
+	D3DXVECTOR3 out;
+	D3DXVECTOR3 scal;
+	D3DXQUATERNION r;
+	D3DXMatrixIdentity(&total);
+	temp = total;
+	D3DXMatrixTranslation(&total,0,0,-dist);
+	D3DXMatrixRotationYawPitchRoll(&temp,D3DXToRadian(rot),D3DXToRadian(angle),0);
+	total *= temp;
+	D3DXMatrixIdentity(&temp);
+	D3DXMatrixTranslation(&temp,camr.cam_look_pos.x,camr.cam_look_pos.y,camr.cam_look_pos.z);
+	total *= temp;
+	D3DXMatrixDecompose(&scal,&r,&out,&total);
+	camr.cam_pos = out;
+}
+
 bool DXFrame::setCam(int camNum,cam* camInfo) {
 	camNum -= 1;
 	if(camNum < numViewPorts) {

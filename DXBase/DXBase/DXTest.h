@@ -17,6 +17,7 @@ private:
 	std::stringstream ss;
 	int numCon;
 	DWORD cTime,lTime;
+	float dist, rot, angle;
 	//dt in seconds
 	float dt;
 public:

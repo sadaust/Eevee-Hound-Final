@@ -66,6 +66,7 @@ private:
 public:
 	DXFrame();
 	~DXFrame();
+	void rotateCam(cam& camra,float distance,float rot,float angle);
 	void init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed);
 	void reSize(HWND& hWnd, HINSTANCE& hInst,bool bWindowed);
 	void setLight(int index, const D3DLIGHT9* light){if(m_pD3DDevice)m_pD3DDevice->SetLight(index,light);}

@@ -7,6 +7,9 @@ DXTest::DXTest() {
 }
 
 void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
+	dist = 2;
+	rot = 0;
+	angle = 0;
 	input.init(hWnd,hInst);
 	sFrame.Init();
 	cTime = lTime = GetTickCount();
@@ -152,10 +155,25 @@ void DXTest::update() {
 			tem = state.Gamepad.sThumbLY;
 			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 				tem = 0;
-			temp.cam_pos.x += (tem/32767.0f)*dt;
+			dist += (tem/32767.0f)*dt;
+			D3DXMatrixTranslation(&testCube.matrix,dist,0,0);
 			ss.str("");
 			ss<<tem/32767.0f;
 			testText.text = ss.str();
+			
+			tem = state.Gamepad.sThumbRX;
+			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+				tem = 0;
+			rot += ((tem/32767.0f)*dt)*10;
+			tem = state.Gamepad.sThumbRY;
+			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+				tem = 0;
+			angle += ((tem/32767.0f)*dt)*10;
+			if(angle >= 90)
+				angle = 89.9;
+			else if(angle <=-90)
+				angle = -89.9;
+			DXVid.rotateCam(temp,2,rot,angle);
 		}
 	}
 	DXVid.setCam(1,&temp);
@@ -163,10 +181,12 @@ void DXTest::update() {
 }
 
 void DXTest::draw() {
+	RenInfo tempRen;
 	if(DXVid.rendererLost()) {
 
 	} else {
 		DXVid.Render();
+		//DXVid.clearRen();
 	}
 }
 
