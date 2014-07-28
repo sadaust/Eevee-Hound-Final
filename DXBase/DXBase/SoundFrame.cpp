@@ -79,24 +79,28 @@ void SoundFrame::ShutDown() {
 }
 
 void SoundFrame::load(const char* name, Sound *sound) {
-	f_sys->createSound(name,FMOD_LOOP_NORMAL|FMOD_3D|FMOD_HARDWARE,0,sound);
+	f_sys->createSound(name,FMOD_3D|FMOD_HARDWARE,0,sound);
 }
 
 void SoundFrame::loadStream(const char* name, Sound *stream) {
 	f_sys->createStream(name,FMOD_LOOP_NORMAL|FMOD_2D|FMOD_HARDWARE,0,stream);
 }
 
-void SoundFrame::Play(Sound sound,float xPos,float yPos,float zPos,float xVel,float yVel,float zVel) {
+void SoundFrame::Play(SoundStruct& soundS,float xPos,float yPos,float zPos,float xVel,float yVel,float zVel) {
 	FMOD::Channel *chan = 0;
 	FMOD_VECTOR pos = {xPos,yPos,zPos};
 	FMOD_VECTOR vel = {xVel,yVel,zVel};
 
-	f_sys->playSound(FMOD_CHANNEL_FREE,sound,false,&chan);
+	f_sys->playSound(FMOD_CHANNEL_FREE,soundS.sound,false,&chan);
 	chan->set3DAttributes(&pos,&vel);
+	chan->set3DMinMaxDistance(soundS.minDist,soundS.maxDist);
+	chan->setVolume(soundS.volume);
 }
 
-void SoundFrame::PlayStream(Sound sound,bool mute) {
-	f_sys->playSound(FMOD_CHANNEL_FREE,sound,mute,0);
+void SoundFrame::PlayStream(MusicStruct& soundS,bool mute) {
+	FMOD::Channel *chan = 0;
+	f_sys->playSound(FMOD_CHANNEL_FREE,soundS.sound,mute,&chan);
+	chan->setVolume(soundS.volume);
 }
 
 int SoundFrame::getNumListen() {

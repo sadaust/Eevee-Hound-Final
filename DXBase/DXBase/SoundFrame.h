@@ -28,12 +28,12 @@ public:
 	SoundFrame();
 	void Init();
 	void Restart();
-	void Play(Sound,float xPos,float yPos,float zPos,float xVel,float yVel,float zVel);
+	void Play(SoundStruct&,float xPos,float yPos,float zPos,float xVel,float yVel,float zVel);
 	void ShutDown();
 	void update();
 	void load(const char*,Sound*);
 	void loadStream(const char* name, Sound *stream);
-	void PlayStream(Sound,bool mute);
+	void PlayStream(MusicStruct&,bool mute);
 	int  getNumListen();
 	void setNumListen(int numListen);
 	void setListenProp(int numListen,listenProp& prop);

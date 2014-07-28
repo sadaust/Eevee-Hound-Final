@@ -14,9 +14,12 @@ private:
 	TextStruct testText;
 	D3DMATERIAL9 testMat;
 	InputHandler input;
+	listenProp tempProp;
 	std::stringstream ss;
+	SoundStruct* testSound;
+	MusicStruct* testMusic;
 	int numCon;
-	DWORD cTime,lTime;
+	DWORD cTime,lTime,tTime;
 	float dist, rot, angle;
 	//dt in seconds
 	float dt;

@@ -4,6 +4,7 @@
 
 DXTest::DXTest() {
 	resMan.changeDevice(&DXVid);
+	resMan.changeDevice(&sFrame);
 }
 
 void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
@@ -12,7 +13,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	angle = 0;
 	input.init(hWnd,hInst);
 	sFrame.Init();
-	cTime = lTime = GetTickCount();
+	tTime = cTime = lTime = GetTickCount();
 	numCon = input.numGamePads();
 	RenInfo tempRen;
 	ss<<numCon;
@@ -82,6 +83,19 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	temp3.cam_pos.z = -2;
 
 	temp4.cam_pos.x = -2;
+	
+	tempProp.pos.x = temp.cam_pos.x;
+	tempProp.pos.y = temp.cam_pos.y;
+	tempProp.pos.z = temp.cam_pos.z;
+	tempProp.up.x = temp.cam_up_vec.x;
+	tempProp.up.y = temp.cam_up_vec.y;
+	tempProp.up.z = temp.cam_up_vec.z;
+	tempProp.vel.x = tempProp.vel.y = tempProp.vel.z = 0;
+	tempProp.forward.x = tempProp.forward.y = tempProp.forward.z = 0;
+	sFrame.setListenProp(0,tempProp);
+	testSound = resMan.loadSound("plinkhit.wav",1,5,1);
+	testMusic = resMan.loadMusic("battle.mp3",0.100);
+	sFrame.PlayStream(*testMusic,false);
 
 	DXVid.setViewCount(4);
 	DXVid.toggleSS();
@@ -148,7 +162,10 @@ void DXTest::update() {
 	dt /= CLOCKS_PER_SEC;
 	SHORT tem;
 	input.update();
+	sFrame.update();
+	if(cTime>tTime) {
 	for(int i = 0; i<numCon;++i) {
+		
 		input.getState(i,state);
 		input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
 		if(i == 0) {
@@ -174,10 +191,19 @@ void DXTest::update() {
 			else if(angle <=-90)
 				angle = -89.9;
 			DXVid.rotateCam(temp,2,rot,angle);
+			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
+				sFrame.Play(*testSound,dist,0,0,0,0,0);
 		}
-	}
+		tTime = cTime+(CLOCKS_PER_SEC/60);
+		}
+	tempProp.pos.x = temp.cam_pos.x;
+	tempProp.pos.y = temp.cam_pos.y;
+	tempProp.pos.z = temp.cam_pos.z;
+	sFrame.setListenProp(0,tempProp);
 	DXVid.setCam(1,&temp);
 	lTime = cTime;
+	}
+	
 }
 
 void DXTest::draw() {
@@ -196,9 +222,9 @@ void DXTest::resize(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 }
 
 void DXTest::shutDown() {
-	sFrame.ShutDown();
 	input.shutdown();
 	resMan.clear();
+	sFrame.ShutDown();
 	DXVid.Shutdown();
 	for(int i = 0; i<numCon;++i) {
 		input.stopVibration(i);

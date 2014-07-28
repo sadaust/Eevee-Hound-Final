@@ -96,6 +96,10 @@
   <ItemGroup>
     <Image Include="uvtest.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="battle.mp3" />
+    <Media Include="plinkhit.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -33,6 +33,18 @@ struct TextureStruct {
 	D3DCOLOR mask;
 };
 
+struct SoundStruct {
+	Sound sound;
+	float minDist;
+	float maxDist;
+	float volume;
+};
+
+struct MusicStruct {
+	Sound sound;
+	float volume;
+};
+
 struct PrimObj {
 	PrimStruct* primInfo;
 	TextureStruct* Tex;

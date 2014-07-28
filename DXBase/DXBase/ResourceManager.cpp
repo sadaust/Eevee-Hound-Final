@@ -1,11 +1,13 @@
 #include "ResourceManager.h"
+#include "SoundFrame.h"
 
 ResourceManager::ResourceManager() {
 	loadDev = 0;
 }
 
-ResourceManager::ResourceManager(DXFrame* frame) {
+ResourceManager::ResourceManager(DXFrame* frame,SoundFrame* sFrame) {
 	loadDev = frame;
+	soundDev = sFrame;
 }
 
 ResourceManager::~ResourceManager() {
@@ -23,7 +25,7 @@ void ResourceManager::clear() {
 	}
 	//clear all primitives
 	PrimStruct* tempPrim;
-	while(primList.size()>0) {
+	while(primList.size() > 0) {
 		tempPrim = &primList.back();
 		tempPrim->obj->Release();
 		tempPrim->obj = 0;
@@ -32,6 +34,21 @@ void ResourceManager::clear() {
 		tempPrim->objInd->Release();
 		tempPrim->objInd = 0;
 		primList.pop_back();
+	}
+	//clear all sounds
+	SoundStruct* tempSound;
+	while(soundList.size() > 0) {
+		tempSound = &soundList.back();
+		tempSound->sound->release();
+		tempSound->sound = 0;
+		soundList.pop_back();
+	}
+	//clear all music
+	MusicStruct* tempMusic;
+	while(musicList.size() > 0) {
+		tempMusic = &musicList.back();
+		tempMusic->sound->release();
+		musicList.pop_back();
 	}
 	//clear all materials
 	matList.clear();
@@ -107,6 +124,10 @@ void ResourceManager::changeDevice(DXFrame* frame) {
 	loadDev = frame;
 }
 
+void ResourceManager::changeDevice(SoundFrame* sFrame) {
+	soundDev = sFrame;
+}
+
 bool ResourceManager::isResLoaded(LPSTR name) {
 	for(int i = 0; i < resources.size();++i) {
 		if(name == resources[i].name)
@@ -149,4 +170,32 @@ PrimStruct* ResourceManager::loadPrim(LPCSTR name,float height,float width,float
 	tempRes.res = &primList.back();
 	resources.push_back(tempRes);
 	return (PrimStruct*)tempRes.res;
+}
+
+SoundStruct* ResourceManager::loadSound(LPCSTR name,float minDist, float maxDist,float volume) {
+	SoundStruct tempSound;
+	resStruct tempRes;
+	tempRes.type = soundEffect;
+	tempRes.name = name;
+	soundDev->load(name,&tempSound.sound);
+	tempSound.minDist = minDist;
+	tempSound.maxDist = maxDist;
+	tempSound.volume = volume;
+	soundList.push_back(tempSound);
+	tempRes.res = &soundList.back();
+	resources.push_back(tempRes);
+	return (SoundStruct*)tempRes.res;
+}
+
+MusicStruct* ResourceManager::loadMusic(LPCSTR name,float volume) {
+	MusicStruct tempMusic;
+	resStruct tempRes;
+	tempRes.type = music;
+	tempRes.name = name;
+	soundDev->loadStream(name,&tempMusic.sound);
+	tempMusic.volume = volume;
+	musicList.push_back(tempMusic);
+	tempRes.res = &musicList.back();
+	resources.push_back(tempRes);
+	return (MusicStruct*)tempRes.res;
 }
