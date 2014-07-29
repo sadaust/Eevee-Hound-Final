@@ -118,10 +118,11 @@ void DXFrame::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed)
 		m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 		m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 		m_pD3DDevice->GetViewport(&defaultView);
 		m_bLost = false;
-		//m_bSplitScreen = false;
-		//viewPorts[0].viewPort = defaultView;
+		m_bSplitScreen = false;
+		viewPorts[0].viewPort = defaultView;
 	}
 	else
 		m_bLost = true;
@@ -316,13 +317,14 @@ void DXFrame::Render() {
 	rect.bottom -= rect.top;
 	rect.top = 0;
 
-	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f), 1.0f, 0))) {
+	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0))) {
 		if(SUCCEEDED(m_pD3DDevice->BeginScene())) {
 			D3DXMATRIX TransMat;
 			RenInfo* tempRen;
 			PrimObj* tempPrim;
 			SpriteObj* tempSprite;
 			TextStruct* tempText;
+			ModelObj* tempMod;
 			D3DXMATRIX scale,loc;
 			//TODO: add render code
 			for(int i = 0;i<=numViewPorts;++i) {
@@ -343,7 +345,6 @@ void DXFrame::Render() {
 					{
 					case primitive:
 						tempPrim = (PrimObj*)tempRen->asset;
-						m_pD3DDevice->SetTransform(D3DTS_WORLD,&tempPrim->matrix);
 						m_pD3DDevice->SetStreamSource(0,tempPrim->primInfo->obj, 0, sizeof(Vertex));
 						m_pD3DDevice->SetIndices(tempPrim->primInfo->objInd);
 						m_pD3DDevice->SetVertexDeclaration(tempPrim->primInfo->objDec);
@@ -354,6 +355,17 @@ void DXFrame::Render() {
 						m_pD3DDevice->SetTransform(D3DTS_WORLD, &tempPrim->matrix);
 						//render
 						m_pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST,0,0,tempPrim->primInfo->numVerts,0,tempPrim->primInfo->numPrim);
+						break;
+					case model:
+						tempMod = (ModelObj*)tempRen->asset;
+						m_pD3DDevice->SetTransform(D3DTS_WORLD,&tempMod->matrix);
+						for(int i = 0;i < tempMod->mod->numMats;++i) {
+							//set texture
+							m_pD3DDevice->SetTexture(0,tempMod->mod->textures[i]->objTex);
+							m_pD3DDevice->SetMaterial(&tempMod->mod->mats[i].MatD3D);
+							//draw model
+							tempMod->mod->mesh->DrawSubset(i);
+						}
 						break;
 					case sprite:
 						tempSprite = (SpriteObj*)tempRen->asset;
@@ -411,7 +423,7 @@ void DXFrame::Render() {
 	cTime = GetTickCount();
 	if(cTime-ltime >= 1000.0f)
 	{
-		fps = framCount;
+		fps = (int)framCount;
 		framCount = 0;
 		ltime = cTime;
 		++waitTime;
@@ -497,14 +509,35 @@ void DXFrame::loadDX(LPCTSTR name,LPD3DXBUFFER* buffer,DWORD& numMat, LPD3DXMESH
 	D3DXLoadMeshFromX(name,D3DXMESH_SYSTEMMEM,m_pD3DDevice,buffer,buffer,buffer,&numMat,mesh);
 }
 
+void DXFrame::loadXFile(LPCTSTR name,ModelStruct& obj) {
+
+	D3DXLoadMeshFromX(name, // file to load
+		D3DXMESH_MANAGED, // flags for memory management
+		m_pD3DDevice, // DXD3D device
+		&obj.adj, // adjacency buffer for mesh
+		&obj.matPoint, // materials in mesh
+		0, // effects (such as lighting)
+		// similar to those in a .fx file
+		&obj.numMats, // count of materials in file
+		&obj.mesh); // reference to the mesh object
+	obj.textures = new TextureStruct*[obj.numMats];
+	obj.mats = (D3DXMATERIAL*)obj.matPoint->GetBufferPointer();
+}
+
 void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth) {
 	float h = height/2;
 	float w = width/2;
 	float d = depth/2;
+	obj.bottom = -h;
+	obj.top = h;
+	obj.left = -w;
+	obj.right = w;
+	obj.back = -d;
+	obj.front = d;
 	Vertex m_cubeVerts[24];
 	WORD m_cubeIndices[36];
 	// Load vertex info, listed per cube face quads
-	// top
+	// back
 	m_cubeVerts[0].position = D3DXVECTOR3(-w, -h, -d); 
 	m_cubeVerts[1].position = D3DXVECTOR3(-w, h, -d); 
 	m_cubeVerts[2].position = D3DXVECTOR3(w, h, -d); 
@@ -513,12 +546,12 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[1].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[2].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[3].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
-	m_cubeVerts[0].uv = D3DXVECTOR2(0.0f, 1.0f); 
-	m_cubeVerts[1].uv = D3DXVECTOR2(0.0f, 0.875f); 
-	m_cubeVerts[2].uv = D3DXVECTOR2(0.25f, 0.875f); 
-	m_cubeVerts[3].uv = D3DXVECTOR2(0.25f, 1.0f);
+	m_cubeVerts[1].uv = D3DXVECTOR2(0.25f, 0.0f); 
+	m_cubeVerts[2].uv = D3DXVECTOR2(0.5f, 0.0f); 
+	m_cubeVerts[3].uv = D3DXVECTOR2(0.5f, 0.875f); 
+	m_cubeVerts[0].uv = D3DXVECTOR2(0.25f, 0.875f);
 
-	// Bottom 
+	// front 
 	m_cubeVerts[4].position = D3DXVECTOR3(-w, -h, d); 
 	m_cubeVerts[5].position = D3DXVECTOR3(w, -h, d); 
 	m_cubeVerts[6].position = D3DXVECTOR3(w, h, d); 
@@ -527,12 +560,12 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[5].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[6].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[7].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
-	m_cubeVerts[4].uv = D3DXVECTOR2(0.5f, 1.0f); 
-	m_cubeVerts[5].uv = D3DXVECTOR2(0.25f, 1.0f); 
-	m_cubeVerts[6].uv = D3DXVECTOR2(0.25f, 0.875f); 
-	m_cubeVerts[7].uv = D3DXVECTOR2(0.5f, 0.875f);
+	m_cubeVerts[7].uv = D3DXVECTOR2(0.25f, 0.0f); 
+	m_cubeVerts[4].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[5].uv = D3DXVECTOR2(0.0f, 0.875f); 
+	m_cubeVerts[6].uv = D3DXVECTOR2(0.0f, 0.0f);
 
-	// Front
+	// top
 	m_cubeVerts[8].position = D3DXVECTOR3(-w, h, -d); 
 	m_cubeVerts[9].position = D3DXVECTOR3(-w, h, d); 
 	m_cubeVerts[10].position = D3DXVECTOR3(w, h, d); 
@@ -541,12 +574,12 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[9].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[10].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[11].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
-	m_cubeVerts[8].uv = D3DXVECTOR2(0.25f, 0.0f); 
-	m_cubeVerts[9].uv = D3DXVECTOR2(0.25f, 0.875f); 
-	m_cubeVerts[10].uv = D3DXVECTOR2(0.0f, 0.875f); 
-	m_cubeVerts[11].uv = D3DXVECTOR2(0.0f, 0.0f);
+	m_cubeVerts[8].uv = D3DXVECTOR2(0.0f, 1.0f); 
+	m_cubeVerts[9].uv = D3DXVECTOR2(0.0f, 0.875f); 
+	m_cubeVerts[10].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[11].uv = D3DXVECTOR2(0.25f, 1.0f);
 
-	// Back 
+	// bottom
 	m_cubeVerts[12].position = D3DXVECTOR3(-w, -h, -d); 
 	m_cubeVerts[13].position = D3DXVECTOR3(w, -h, -d); 
 	m_cubeVerts[14].position = D3DXVECTOR3(w, -h, d); 
@@ -555,10 +588,10 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[13].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[14].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[15].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f));
-	m_cubeVerts[12].uv = D3DXVECTOR2(0.25f, 0.0f); 
-	m_cubeVerts[13].uv = D3DXVECTOR2(0.5f, 0.0f); 
-	m_cubeVerts[14].uv = D3DXVECTOR2(0.5f, 0.875f); 
-	m_cubeVerts[15].uv = D3DXVECTOR2(0.25f, 0.875f);
+	m_cubeVerts[14].uv = D3DXVECTOR2(0.5f, 1.0f); 
+	m_cubeVerts[15].uv = D3DXVECTOR2(0.25f, 1.0f); 
+	m_cubeVerts[12].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[13].uv = D3DXVECTOR2(0.5f, 0.875f);
 
 	// Left 
 	m_cubeVerts[16].position = D3DXVECTOR3(-w, -h, d); 
@@ -569,10 +602,10 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[17].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[18].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[19].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
-	m_cubeVerts[16].uv = D3DXVECTOR2(0.75f, 0.875f); 
-	m_cubeVerts[17].uv = D3DXVECTOR2(0.5f, 0.875f); 
-	m_cubeVerts[18].uv = D3DXVECTOR2(0.5f, 0.0f); 
-	m_cubeVerts[19].uv = D3DXVECTOR2(0.75f, 0.0f);
+	m_cubeVerts[19].uv = D3DXVECTOR2(0.75f, 0.875f); 
+	m_cubeVerts[16].uv = D3DXVECTOR2(0.5f, 0.875f); 
+	m_cubeVerts[17].uv = D3DXVECTOR2(0.5f, 0.0f); 
+	m_cubeVerts[18].uv = D3DXVECTOR2(0.75f, 0.0f);
 
 	// Right 
 	m_cubeVerts[20].position = D3DXVECTOR3(w, -h, -d); 
@@ -583,10 +616,156 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	D3DXVec3Normalize(&m_cubeVerts[21].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[22].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
 	D3DXVec3Normalize(&m_cubeVerts[23].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
-	m_cubeVerts[20].uv = D3DXVECTOR2(0.75f, 0.0f); 
-	m_cubeVerts[21].uv = D3DXVECTOR2(1.0f, 0.0f); 
-	m_cubeVerts[22].uv = D3DXVECTOR2(1.0f, 0.875f); 
-	m_cubeVerts[23].uv = D3DXVECTOR2(0.75f, 0.875f);
+	m_cubeVerts[21].uv = D3DXVECTOR2(0.75f, 0.0f); 
+	m_cubeVerts[22].uv = D3DXVECTOR2(1.0f, 0.0f); 
+	m_cubeVerts[23].uv = D3DXVECTOR2(1.0f, 0.875f); 
+	m_cubeVerts[20].uv = D3DXVECTOR2(0.75f, 0.875f);
+
+	// Load index info, refers into index into verts array to compose triangles 
+	// Note: A clockwise winding order of verts will show the front face.
+
+	// Front 
+	m_cubeIndices[0] = 0; m_cubeIndices[1] = 1; m_cubeIndices[2] = 2; // Triangle 0 
+	m_cubeIndices[3] = 0; m_cubeIndices[4] = 2; m_cubeIndices[5] = 3; // Triangle 1
+
+	// Back 
+	m_cubeIndices[6] = 4; m_cubeIndices[7] = 5; m_cubeIndices[8] = 6; // Triangle 2 
+	m_cubeIndices[9] = 4; m_cubeIndices[10] = 6; m_cubeIndices[11] = 7; // Triangle 3
+
+	// Top 
+	m_cubeIndices[12] = 8; m_cubeIndices[13] = 9; m_cubeIndices[14] = 10; // Triangle 4 
+	m_cubeIndices[15] = 8; m_cubeIndices[16] = 10; m_cubeIndices[17] = 11; // Triangle 5
+
+	// Bottom 
+	m_cubeIndices[18] = 12; m_cubeIndices[19] = 13; m_cubeIndices[20] = 14; // Triangle 6 
+	m_cubeIndices[21] = 12; m_cubeIndices[22] = 14; m_cubeIndices[23] = 15; // Triangle 7
+
+	// Left 
+	m_cubeIndices[24] = 16; m_cubeIndices[25] = 17; m_cubeIndices[26] = 18; // Triangle 8 
+	m_cubeIndices[27] = 16; m_cubeIndices[28] = 18; m_cubeIndices[29] = 19; // Triangle 9
+
+	// Right 
+	m_cubeIndices[30] = 20; m_cubeIndices[31] = 21; m_cubeIndices[32] = 22; // Triangle 10 
+	m_cubeIndices[33] = 20; m_cubeIndices[34] = 22; m_cubeIndices[35] = 23; // Triangle 11
+	//create decloration
+	D3DVERTEXELEMENT9 decl[] =
+	{
+		{0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
+		{0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL, 0},
+		{0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0},
+		D3DDECL_END()
+	};
+	m_pD3DDevice->CreateVertexDeclaration(decl, &obj.objDec);
+	//create memory
+	m_pD3DDevice->CreateVertexBuffer(24*sizeof(Vertex),D3DUSAGE_WRITEONLY,0,D3DPOOL_MANAGED,&obj.obj,0);
+	m_pD3DDevice->CreateIndexBuffer(36*sizeof(WORD),D3DUSAGE_WRITEONLY,D3DFMT_INDEX16,D3DPOOL_MANAGED,&obj.objInd,0);
+	//copy info to memory
+	VOID* pVertices; VOID* pInd;
+	obj.obj->Lock(0,0,&pVertices,0);
+	memcpy(pVertices,m_cubeVerts,24*sizeof(Vertex));
+	obj.obj->Unlock();
+
+	obj.objInd->Lock(0,0,&pInd,0);
+	memcpy(pInd,m_cubeIndices,36*sizeof(WORD));
+	obj.objInd->Unlock();
+
+	obj.numVerts = 24;
+	obj.numPrim = 12;
+}
+
+void DXFrame::uncenterdUVCube(PrimStruct& obj,float bottom,float top,float left,float right,float front, float back) {
+	obj.bottom = bottom;
+	obj.top = top;
+	obj.left = left;
+	obj.right = right;
+	obj.back = back;
+	obj.front = front;
+	Vertex m_cubeVerts[24];
+	WORD m_cubeIndices[36];
+	// Load vertex info, listed per cube face quads
+	// back
+	m_cubeVerts[0].position = D3DXVECTOR3(left, bottom, back); 
+	m_cubeVerts[1].position = D3DXVECTOR3(left, top, back); 
+	m_cubeVerts[2].position = D3DXVECTOR3(right, top, back); 
+	m_cubeVerts[3].position = D3DXVECTOR3(right, bottom, back); 
+	D3DXVec3Normalize(&m_cubeVerts[0].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[1].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[2].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[3].normal, &D3DXVECTOR3(0.0f, 0.0f, -1.0f)); 
+	m_cubeVerts[1].uv = D3DXVECTOR2(0.25f, 0.0f); 
+	m_cubeVerts[2].uv = D3DXVECTOR2(0.5f, 0.0f); 
+	m_cubeVerts[3].uv = D3DXVECTOR2(0.5f, 0.875f); 
+	m_cubeVerts[0].uv = D3DXVECTOR2(0.25f, 0.875f);
+
+	// front 
+	m_cubeVerts[4].position = D3DXVECTOR3(left, bottom, front); 
+	m_cubeVerts[5].position = D3DXVECTOR3(right, bottom, front); 
+	m_cubeVerts[6].position = D3DXVECTOR3(right, top, front); 
+	m_cubeVerts[7].position = D3DXVECTOR3(left, top, front); 
+	D3DXVec3Normalize(&m_cubeVerts[4].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[5].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[6].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[7].normal, &D3DXVECTOR3(0.0f, 0.0f, 1.0f)); 
+	m_cubeVerts[7].uv = D3DXVECTOR2(0.25f, 0.0f); 
+	m_cubeVerts[4].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[5].uv = D3DXVECTOR2(0.0f, 0.875f); 
+	m_cubeVerts[6].uv = D3DXVECTOR2(0.0f, 0.0f);
+
+	// top
+	m_cubeVerts[8].position = D3DXVECTOR3(left, top, back); 
+	m_cubeVerts[9].position = D3DXVECTOR3(left, top, front); 
+	m_cubeVerts[10].position = D3DXVECTOR3(right, top, front); 
+	m_cubeVerts[11].position = D3DXVECTOR3(right, top, back); 
+	D3DXVec3Normalize(&m_cubeVerts[8].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[9].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[10].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[11].normal, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)); 
+	m_cubeVerts[8].uv = D3DXVECTOR2(0.0f, 1.0f); 
+	m_cubeVerts[9].uv = D3DXVECTOR2(0.0f, 0.875f); 
+	m_cubeVerts[10].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[11].uv = D3DXVECTOR2(0.25f, 1.0f);
+
+	// bottom
+	m_cubeVerts[12].position = D3DXVECTOR3(left, bottom, back); 
+	m_cubeVerts[13].position = D3DXVECTOR3(right, bottom, back); 
+	m_cubeVerts[14].position = D3DXVECTOR3(right, bottom,  front); 
+	m_cubeVerts[15].position = D3DXVECTOR3(left, bottom, front); 
+	D3DXVec3Normalize(&m_cubeVerts[12].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[13].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[14].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[15].normal, &D3DXVECTOR3(0.0f, -1.0f, 0.0f));
+	m_cubeVerts[14].uv = D3DXVECTOR2(0.5f, 1.0f); 
+	m_cubeVerts[15].uv = D3DXVECTOR2(0.25f, 1.0f); 
+	m_cubeVerts[12].uv = D3DXVECTOR2(0.25f, 0.875f); 
+	m_cubeVerts[13].uv = D3DXVECTOR2(0.5f, 0.875f);
+
+	// Left 
+	m_cubeVerts[16].position = D3DXVECTOR3(left, bottom, front); 
+	m_cubeVerts[17].position = D3DXVECTOR3(left, top, front); 
+	m_cubeVerts[18].position = D3DXVECTOR3(left, top, back); 
+	m_cubeVerts[19].position = D3DXVECTOR3(left, bottom, back); 
+	D3DXVec3Normalize(&m_cubeVerts[16].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[17].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[18].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[19].normal, &D3DXVECTOR3(-1.0f, 0.0f, 0.0f)); 
+	m_cubeVerts[19].uv = D3DXVECTOR2(0.75f, 0.875f); 
+	m_cubeVerts[16].uv = D3DXVECTOR2(0.5f, 0.875f); 
+	m_cubeVerts[17].uv = D3DXVECTOR2(0.5f, 0.0f); 
+	m_cubeVerts[18].uv = D3DXVECTOR2(0.75f, 0.0f);
+
+	// Right 
+	m_cubeVerts[20].position = D3DXVECTOR3(right, bottom, back); 
+	m_cubeVerts[21].position = D3DXVECTOR3(right, top, back); 
+	m_cubeVerts[22].position = D3DXVECTOR3(right, top, front); 
+	m_cubeVerts[23].position = D3DXVECTOR3(right, bottom, front); 
+	D3DXVec3Normalize(&m_cubeVerts[20].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[21].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[22].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
+	D3DXVec3Normalize(&m_cubeVerts[23].normal, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)); 
+	m_cubeVerts[21].uv = D3DXVECTOR2(0.75f, 0.0f); 
+	m_cubeVerts[22].uv = D3DXVECTOR2(1.0f, 0.0f); 
+	m_cubeVerts[23].uv = D3DXVECTOR2(1.0f, 0.875f); 
+	m_cubeVerts[20].uv = D3DXVECTOR2(0.75f, 0.875f);
 
 	// Load index info, refers into index into verts array to compose triangles 
 	// Note: A clockwise winding order of verts will show the front face.

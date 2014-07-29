@@ -21,9 +21,12 @@ struct PrimStruct {
 	int numVerts;
 	int numPrim;
 
-	float height;
-	float width;
-	float depth;
+	float bottom;
+	float top;
+	float left;
+	float right;
+	float front;
+	float back;
 };
 
 struct TextureStruct {
@@ -31,6 +34,16 @@ struct TextureStruct {
 	TexInfo texInfo;
 
 	D3DCOLOR mask;
+};
+
+struct ModelStruct {
+	ID3DXMesh* mesh;
+	ID3DXBuffer* adj;
+	ID3DXBuffer* matPoint;
+	D3DXMATERIAL* mats;
+	IDirect3DVertexDeclaration9* dec;
+	DWORD numMats;
+	TextureStruct** textures; 
 };
 
 struct SoundStruct {
@@ -49,6 +62,11 @@ struct PrimObj {
 	PrimStruct* primInfo;
 	TextureStruct* Tex;
 	D3DMATERIAL9* mat;
+	D3DXMATRIX matrix;
+};
+
+struct ModelObj {
+	ModelStruct* mod;
 	D3DXMATRIX matrix;
 };
 

@@ -9,12 +9,14 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube;
+	PrimObj testCube,testCube2;
 	SpriteObj testSprite;
 	TextStruct testText;
+	ModelObj testMod;
 	D3DMATERIAL9 testMat;
 	InputHandler input;
 	listenProp tempProp;
+	D3DLIGHT9 m_Light;
 	std::stringstream ss;
 	SoundStruct* testSound;
 	MusicStruct* testMusic;

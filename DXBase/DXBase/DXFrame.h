@@ -80,6 +80,8 @@ public:
 	void toggleSS();
 	void resetDev(HWND& hWnd,HINSTANCE& hInsts);
 	void CreateUVCube(PrimStruct& obj,float height,float width,float depth);
+	void loadXFile(LPCSTR name,ModelStruct& obj);
+	void uncenterdUVCube(PrimStruct& obj,float bottom,float top,float left,float right,float front, float back);
 	bool rendererLost(){return m_bLost;}
 	bool setCam(int camNum,cam* camInfo);
 	void zeroWaitTime(){waitTime = 0;}

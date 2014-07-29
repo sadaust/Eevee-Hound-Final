@@ -30,20 +30,35 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.init(hWnd,hInst,bWindowed);
 	DXVid.addRen(tempRen);
 	testCube.mat = &testMat;
-	testMat.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	testMat.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 	testMat.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		// Diffuse color reflected
-	testMat.Emissive = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);		// Emissive color reflected
-	testMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		// Specular
+	testMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Emissive color reflected
+	testMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
 	testMat.Power = 0.0f;
-	testCube.Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,0),0);
+	
+	testMod.matrix = testCube.matrix;
+	D3DXMatrixScaling(&testMod.matrix,0.01,0.01,0.01);
+	testMod.mod = resMan.loadXFile("tiny.x");
+	for(int i = 0;i< testMod.mod->numMats;++i) {
+		testMod.mod->mats[i].MatD3D = testMat;
+	}
+	tempRen.type = model;
+	tempRen.asset = &testMod;
+	tempRen.locCamNum = 0;
+	DXVid.addRen(tempRen);
+
+	testCube.Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(0,0,0),0);
 	testCube.primInfo = resMan.loadPrim("CuberTest",1,1,1);
 	D3DXMatrixIdentity(&testCube.matrix);
+	testCube2 = testCube;
 	tempRen.asset = &testCube;
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
 	DXVid.addRen(tempRen);
+	tempRen.asset = &testCube2;
+	DXVid.addRen(tempRen);
 
-	testSprite.image = resMan.loadTexture("xboxControllerSpriteFont.tga",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_ARGB(0,0,0,0),0);
+	testSprite.image = resMan.loadTexture("xboxControllerSpriteFont.tga",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0);
 	testSprite.posX = 0;
 	testSprite.posY = 0;
 	testSprite.scalX = 0.1f;
@@ -69,11 +84,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	temp2.cam_look_pos.y = 0;
 	temp2.cam_look_pos.z = 0;
 	temp2.cam_pos.x = 0;
-	temp2.cam_pos.y = 0;
-	temp2.cam_pos.z = 5;
+	temp2.cam_pos.y = 5;
+	temp2.cam_pos.z = 0;
 	temp2.cam_up_vec.x = 0;
-	temp2.cam_up_vec.y = 1;
-	temp2.cam_up_vec.z = 0;
+	temp2.cam_up_vec.y = 0;
+	temp2.cam_up_vec.z = 1;
 	temp2.drawDist = 200.0f;
 	temp2.fov_deg = 90.0f;
 
@@ -94,10 +109,33 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempProp.forward.x = tempProp.forward.y = tempProp.forward.z = 0;
 	sFrame.setListenProp(0,tempProp);
 	testSound = resMan.loadSound("plinkhit.wav",1,5,1);
-	testMusic = resMan.loadMusic("battle.mp3",0.100);
+	testMusic = resMan.loadMusic("battle.mp3",0.10f);
 	sFrame.PlayStream(*testMusic,false);
 
-	DXVid.setViewCount(4);
+	
+	// Ambient light color emitted from this light
+	m_Light.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	// Diffuse light color emitted from this light
+	m_Light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	// Specular light color emitted from this light
+	m_Light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	// Light Type (Point) Requires: Position, Range, Attenuation
+	m_Light.Type = D3DLIGHT_POINT;	// Point, alternatively D3DLIGHT_DIRECTIONAL or D3DLIGHT_SPOT
+	// Light Position
+	m_Light.Position = D3DXVECTOR3(30.0f, 10.0f, -10.0f); 
+	// Range of Light
+	m_Light.Range = 100.0f;
+	// Light Attenuation
+	m_Light.Attenuation0 = 0.0f;	// Constant
+	m_Light.Attenuation1 = 0.05f;	// Linear
+	m_Light.Attenuation2 = 0.0f;	// Quadratic
+
+	// Set Light
+	DXVid.setLight(0, &m_Light);
+	//turn on light
+	DXVid.setLightActive(0,true);
+
+	DXVid.setViewCount(1);
 	DXVid.toggleSS();
 	DXVid.setCam(1,&temp);
 	DXVid.setCam(2,&temp2);
@@ -173,7 +211,7 @@ void DXTest::update() {
 			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 				tem = 0;
 			dist += (tem/32767.0f)*dt;
-			D3DXMatrixTranslation(&testCube.matrix,dist,0,0);
+			D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
 			ss.str("");
 			ss<<tem/32767.0f;
 			testText.text = ss.str();
@@ -187,9 +225,9 @@ void DXTest::update() {
 				tem = 0;
 			angle += ((tem/32767.0f)*dt)*10;
 			if(angle >= 90)
-				angle = 89.9;
+				angle = 89.9f;
 			else if(angle <=-90)
-				angle = -89.9;
+				angle = -89.9f;
 			DXVid.rotateCam(temp,2,rot,angle);
 			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
 				sFrame.Play(*testSound,dist,0,0,0,0,0);
@@ -218,7 +256,7 @@ void DXTest::draw() {
 
 void DXTest::resize(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.reSize(hWnd,hInst,bWindowed);
-	resMan.reloadAll();
+	resMan.reloadVideo();
 }
 
 void DXTest::shutDown() {
