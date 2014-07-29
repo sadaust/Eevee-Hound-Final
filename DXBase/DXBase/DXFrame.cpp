@@ -118,7 +118,6 @@ void DXFrame::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed)
 		m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 		m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-		m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 		m_pD3DDevice->GetViewport(&defaultView);
 		m_bLost = false;
 		m_bSplitScreen = false;
@@ -335,7 +334,7 @@ void DXFrame::Render() {
 				//set cam
 				D3DXMatrixLookAtLH(&TransMat,&viewPorts[i].camera.cam_pos,&viewPorts[i].camera.cam_look_pos,&viewPorts[i].camera.cam_up_vec);
 				m_pD3DDevice->SetTransform(D3DTS_VIEW,&TransMat);
-				D3DXMatrixPerspectiveFovLH(&TransMat,D3DXToRadian(viewPorts[i].camera.fov_deg),800/600,0.0f,viewPorts[i].camera.drawDist);
+				D3DXMatrixPerspectiveFovLH(&TransMat,D3DXToRadian(viewPorts[i].camera.fov_deg),800/600,1.0f,viewPorts[i].camera.drawDist);
 				m_pD3DDevice->SetTransform(D3DTS_PROJECTION,&TransMat);
 				for(int z = 0;z < renVec.getSize();++z)
 				{
@@ -672,6 +671,7 @@ void DXFrame::CreateUVCube(PrimStruct& obj,float height,float width,float depth)
 	obj.numVerts = 24;
 	obj.numPrim = 12;
 }
+
 
 void DXFrame::uncenterdUVCube(PrimStruct& obj,float bottom,float top,float left,float right,float front, float back) {
 	obj.bottom = bottom;
