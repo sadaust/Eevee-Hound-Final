@@ -11,6 +11,7 @@ DXFrame::DXFrame()
 	m_bFullScreen = false;
 	m_bLost = false;
 	m_bSplitScreen = false;
+	m_vSplit = true;
 	showFPS = true;
 	w_width = 0;
 	w_height = 0;
@@ -122,6 +123,10 @@ void DXFrame::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed)
 		m_bLost = false;
 		m_bSplitScreen = false;
 		viewPorts[0].viewPort = defaultView;
+		hLine[0] = D3DXVECTOR2(0,w_height/2);
+		hLine[1] = D3DXVECTOR2(w_width,w_height/2);
+		vLine[0] = D3DXVECTOR2(w_width/2,0);
+		vLine[1] = D3DXVECTOR2(w_width/2,w_height);
 	}
 	else
 		m_bLost = true;
@@ -248,7 +253,10 @@ void DXFrame::reSize(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 		m_pD3DDevice->GetViewport(&defaultView);
 		m_pD3DDevice->SetViewport(&defaultView);
 		setViewCount(numViewPorts);
-		m_pD3DDevice->Reset(&D3Dpp);
+		hLine[0] = D3DXVECTOR2(0,w_height/2);
+		hLine[1] = D3DXVECTOR2(w_width,w_height/2);
+		vLine[0] = D3DXVECTOR2(w_width/2,0);
+		vLine[1] = D3DXVECTOR2(w_width/2,w_height);
 	}
 	else
 		m_bLost = true;
@@ -289,6 +297,11 @@ void DXFrame::addRen(RenInfo &render) {
 
 void DXFrame::clearRen() {
 	renVec.clear();
+}
+
+void DXFrame::setSSvSplit(bool vSplit) {
+	m_vSplit = vSplit;
+	setViewCount(numViewPorts);
 }
 
 void DXFrame::toggleSS() {
@@ -392,19 +405,19 @@ void DXFrame::Render() {
 			//fps counter
 			if(m_bSplitScreen)
 				m_pD3DDevice->SetViewport(&defaultView);
-			D3DXVECTOR2 lines[]  = {D3DXVECTOR2(viewPorts[0].viewPort.Width,0),D3DXVECTOR2(viewPorts[0].viewPort.Width,viewPorts[0].viewPort.Height)};
-			D3DXVECTOR2 lines1[] = {D3DXVECTOR2(viewPorts[0].viewPort.Width,0),D3DXVECTOR2(viewPorts[0].viewPort.Width,defaultView.Height)};
-			D3DXVECTOR2 lines2[] = {D3DXVECTOR2(0,viewPorts[0].viewPort.Height),D3DXVECTOR2(defaultView.Width,viewPorts[0].viewPort.Height)};
 			switch(numViewPorts) {
 			case 2:
 				m_pD3DLine->Begin();
-				m_pD3DLine->Draw(lines , 2, 0xFFFFFFFF);
+				if(m_vSplit)
+					m_pD3DLine->Draw(vLine , 2, 0xFFFFFFFF);
+				else
+					m_pD3DLine->Draw(hLine , 2, 0xFFFFFFFF);
 				m_pD3DLine->End();
 				break;
 			case 4:
 				m_pD3DLine->Begin();
-				m_pD3DLine->Draw(lines1, 2, 0xFFFFFFFF);
-				m_pD3DLine->Draw(lines2, 2, 0xFFFFFFFF);
+				m_pD3DLine->Draw(vLine, 2, 0xFFFFFFFF);
+				m_pD3DLine->Draw(hLine, 2, 0xFFFFFFFF);
 				m_pD3DLine->End();
 				break;
 			}
@@ -454,20 +467,35 @@ bool DXFrame::setViewCount(int numView) {
 			viewPorts[0].viewPort.Height = defaultView.Height;
 			break;
 		case 2:
-			viewPorts[0].viewPort.MaxZ = defaultView.MaxZ;
-			viewPorts[0].viewPort.MinZ = defaultView.MinZ;
-			viewPorts[0].viewPort.X = defaultView.X;
-			viewPorts[0].viewPort.Y = defaultView.Y;
-			viewPorts[0].viewPort.Width = defaultView.Width/2;
-			viewPorts[0].viewPort.Height = defaultView.Height;
+			if(m_vSplit) {
+				viewPorts[0].viewPort.MaxZ = defaultView.MaxZ;
+				viewPorts[0].viewPort.MinZ = defaultView.MinZ;
+				viewPorts[0].viewPort.X = defaultView.X;
+				viewPorts[0].viewPort.Y = defaultView.Y;
+				viewPorts[0].viewPort.Width = defaultView.Width/2;
+				viewPorts[0].viewPort.Height = defaultView.Height;
 
-			viewPorts[1].viewPort.MaxZ = defaultView.MaxZ;
-			viewPorts[1].viewPort.MinZ = defaultView.MinZ;
-			viewPorts[1].viewPort.X = defaultView.X+viewPorts[0].viewPort.Width;
-			viewPorts[1].viewPort.Y = defaultView.Y;
-			viewPorts[1].viewPort.Width = defaultView.Width/2;
-			viewPorts[1].viewPort.Height = defaultView.Height;
+				viewPorts[1].viewPort.MaxZ = defaultView.MaxZ;
+				viewPorts[1].viewPort.MinZ = defaultView.MinZ;
+				viewPorts[1].viewPort.X = defaultView.X+viewPorts[0].viewPort.Width;
+				viewPorts[1].viewPort.Y = defaultView.Y;
+				viewPorts[1].viewPort.Width = defaultView.Width/2;
+				viewPorts[1].viewPort.Height = defaultView.Height;
+			} else {
+				viewPorts[0].viewPort.MaxZ = defaultView.MaxZ;
+				viewPorts[0].viewPort.MinZ = defaultView.MinZ;
+				viewPorts[0].viewPort.X = defaultView.X;
+				viewPorts[0].viewPort.Y = defaultView.Y;
+				viewPorts[0].viewPort.Width = defaultView.Width;
+				viewPorts[0].viewPort.Height = defaultView.Height/2;
 
+				viewPorts[1].viewPort.MaxZ = defaultView.MaxZ;
+				viewPorts[1].viewPort.MinZ = defaultView.MinZ;
+				viewPorts[1].viewPort.X = defaultView.X;
+				viewPorts[1].viewPort.Y = defaultView.Y+viewPorts[0].viewPort.Height;
+				viewPorts[1].viewPort.Width = defaultView.Width;
+				viewPorts[1].viewPort.Height = defaultView.Height/2;
+			}
 			break;
 		case 4:
 			viewPorts[0].viewPort = defaultView;

@@ -135,7 +135,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//turn on light
 	DXVid.setLightActive(0,true);
 
-	DXVid.setViewCount(1);
+	DXVid.setViewCount(2);
 	DXVid.toggleSS();
 	DXVid.setCam(1,&temp);
 	DXVid.setCam(2,&temp2);
@@ -231,6 +231,10 @@ void DXTest::update() {
 			DXVid.rotateCam(temp,2,rot,angle);
 			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
 				sFrame.Play(*testSound,dist,0,0,0,0,0);
+			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
+				DXVid.setSSvSplit(true);
+			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_Y)
+				DXVid.setSSvSplit(false);
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
 		}

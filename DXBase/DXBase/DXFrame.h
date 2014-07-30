@@ -39,9 +39,11 @@ private:
 	bool m_bFullScreen;
 	bool m_bLost;
 	bool m_bSplitScreen;
+	bool m_vSplit;
 	int w_width;
 	int w_height;
-
+	D3DXVECTOR2 vLine[2];
+	D3DXVECTOR2 hLine[2];
 	int fps;
 	int waitTime;
 	int numViewPorts;
@@ -78,6 +80,7 @@ public:
 	void Shutdown();
 	void Render();
 	void toggleSS();
+	void setSSvSplit(bool);
 	void resetDev(HWND& hWnd,HINSTANCE& hInsts);
 	void CreateUVCube(PrimStruct& obj,float height,float width,float depth);
 	void loadXFile(LPCSTR name,ModelStruct& obj);
