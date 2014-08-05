@@ -338,8 +338,8 @@ void DXFrame::Render() {
 			TextStruct* tempText;
 			ModelObj* tempMod;
 			D3DXMATRIX scale,loc;
-			//TODO: add render code
 			for(int i = 0;i<=numViewPorts;++i) {
+				//set viewport
 				if(m_bSplitScreen&&i!= 4)
 					m_pD3DDevice->SetViewport(&viewPorts[i].viewPort);
 				else
@@ -349,6 +349,7 @@ void DXFrame::Render() {
 				m_pD3DDevice->SetTransform(D3DTS_VIEW,&TransMat);
 				D3DXMatrixPerspectiveFovLH(&TransMat,D3DXToRadian(viewPorts[i].camera.fov_deg),800/600,1.0f,viewPorts[i].camera.drawDist);
 				m_pD3DDevice->SetTransform(D3DTS_PROJECTION,&TransMat);
+				//start render
 				for(int z = 0;z < renVec.getSize();++z)
 				{
 					tempRen = renVec.get(z);

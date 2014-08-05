@@ -23,11 +23,11 @@ void InputHandler::init(HWND& hWnd,HINSTANCE& hInst) {
 	}
 
 	DirectInput8Create(hInst,DIRECTINPUT_VERSION,IID_IDirectInput8,(void**)&m_pDIObj,NULL);
-	
+
 	m_pDIObj->CreateDevice(GUID_SysKeyboard,&m_pDIKeyboard,NULL);
 	m_pDIKeyboard->SetDataFormat(&c_dfDIKeyboard); 
 	m_pDIKeyboard->SetCooperativeLevel(hWnd,DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	
+
 	m_pDIObj->CreateDevice(GUID_SysMouse,&m_pDIMouse,NULL);
 	m_pDIMouse->SetDataFormat(&c_dfDIMouse2);
 	m_pDIMouse->SetCooperativeLevel(hWnd,DISCL_FOREGROUND | DISCL_EXCLUSIVE);
@@ -59,6 +59,57 @@ int InputHandler::numGamePads() {
 		}
 	}
 	return numPads;
+}
+//return true if succeded
+bool InputHandler::getState(int controllerNum,inputState& out) {
+	XINPUT_STATE xInputState;
+	float temp;
+	if(controllerNum >= 0 && controllerNum < 4) {
+		if(XInputGetState(controllerNum,&xInputState) == ERROR_SUCCESS) {
+			//left thumb stick x
+			temp = xInputState.Gamepad.sThumbLX;
+			if(temp < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+				temp = 0;
+			temp /= MAXSHORT;
+			out.lX = temp;
+			//left thumb stick y
+			temp = xInputState.Gamepad.sThumbLY;
+			if(temp < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+				temp = 0;
+			temp /= MAXSHORT;
+			out.lY = temp;
+			//right thumb stick x
+			temp = xInputState.Gamepad.sThumbRX;
+			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+				temp = 0;
+			temp /= MAXSHORT;
+			out.rX = temp;
+			//right thump stick y
+			temp = xInputState.Gamepad.sThumbRY;
+			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+				temp = 0;
+			temp /= MAXSHORT;
+			out.rY = temp;
+
+			return true;
+		}
+		else
+			return false;
+	} else if(controllerNum == 4) {
+		temp = mouseState.lX;
+		temp /= MAXLONG;
+		out.rX = temp;
+		temp = mouseState.lY;
+		temp /= MAXLONG;
+		out.rY = temp;
+		//check all binds
+		int tem = DIK_W;
+		if(buffer[DIK_W]&0x80) {
+
+		}
+		return true;
+	}
+	return false;
 }
 
 //retun false if failed
@@ -95,8 +146,6 @@ void InputHandler::stopVibration(int padNum) {
 }
 
 void InputHandler::update() {
-	char buffer[256];
-	DIMOUSESTATE2 mouseState;
 	ZeroMemory(buffer,sizeof(buffer));
 	ZeroMemory(&mouseState,sizeof(mouseState));
 	if(m_pDIKeyboard->Acquire() != DIERR_INPUTLOST)

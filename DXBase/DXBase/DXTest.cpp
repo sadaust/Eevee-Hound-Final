@@ -195,6 +195,7 @@ void DXTest::resetDev(HWND& hWnd,HINSTANCE& hInsts) {
 
 void DXTest::update() {
 	XINPUT_STATE state;
+	inputState iState;
 	cTime = timeGetTime();
 	dt = (float)(cTime-lTime);
 	dt /= CLOCKS_PER_SEC;
@@ -203,14 +204,16 @@ void DXTest::update() {
 	sFrame.update();
 	if(cTime>tTime) {
 	for(int i = 0; i<numCon;++i) {
-		
 		input.getState(i,state);
 		input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
+		input.getState(4,iState);
 		if(i == 0) {
+			/*
 			tem = state.Gamepad.sThumbLY;
 			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 				tem = 0;
-			dist += (tem/32767.0f)*dt;
+				*/
+			dist += iState.lY*dt;
 			D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
 			ss.str("");
 			ss<<tem/32767.0f;
