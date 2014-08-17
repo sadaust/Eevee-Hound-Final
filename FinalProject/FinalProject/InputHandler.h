@@ -41,6 +41,7 @@ private:
 	IDirectInputDevice8* m_pDIKeyboard;
 	IDirectInputDevice8* m_pDIMouse;
 	int binds[binds::last]; 
+	int mouseOffSet;
 	//keyboard state
 	char buffer[256];
 	//mouse state
@@ -55,6 +56,7 @@ public:
 	void setVibration(int padNum,float leftSpeed,float rightSpeed);
 	void setVibration(int padNum,WORD leftSpeed,WORD rightSpeed);
 	void stopVibration(int padNum);
+	void setBind(binds::bindList,int keyNum);
 	DIMOUSESTATE2 getMouse();
 	void getKeyboard(char[]);
 	void update();

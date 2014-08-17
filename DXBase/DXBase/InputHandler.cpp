@@ -1,9 +1,29 @@
 #include "InputHandler.h"
 
 InputHandler::InputHandler() {
+	mouseOffSet = 256;
 	m_pDIObj = 0;
 	m_pDIKeyboard = 0;
 	m_pDIMouse = 0;
+	//set binds
+	setBind(binds::jump,DIK_SPACE);
+	setBind(binds::legPower,DIK_Q);
+	setBind(binds::use,DIK_E);
+	setBind(binds::headPower,DIK_R);
+	setBind(binds::pause,DIK_ESCAPE);
+	setBind(binds::leftAttack,mouseOffSet);
+	setBind(binds::leftAltAttack,DIK_R);
+	setBind(binds::rightAttack,mouseOffSet+1);
+	setBind(binds::rightAltAttack,DIK_F);
+	setBind(binds::forward,DIK_W);
+	setBind(binds::back,DIK_S);
+	setBind(binds::left,DIK_A);
+	setBind(binds::right,DIK_D);
+	setBind(binds::sprint,DIK_LSHIFT);
+}
+
+void InputHandler::setBind(binds::bindList bin, int key) {
+	binds[bin] = key;
 }
 
 char InputHandler::getBoundKey(int num) {

@@ -208,11 +208,11 @@ void DXTest::update() {
 		input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
 		input.getState(4,iState);
 		if(i == 0) {
-			/*
+			
 			tem = state.Gamepad.sThumbLY;
 			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 				tem = 0;
-				*/
+				
 			dist += iState.lY*dt;
 			D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
 			ss.str("");
