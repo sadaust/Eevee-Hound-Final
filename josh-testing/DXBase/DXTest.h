@@ -2,6 +2,7 @@
 #include "InputHandler.h"
 #include "SoundFrame.h"
 #include "Player.h"
+#include "PhysicsSystem.h"
 #include <sstream>
 
 class DXTest {
@@ -10,7 +11,7 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube,testCube2, testCube3;
+	PrimObj testCube,testCube2, testCube3, testCube4;
 	SpriteObj testSprite;
 	TextStruct testText;
 	ModelObj testMod;
@@ -25,6 +26,9 @@ private:
 	int numCon;
 	DWORD cTime,lTime,tTime;
 	float dist, distX, distZ, rot, angle;
+	Terrain testTerrain, testTerrain2;
+	PhysicsSystem testPhys;
+	Bullet testBullet;
 	//dt in seconds
 	float dt;
 public:
