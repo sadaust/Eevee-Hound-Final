@@ -3,11 +3,13 @@
 #include <windows.h>
 #include <XInput.h>
 #include <dinput.h>
+#include <vector>
 #pragma comment(lib, "XInput.lib")
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
 namespace binds {
+	//BYTE fireTriggerPoint = 100;
 	enum bindList {
 		jump,
 		legPower,
@@ -32,7 +34,7 @@ struct inputState {
 	float lY;
 	float rX;
 	float rY;
-
+	bool buttons[9];
 };
 
 class InputHandler {
@@ -46,7 +48,8 @@ private:
 	char buffer[256];
 	//mouse state
 	DIMOUSESTATE2 mouseState;
-	char getBoundKey(int num);
+	bool getBoundKey(int num);
+	BYTE fireTriggerPoint;
 public:
 	InputHandler();
 	void init(HWND& hWnd,HINSTANCE& hInst);

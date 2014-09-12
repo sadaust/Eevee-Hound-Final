@@ -11,6 +11,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	dist = 2;
 	rot = 0;
 	angle = 0;
+
+	dist2 = 2;
+	rot2 = 0;
+	angle2 = 0;
+
 	input.init(hWnd,hInst);
 	sFrame.Init();
 	tTime = cTime = lTime = GetTickCount();
@@ -26,7 +31,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempRen.asset = &testText;
 	tempRen.locCamNum = 5;
 	tempRen.type = text;
-	
+
 	DXVid.init(hWnd,hInst,bWindowed);
 	DXVid.addRen(tempRen);
 	testCube.mat = &testMat;
@@ -35,7 +40,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Emissive color reflected
 	testMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
 	testMat.Power = 0.0f;
-	
+
 	testMod.matrix = testCube.matrix;
 	D3DXMatrixScaling(&testMod.matrix,0.01,0.01,0.01);
 	testMod.mod = resMan.loadXFile("tiny.x");
@@ -83,22 +88,22 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	temp2.cam_look_pos.x = 0;
 	temp2.cam_look_pos.y = 0;
 	temp2.cam_look_pos.z = 0;
-	temp2.cam_pos.x = 0;
-	temp2.cam_pos.y = 5;
+	temp2.cam_pos.x = 5;
+	temp2.cam_pos.y = 0;
 	temp2.cam_pos.z = 0;
 	temp2.cam_up_vec.x = 0;
-	temp2.cam_up_vec.y = 0;
-	temp2.cam_up_vec.z = 1;
+	temp2.cam_up_vec.y = 1;
+	temp2.cam_up_vec.z = 0;
 	temp2.drawDist = 200.0f;
 	temp2.fov_deg = 90.0f;
 
 	temp3 = temp4 = temp;
-	
+
 	temp3.cam_pos.x = 0;
 	temp3.cam_pos.z = -2;
 
 	temp4.cam_pos.x = -2;
-	
+
 	tempProp.pos.x = temp.cam_pos.x;
 	tempProp.pos.y = temp.cam_pos.y;
 	tempProp.pos.z = temp.cam_pos.z;
@@ -112,7 +117,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testMusic = resMan.loadMusic("battle.mp3",0.10f);
 	sFrame.PlayStream(*testMusic,false);
 
-	
+
 	// Ambient light color emitted from this light
 	m_Light.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	// Diffuse light color emitted from this light
@@ -166,9 +171,9 @@ void DXTest::resetDev(HWND& hWnd,HINSTANCE& hInsts) {
 		temp2.cam_look_pos.x = 0;
 		temp2.cam_look_pos.y = 0;
 		temp2.cam_look_pos.z = 0;
-		temp2.cam_pos.x = 0;
+		temp2.cam_pos.x = 5;
 		temp2.cam_pos.y = 0;
-		temp2.cam_pos.z = 5;
+		temp2.cam_pos.z = 0;
 		temp2.cam_up_vec.x = 0;
 		temp2.cam_up_vec.y = 1;
 		temp2.cam_up_vec.z = 0;
@@ -176,10 +181,10 @@ void DXTest::resetDev(HWND& hWnd,HINSTANCE& hInsts) {
 		temp2.fov_deg = 90.0f;
 
 		temp3 = temp4 = temp;
-	
+
 		temp3.cam_pos.x = 0;
 		temp3.cam_pos.z = -2;
-			
+
 		temp4.cam_pos.x = -2;
 		resMan.reloadAll();
 		//DXVid.setViewCount(1);
@@ -203,52 +208,68 @@ void DXTest::update() {
 	input.update();
 	sFrame.update();
 	if(cTime>tTime) {
-	for(int i = 0; i<numCon;++i) {
-		input.getState(i,state);
-		input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
-		input.getState(4,iState);
-		if(i == 0) {
-			
-			tem = state.Gamepad.sThumbLY;
-			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-				tem = 0;
+		for(int i = 0; i<numCon;++i) {
+			input.getState(i,state);
+			input.getState(i,iState);
+			input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
+			if(i == 0) {
 				
-			dist += iState.lY*dt;
-			D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
-			ss.str("");
-			ss<<tem/32767.0f;
-			testText.text = ss.str();
+				tem = state.Gamepad.sThumbLY;
+				if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+					tem = 0;
+				
+				dist += iState.lY*dt;
+				D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
+				ss.str("");
+				ss<<tem/32767.0f;
+				testText.text = ss.str();
+				/*
+				tem = iState.rX;
+				if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+					tem = 0;*/
+				rot += (iState.rX*dt)*10;
+				tem = state.Gamepad.sThumbRY;
+				if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+					tem = 0;
+				angle += (iState.rY*dt)*10;
+				if(angle >= 90)
+					angle = 89.9f;
+				else if(angle <=-90)
+					angle = -89.9f;
+				DXVid.rotateCam(temp,2,rot,angle);
+				if(iState.buttons[binds::jump])
+					sFrame.Play(*testSound,dist,0,0,0,0,0);
+				if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
+					DXVid.setSSvSplit(true);
+				if(state.Gamepad.wButtons&XINPUT_GAMEPAD_Y)
+					DXVid.setSSvSplit(false);
+			}
 			
-			tem = state.Gamepad.sThumbRX;
-			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-				tem = 0;
-			rot += ((tem/32767.0f)*dt)*10;
-			tem = state.Gamepad.sThumbRY;
-			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-				tem = 0;
-			angle += ((tem/32767.0f)*dt)*10;
-			if(angle >= 90)
-				angle = 89.9f;
-			else if(angle <=-90)
-				angle = -89.9f;
-			DXVid.rotateCam(temp,2,rot,angle);
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
-				sFrame.Play(*testSound,dist,0,0,0,0,0);
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
-				DXVid.setSSvSplit(true);
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_Y)
-				DXVid.setSSvSplit(false);
+
 		}
+		DXVid.setCam(1,&temp);
+		tem = 0;
+		if(input.getState(4,iState)) {
+			dist2 -= iState.lY*dt;
+			tem = iState.rY;
+			angle2 += iState.rY*dt;
+			rot2 += iState.rX*dt;
+			if(angle2 >= 90)
+				angle2 = 89.9f;
+			else if(angle2 <=-90)
+				angle2 = -89.9f;
+			DXVid.rotateCam(temp2,dist2,rot2,angle2);
+			DXVid.setCam(2,&temp2);
+		}
+		
 		tTime = cTime+(CLOCKS_PER_SEC/60);
-		}
-	tempProp.pos.x = temp.cam_pos.x;
-	tempProp.pos.y = temp.cam_pos.y;
-	tempProp.pos.z = temp.cam_pos.z;
-	sFrame.setListenProp(0,tempProp);
-	DXVid.setCam(1,&temp);
-	lTime = cTime;
+		tempProp.pos.x = temp.cam_pos.x;
+		tempProp.pos.y = temp.cam_pos.y;
+		tempProp.pos.z = temp.cam_pos.z;
+		sFrame.setListenProp(0,tempProp);
+		lTime = cTime;
 	}
-	
+
 }
 
 void DXTest::draw() {

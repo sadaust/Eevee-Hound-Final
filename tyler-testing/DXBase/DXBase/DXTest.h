@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ResourceManager.h"
 #include "InputHandler.h"
 #include "SoundFrame.h"
@@ -23,6 +25,7 @@ private:
 	int numCon;
 	DWORD cTime,lTime,tTime;
 	float dist, rot, angle;
+	float dist2, rot2, angle2;
 	//dt in seconds
 	float dt;
 public:
