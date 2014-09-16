@@ -105,6 +105,14 @@ int InputHandler::numGamePads() {
 bool InputHandler::getState(int controllerNum,inputState& out) {
 	XINPUT_STATE xInputState;
 	float temp;
+	//clear input
+	for(int i = 0; i < 9;++i)
+		out.buttons[i] = false;
+	out.lX = 0;
+	out.lY = 0;
+	out.rX = 0;
+	out.rY = 0;
+	//get input
 	if(controllerNum >= 0 && controllerNum < 4) {
 		if(XInputGetState(controllerNum,&xInputState) == ERROR_SUCCESS) {
 			//left thumb stick x
