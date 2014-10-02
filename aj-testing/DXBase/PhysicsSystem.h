@@ -36,6 +36,26 @@ public:
 	void HitPlayer(Player& a_player);
 };
 
+<<<<<<< HEAD
+=======
+class BulletVec {
+private:
+	Bullet bullets[MAXBULLETS];
+	bool bools[MAXBULLETS];
+public:
+	BulletVec();
+	~BulletVec();
+	void Init();
+	void Update(float a_dt);
+	Bullet& GetBullet(int a_index);
+	bool GetActive(int a_index);
+	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle);
+	bool DeactivateABullet(int a_index);
+};
+
+
+
+>>>>>>> origin/master
 
 class Terrain {
 private:

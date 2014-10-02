@@ -61,6 +61,64 @@ void Bullet::HitPlayer(Player& a_player) {
 }
 
 
+<<<<<<< HEAD
+=======
+BulletVec::BulletVec() {
+
+}
+
+
+BulletVec::~BulletVec() {
+
+}
+
+
+void BulletVec::Init() {
+	for(int i = 0; i < MAXBULLETS; ++i) {
+		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0);
+		bools[i] = false;
+	}
+}
+
+
+void BulletVec::Update(float a_dt) {
+	for(int i = 0; i < MAXBULLETS; ++i) {
+		if(bools[i]) {
+			bullets[i].Update(a_dt);
+		}
+	}
+}
+
+
+Bullet& BulletVec::GetBullet(int a_index) {
+	return bullets[a_index];
+}
+
+
+bool BulletVec::GetActive(int a_index) {
+	return bools[a_index];
+}
+
+
+bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle) {
+	for(int i = 0; i < MAXBULLETS; ++i) {
+		if(!bools[i]) {
+			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle);
+			bools[i] = true;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool BulletVec::DeactivateABullet(int a_index) {
+	bools[a_index] = false;
+	return true;
+}
+
+
+>>>>>>> origin/master
 Terrain::Terrain() {
 	pos.x = 0;
 	pos.y = 0;
@@ -183,6 +241,7 @@ bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 
 
 bool PhysicsSystem::SenseCollision(Player& a_player, Bullet &a_bullet) {
+<<<<<<< HEAD
 	float distX = 0;
 	float distZ = 0;
 	float tempDist = 0;
@@ -195,6 +254,27 @@ bool PhysicsSystem::SenseCollision(Player& a_player, Bullet &a_bullet) {
 		//a_player.toggleGrounded(true);
 		//a_player.setVelocityY(0);
 		return true;
+=======
+
+
+
+	if(a_player.getProspectivePos().y < a_bullet.getPos().y) { // y,y,top
+		if(a_player.getProspectivePos().y > a_bullet.getPos().y-a_player.getBound().height) { //y,y,bottom
+			float distX = 0;
+			float distZ = 0;
+			float tempDist = 0;
+			distX = a_bullet.getProspectivePos().x-a_player.getProspectivePos().x;
+			distZ = a_bullet.getProspectivePos().z-a_player.getProspectivePos().z;
+			// Finds distances in straight lines between the points
+			tempDist = (distX*distX)+(distZ*distZ);
+			if(tempDist < (a_player.getBound().radius*a_player.getBound().radius)) {
+				//a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getStruct()->top,a_player.getProspectivePos().z));
+				//a_player.toggleGrounded(true);
+				//a_player.setVelocityY(0);
+				return true;
+			}
+		}
+>>>>>>> origin/master
 	}
 	return false;
 }
