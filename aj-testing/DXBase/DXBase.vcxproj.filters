@@ -42,9 +42,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Limbase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXFrame.h">
@@ -75,12 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShapeDefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Limbase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LimbHold.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
