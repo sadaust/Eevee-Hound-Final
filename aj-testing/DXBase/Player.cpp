@@ -12,8 +12,8 @@ Player::Player() {
 	facing = 0;
 	velocityY = 0;
 	moving = 0;
-	boundingCyl.height = 1;
-	boundingCyl.radius = 0.5f;
+	height = 1;
+	radius = 0.5f;
 	onGround = false;
 }
 
@@ -32,8 +32,8 @@ void Player::testInit(float a_x, float a_y, float a_z, float a_rot) {
 	prospectivePos.z = pos.z;
 	facing = a_rot;
 	speed = 5.0f;
-	boundingCyl.height = 1;
-	boundingCyl.radius = 0.5f;
+	height = 1;
+	radius = 0.5f;
 }
 
 
@@ -176,14 +176,13 @@ float Player::getVelocityY() {
 }
 
 
-cylinder Player::getBound() {
-	return boundingCyl;
+float Player::getHeight() {
+	return height;
 }
 
 
-void Player::setBound(float a_h, float a_r) {
-	boundingCyl.height = a_h;
-	boundingCyl.radius = a_r;
+float Player::getRadius() {
+	return radius;
 }
 
 

@@ -74,9 +74,6 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShapeDefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Limbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,5 +93,10 @@
     <Media Include="plinkhit.wav">
       <Filter>Resource Files</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PartList.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

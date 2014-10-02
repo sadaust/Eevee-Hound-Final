@@ -100,7 +100,6 @@
     <ClInclude Include="RenVector.h" />
     <ClInclude Include="ResDefs.h" />
     <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="ShapeDefs.h" />
     <ClInclude Include="SoundFrame.h" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +108,9 @@
   <ItemGroup>
     <Media Include="battle.mp3" />
     <Media Include="plinkhit.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PartList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

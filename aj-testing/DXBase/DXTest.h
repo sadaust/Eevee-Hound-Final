@@ -12,7 +12,6 @@ private:
 	DXFrame DXVid;
 	SoundFrame sFrame;
 	PrimObj testCube,testCube2, testCube3, testCube4;
-	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
 	TextStruct testText;
 	ModelObj testMod;
@@ -30,7 +29,6 @@ private:
 	Terrain testTerrain, testTerrain2;
 	PhysicsSystem testPhys;
 	Bullet testBullet;
-	BulletVec testBullVec;
 	//dt in seconds
 	float dt;
 public:

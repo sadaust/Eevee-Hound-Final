@@ -1,7 +1,6 @@
 #pragma once
 #include "DXFrame.h"
 #include "InputHandler.h"
-#include "ShapeDefs.h"
 //#include "PhysicsSystem.h"
 
 
@@ -15,8 +14,9 @@ private:
 	float facing, 
 		moving, 
 		velocityY,
-		speed;
-	cylinder boundingCyl;
+		speed,
+		height,
+		radius;
 	bool onGround;
 public:
 	Player();
@@ -30,8 +30,8 @@ public:
 	float getMoving();
 	D3DXVECTOR2 getVelocityXZ();
 	float getVelocityY();
-	cylinder getBound();
-	void setBound(float a_h, float a_r);
+	float getHeight();
+	float getRadius();
 	void setPosInts(float a_x, float a_y, float a_z);
 	void setPos(D3DXVECTOR3 a_pos);
 	void setProspectivePos(D3DXVECTOR3 a_prospos);
