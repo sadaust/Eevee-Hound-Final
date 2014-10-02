@@ -59,6 +59,8 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testCube4 = testCube;
 	testCube2.primInfo = resMan.loadPrim("WallTest",20,1,1);
 	testCube4.primInfo = resMan.loadPrim("BulletTest",0.1f,0.1f,0.1f);
+	for(int i = 0; i < MAXBULLETS; ++i)
+		testPrimObjs[i] = testCube4;
 	tempRen.asset = &testCube;
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
@@ -69,6 +71,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.addRen(tempRen);
 	tempRen.asset = &testCube4;
 	DXVid.addRen(tempRen);
+	for(int i = 0; i < 256; ++i) {
+		tempRen.asset = &testPrimObjs[i];
+		DXVid.addRen(tempRen);
+	}
+
 
 	testSprite.image = resMan.loadTexture("xboxControllerSpriteFont.tga",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0);
 	testSprite.posX = 0;
@@ -157,6 +164,22 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
 	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	testBullVec.Init();
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo);
+	testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo);
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo);
+	testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo);
+
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+
 }
 
 bool DXTest::devLost() {
@@ -249,8 +272,8 @@ void DXTest::update() {
 			else if(angle <=-90)
 				angle = -89.9f;
 			DXVid.rotateCam(temp,2,rot,angle);
+			
 			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
-				testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 				//sFrame.Play(*testSound,dist,0,0,0,0,0);
 			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
 				DXVid.setSSvSplit(true);
@@ -262,6 +285,7 @@ void DXTest::update() {
 			////////////////////////////////
 			testPlayer.Update(state, dt,rot, angle);
 			testBullet.Update(dt);
+			testBullVec.Update(dt);
 			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
 				testPhys.ResolveCollision(testPlayer,testTerrain);
 			}
@@ -276,6 +300,23 @@ void DXTest::update() {
 			}
 			if(testPhys.SenseCollision(testPlayer,testBullet)) {
 				testPhys.ResolveCollision(testPlayer,testBullet);
+			}
+
+			for(int i = 0; i < MAXBULLETS; ++i) {
+				if(testBullVec.GetActive(i)) {
+					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testTerrain2,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+				}
 			}
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
@@ -295,6 +336,17 @@ void DXTest::update() {
 			D3DXMatrixTranslation(&testCube2.matrix,testTerrain2.getPos().x,testTerrain2.getPos().y-0.5f,testTerrain2.getPos().z);
 			D3DXMatrixTranslation(&testCube3.matrix,testTerrain.getPos().x,testTerrain.getPos().y-0.5f,testTerrain.getPos().z);
 			D3DXMatrixTranslation(&testCube4.matrix,testBullet.getPos().x,testBullet.getPos().y-0.5f,testBullet.getPos().z);
+
+			D3DXVECTOR3 temppos;
+			for(int i = 0; i < MAXBULLETS; ++i) {
+				if(testBullVec.GetActive(i)) {
+					temppos = testBullVec.GetBullet(i).getPos();
+					D3DXMatrixTranslation(&testPrimObjs[i].matrix,temppos.x,temppos.y-0.5f,temppos.z);
+				}
+			}
+
+
+
 			///*D3DXMatrixTranslation(&testCube.matrix,0,0,distX);*/
 			
 			temp.cam_look_pos.x = testPlayer.getPos().x;
@@ -302,7 +354,9 @@ void DXTest::update() {
 			temp.cam_look_pos.z = testPlayer.getPos().z;
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
-
+			if(state.Gamepad.bLeftTrigger > 0) { 
+				testBullVec.ActivateABullet(temp.cam_pos,D3DXVECTOR3(1,0,0),testCube4.primInfo);
+			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
 		}

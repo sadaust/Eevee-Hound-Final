@@ -97,6 +97,7 @@
     <ClInclude Include="RenVector.h" />
     <ClInclude Include="ResDefs.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ShapeDefs.h" />
     <ClInclude Include="SoundFrame.h" />
   </ItemGroup>
   <ItemGroup>
