@@ -42,6 +42,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Limbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXFrame.h">
@@ -71,14 +74,16 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
+    <ClInclude Include="ShapeDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Limbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LimbHold.h">
-=======
-    <ClInclude Include="ShapeDefs.h">
->>>>>>> origin/master
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Limb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

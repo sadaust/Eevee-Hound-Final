@@ -1,6 +1,9 @@
 #pragma once
 #include "DXFrame.h"
 #include "InputHandler.h"
+#include "ShapeDefs.h"
+#include "LimbHold.h"
+#include "Limb.h"
 //#include "PhysicsSystem.h"
 
 
@@ -9,15 +12,16 @@
 
 class Player {
 private: 
+	PlayerLimbs Limbs;
 	D3DXVECTOR3 pos, prospectivePos;
 	D3DXVECTOR2 velocityXZ;
 	float facing, 
 		moving, 
 		velocityY,
-		speed,
-		height,
-		radius;
+		speed;
+	cylinder boundingCyl;
 	bool onGround;
+	bool R_arm;
 public:
 	Player();
 	~Player();
@@ -30,8 +34,8 @@ public:
 	float getMoving();
 	D3DXVECTOR2 getVelocityXZ();
 	float getVelocityY();
-	float getHeight();
-	float getRadius();
+	cylinder getBound();
+	void setBound(float a_h, float a_r);
 	void setPosInts(float a_x, float a_y, float a_z);
 	void setPos(D3DXVECTOR3 a_pos);
 	void setProspectivePos(D3DXVECTOR3 a_prospos);
@@ -41,6 +45,8 @@ public:
 	void setVelocityXZ(D3DXVECTOR2 a_velocityXZ);
 	void setVelocityY(float a_velocityY);
 	void toggleGrounded(bool a_ground);
+	void toggleRarm(bool R_arm);
+	void addLimb(Limb part);
 };
 
 
