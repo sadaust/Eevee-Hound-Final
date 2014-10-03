@@ -22,6 +22,22 @@ InputHandler::InputHandler() {
 	setBind(binds::left,DIK_A);
 	setBind(binds::right,DIK_D);
 	setBind(binds::sprint,DIK_LSHIFT);
+	//set sensitivity
+	for(int i = 0;i<4;++i) {
+		sens[i].xSens = 1;
+		sens[i].ySens = 1;
+	}
+	sens[4].xSens = 10;
+	sens[4].ySens = 10;
+}
+
+bool InputHandler::setSens(int pNum, float xSens, float ySens) {
+	if(pNum >= 0&&pNum<5) {
+		sens[pNum].xSens = xSens;
+		sens[pNum].ySens = ySens;
+		return true;
+	}
+	return false;
 }
 
 void InputHandler::setBind(binds::bindList bin, int key) {
@@ -132,12 +148,14 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 				temp = 0;
 			temp /= MAXSHORT;
+			temp *= sens[controllerNum].xSens;
 			out.rX = temp;
 			//right thump stick y
 			temp = xInputState.Gamepad.sThumbRY;
 			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 				temp = 0;
 			temp /= MAXSHORT;
+			temp *= sens[controllerNum].ySens;
 			out.rY = temp;
 			//set buttons
 			//get jump
@@ -164,10 +182,10 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			return false;
 	} else if(controllerNum == 4) {
 		temp = mouseState.lX;
-		temp /= 1;
+		temp *= sens[4].xSens;
 		out.rX = temp;
 		temp = mouseState.lY;
-		temp /= 1;
+		temp *= sens[4].ySens;
 		out.rY = temp;
 		//check all binds
 		if(getBoundKey(binds[binds::sprint]))
