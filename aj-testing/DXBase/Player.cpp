@@ -15,6 +15,8 @@ Player::Player() {
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
 	onGround = false;
+	checkItem= false;
+	R_arm= false;
 }
 
 
@@ -49,7 +51,7 @@ void rotate2Dvector(D3DXVECTOR2* pV2, float angle)
 	return;
 }
 
-void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_angle) {
+void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list) {
 	int tempint;
 
 	
@@ -100,6 +102,22 @@ void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_ang
 		velocityY = 0.2f;
 		onGround = false;
 	}
+	if(a_state.Gamepad.wButtons&XINPUT_GAMEPAD_B) {
+		//get part !0 
+		if (Limbs.getLeg()==0){
+			part_list.CaseAction(Limbs.getLeg(),*this);
+		// find that part 
+		// execute that function
+		}
+	}
+	if(a_state.Gamepad.wButtons&XINPUT_GAMEPAD_X) {
+		//if item is coliding with character
+		// make bool switch here.
+		//
+		//bring menue up 
+		// 
+	}
+	
 	
 	
 	facing = D3DXToRadian(a_rot);

@@ -1,32 +1,6 @@
 #include "Limbase.h"
-
-Limbase::Limbase()
-{
-	/*/ testing
-	infile.open("PartList.txt");
-	for (int i=0;i<NUMPARTS;i++)
-	{
-		getline(infile,ss, ';');
-		int id;
-		std::string name;
-		int typehold;
-		ss>>id;
-		ss>>name;
-		ss>>typehold;
-		Limbtype type;
-		if (typehold==0)
-			type=head;
-		if (typehold==1)
-			type=arm;
-		if (typehold==2)
-			type=leg;
-		if (typehold==3)
-			type=body;
-		part[i].ID=id;
-		part[i].name=name;
-		part[i].type=type;
-	}
-	*/
+#include "Player.h"
+Limbase::Limbase(){
 	// to be made to read from text file.
 	part[0].setID(1);
 	part[0].setName("Turtle");
@@ -90,104 +64,87 @@ Limbase::Limbase()
    part[19].setType(body);
 }
 
-Limb Limbase::getPartRan()
-{
+Limb Limbase::getPartRan(){
 	int num;
 	num=rand()%NUMPARTS;
 	return part[num];
 }
 
-Limb Limbase::getPart(int partnum)
-{
+Limb Limbase::getPart(int partnum){
 	return part[partnum];
 }
 
-void Limbase::CaseAction(Limb part)
-{
-	switch (part.getPartType())
-	{
+void Limbase::CaseAction(int partNumber,Player& p_data){
+	partNumber=1;
+	switch (part[partNumber-1].getPartType()){
 	case arm:
 		{
-			if (part.getPartName()=="Pheonix")
-			{
+			if (part[partNumber-1].getPartName()=="Pheonix")	{
 				//shoot fireball
 			}
-			else if (part.getPartName()=="Tiger")
-			{
+			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//claw attack
 			}
-			else if (part.getPartName()=="Bear")
-			{
+			else if (part[partNumber-1].getPartName()=="Bear"){
 				//bearpull
 			}
-			else if (part.getPartName()=="Turtle")
-			{
+			else if (part[partNumber-1].getPartName()=="Turtle"){
 				//throw slwoing bubble
 			}
 			else break;
 		}
 	case leg:
 		{
-			if (part.getPartName()=="Pheonix")
-			{
+			if (part[partNumber-1].getPartName()=="Pheonix"){
 				//tripple jump
-				if(a_state.Gamepad.wButtons&XINPUT_GAMEPAD_A &&jumpCount!=3) {
-				velocityY = 0.2f;
 				//increase jump count function to be made
-				}
+				
 			}
-			else if (part.getPartName()=="Tiger")
-			{
+			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//movement speed boost
 			}
-			else if (part.getPartName()=="Bear")
-			{
+			else if (part[partNumber-1].getPartName()=="Bear"){
 				//
 			}
-			else if (part.getPartName()=="Turtle")
-			{
+			else if (part[partNumber-1].getPartName()=="Turtle"){
 				//swim speed boost
 			}
 			else break;
 		}
 	case body:  // body parts to be added to passive will not be in case in the end.
 		{
-			if (part.getPartName()=="Pheonix")
-			{
+			if (part[partNumber-1].getPartName()=="Pheonix"){
 				//damage over time aura
 
 			}
-			else if (part.getPartName()=="Tiger")
-			{
+			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//chance to not receive damage
 			}
-			else if (part.getPartName()=="Bear")
-			{
+			else if (part[partNumber-1].getPartName()=="Bear"){
 				//HP increased
 			}
-			else if (part.getPartName()=="Turtle")
-			{
+			else if (part[partNumber-1].getPartName()=="Turtle"){
 				//damage taken reduced
 			}
 			else break;
 		}
 	case head: // headparts to be added to passive will not be in case in the end
 		{
-			if (part.getPartName()=="Pheonix")
-			{
+			if (part[partNumber-1].getPartName()=="Pheonix"){
 				// all enemy players displayed on the map
 			}
-			else if (part.getPartName()=="Tiger")
-			{
+			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//target rect on screen
 			}
-			else if (part.getPartName()=="Bear")
-			{
+			else if (part[partNumber-1].getPartName()=="Bear"){
 				// chance to stun enemy on hit
 			}
-			else if (part.getPartName()=="Turtle")
-			{
+			else if (part[partNumber-1].getPartName()=="Turtle"){
 				// chance to poison enemy on attack.
+				D3DXVECTOR2 move;
+				move.x=0.2f;
+				move.y=0.2f;
+				p_data.setVelocityXZ(move);
 			}
 			else break;
 		}

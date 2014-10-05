@@ -20,5 +20,5 @@ public:
 	int getLarm(){return L_Arm;}
 	int getLeg(){return Leg;}
 	int getBody(){return Body;}
-	~PlayerLimbs();
+	//~PlayerLimbs();
 };

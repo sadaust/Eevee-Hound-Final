@@ -28,6 +28,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempRen.asset = &testText;
 	tempRen.locCamNum = 5;
 	tempRen.type = text;
+	Limbase PartList;
 	
 	DXVid.init(hWnd,hInst,bWindowed);
 	DXVid.addRen(tempRen);
@@ -283,7 +284,7 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer.Update(state, dt,rot, angle);
+			testPlayer.Update(state, dt,rot, angle,PartList);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
 			if(testPhys.SenseCollision(testPlayer,testTerrain)) {

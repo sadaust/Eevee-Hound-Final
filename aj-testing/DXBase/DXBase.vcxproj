@@ -93,6 +93,7 @@
     <ClInclude Include="DXFrame.h" />
     <ClInclude Include="DXTest.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="ItemSwapMenu.h" />
     <ClInclude Include="Limb.h" />
     <ClInclude Include="Limbase.h" />
     <ClInclude Include="LimbHold.h" />

@@ -4,6 +4,7 @@
 #include "ShapeDefs.h"
 #include "LimbHold.h"
 #include "Limb.h"
+#include "Limbase.h"
 //#include "PhysicsSystem.h"
 
 
@@ -20,13 +21,12 @@ private:
 		velocityY,
 		speed;
 	cylinder boundingCyl;
-	bool onGround;
-	bool R_arm;
+	bool onGround, checkItem, R_arm;
 public:
 	Player();
 	~Player();
 	void testInit(float a_x, float a_y, float a_z, float a_rot);
-	void Update(XINPUT_STATE a_input, float a_dt, float &a_rot, float &a_angle);
+	void Update(XINPUT_STATE a_input, float a_dt, float &a_rot, float &a_angle,Limbase part_list);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
@@ -45,7 +45,8 @@ public:
 	void setVelocityXZ(D3DXVECTOR2 a_velocityXZ);
 	void setVelocityY(float a_velocityY);
 	void toggleGrounded(bool a_ground);
-	void toggleRarm(bool R_arm);
+	void toggleRarm(bool right_a);
+	void togglecheckItem(bool item);
 	void addLimb(Limb part);
 };
 

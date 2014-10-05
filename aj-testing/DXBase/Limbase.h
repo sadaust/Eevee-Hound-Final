@@ -4,6 +4,10 @@
 #include <fstream>
 #include <sstream>
 #include "Limb.h"
+#include "DXFrame.h"
+//#include "Player.h"
+
+class Player;
 
 #define NUMPARTS 20
 
@@ -12,12 +16,10 @@
 class Limbase {
 private:
 	Limb part[NUMPARTS];
-	//std::ifstream infile; //still testing
-	std::stringstream ss;
 public:
 	Limbase();
 	Limb getPartRan();
 	Limb getPart(int);
-	void CaseAction(Limb);
-	~Limbase();
+	void CaseAction(int,Player&);
+	//~Limbase();
 };
