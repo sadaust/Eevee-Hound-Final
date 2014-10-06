@@ -277,6 +277,29 @@ void DXTest::draw() {
 	if(DXVid.rendererLost()) {
 
 	} else {
+		DXVid.clearRen();
+
+		tempRen.asset = &testCube;
+		tempRen.locCamNum = 0;
+		tempRen.type = primitive;
+
+		DXVid.addRen(tempRen);
+		tempRen.asset = &testCube2;
+		DXVid.addRen(tempRen);
+
+		tempRen.asset = &testSprite;
+		tempRen.type = sprite;
+		DXVid.addRen(tempRen);
+
+		tempRen.asset = &testMod;
+		tempRen.type = model;
+		DXVid.addRen(tempRen);
+		
+		tempRen.asset = &testText;
+		tempRen.type = text;
+		tempRen.locCamNum = 2;
+		DXVid.addRen(tempRen);
+
 		DXVid.Render();
 		//DXVid.clearRen();
 	}

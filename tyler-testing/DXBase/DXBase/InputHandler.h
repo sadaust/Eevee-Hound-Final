@@ -35,6 +35,7 @@ struct inputState {
 	float rX;
 	float rY;
 	bool buttons[9];
+	bool buttonLast[9];
 };
 
 struct sensitivity {
@@ -47,6 +48,7 @@ private:
 	IDirectInput8* m_pDIObj;
 	IDirectInputDevice8* m_pDIKeyboard;
 	IDirectInputDevice8* m_pDIMouse;
+	inputState state[5];
 	int binds[binds::last]; 
 	int mouseOffSet;
 	//keyboard state

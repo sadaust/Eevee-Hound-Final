@@ -88,6 +88,13 @@ void InputHandler::init(HWND& hWnd,HINSTANCE& hInst) {
 	m_pDIObj->CreateDevice(GUID_SysMouse,&m_pDIMouse,NULL);
 	m_pDIMouse->SetDataFormat(&c_dfDIMouse2);
 	m_pDIMouse->SetCooperativeLevel(hWnd,DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+
+	for(int i = 0; i < 5;++i) {
+		for(int z = 0; z < 9; ++z) {
+			state[i].buttonLast[z] = false;
+			state[i].buttons[z] = false;
+		}
+	}
 }
 
 void InputHandler::shutdown() {
@@ -128,6 +135,9 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 	out.lY = 0;
 	out.rX = 0;
 	out.rY = 0;
+	for(int i = 0; i < 9; ++i) {
+		out.buttons[i] = state[controllerNum].buttons[i];
+	}
 	//get input
 	if(controllerNum >= 0 && controllerNum < 4) {
 		if(XInputGetState(controllerNum,&xInputState) == ERROR_SUCCESS) {
@@ -176,6 +186,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			out.buttons[binds::rightAttack] = xInputState.Gamepad.bRightTrigger > fireTriggerPoint;
 			//get right alt attack
 			out.buttons[binds::rightAltAttack] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_RIGHT_SHOULDER;
+			state[controllerNum] = out;
 			return true;
 		}
 		else
@@ -208,6 +219,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 		for(int i = 0; i < 9; ++i) {
 			out.buttons[i] = getBoundKey(i);
 		}
+		state[controllerNum] = out;
 		return true;
 	}
 	return false;
