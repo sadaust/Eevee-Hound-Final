@@ -81,6 +81,7 @@
     <ClCompile Include="DXFrame.cpp" />
     <ClCompile Include="DXTest.cpp" />
     <ClCompile Include="Limbase.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenVector.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="Limb.h" />
     <ClInclude Include="Limbase.h" />
     <ClInclude Include="LimbHold.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenVector.h" />
