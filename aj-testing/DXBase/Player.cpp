@@ -17,6 +17,7 @@ Player::Player() {
 	onGround = false;
 	checkItem= false;
 	R_arm= false;
+	jumpCount=0;
 }
 
 

@@ -75,7 +75,7 @@ Limb Limbase::getPart(int partnum){
 }
 
 void Limbase::CaseAction(int partNumber,Player& p_data){
-	partNumber=1;
+	partNumber=18;
 	switch (part[partNumber-1].getPartType()){
 	case arm:
 		{
@@ -98,6 +98,13 @@ void Limbase::CaseAction(int partNumber,Player& p_data){
 			if (part[partNumber-1].getPartName()=="Pheonix"){
 				//tripple jump
 				//increase jump count function to be made
+				if(p_data.getGrounded()==false&&p_data.getJumpCount()<2){
+					p_data.setVelocityY(0.3f);
+					p_data.incrementJumpCount();
+					if(p_data.getJumpCount()==2){
+						p_data.setJumpCount(0);
+					}
+				}
 				
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){

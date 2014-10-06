@@ -22,6 +22,7 @@ private:
 		speed;
 	cylinder boundingCyl;
 	bool onGround, checkItem, R_arm;
+	int jumpCount;
 public:
 	Player();
 	~Player();
@@ -47,7 +48,11 @@ public:
 	void toggleGrounded(bool a_ground);
 	void toggleRarm(bool right_a);
 	void togglecheckItem(bool item);
+	bool getGrounded(){return onGround;}
 	void addLimb(Limb part);
+	void setJumpCount(int j_count){jumpCount=j_count;}
+	int getJumpCount(){return jumpCount;}
+	void incrementJumpCount(){jumpCount++;}
 };
 
 
