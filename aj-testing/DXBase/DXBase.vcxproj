@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="DXFrame.cpp" />
     <ClCompile Include="DXTest.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Limbase.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -93,7 +94,7 @@
     <ClInclude Include="DXFrame.h" />
     <ClInclude Include="DXTest.h" />
     <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="ItemSwapMenu.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Limb.h" />
     <ClInclude Include="Limbase.h" />
     <ClInclude Include="LimbHold.h" />

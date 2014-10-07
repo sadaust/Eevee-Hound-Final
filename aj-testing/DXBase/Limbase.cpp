@@ -64,10 +64,10 @@ Limbase::Limbase(){
    part[19].setType(body);
 }
 
-Limb Limbase::getPartRan(){
+int Limbase::getPartRan(){
 	int num;
 	num=rand()%NUMPARTS;
-	return part[num];
+	return num;
 }
 
 Limb Limbase::getPart(int partnum){

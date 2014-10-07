@@ -8,16 +8,18 @@ DXTest::DXTest() {
 }
 
 void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
-	dist = 2;
+	dist = 2; 
 	distX = 2;
 	distZ = 0;
+	i_distx=4;
+	i_distz=4;
 	rot = 0;
 	angle = 0;
 	input.init(hWnd,hInst);
 	sFrame.Init();
 	tTime = cTime = lTime = GetTickCount();
 	numCon = input.numGamePads();
-	RenInfo tempRen;
+	RenInfo tempRen,tempRen2;
 	ss<<numCon;
 	testText.text = ss.str();
 	testText.textColor = D3DCOLOR(0xFFFFFFFF);
@@ -28,7 +30,9 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempRen.asset = &testText;
 	tempRen.locCamNum = 5;
 	tempRen.type = text;
-	Limbase PartList;
+
+	
+
 	
 	DXVid.init(hWnd,hInst,bWindowed);
 	DXVid.addRen(tempRen);
@@ -60,6 +64,14 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testCube4 = testCube;
 	testCube2.primInfo = resMan.loadPrim("WallTest",20,1,1);
 	testCube4.primInfo = resMan.loadPrim("BulletTest",0.1f,0.1f,0.1f);
+
+	itemDrop.ItemBoxInit(i_distx,0,i_distz);
+	itemDrop.setPrim(testCube);
+	itemDrop.setPartID(PartList.getPartRan());
+	tempRen2.type=primitive;
+	tempRen2.asset=&itemDrop;
+	tempRen2.locCamNum = 0;
+
 	for(int i = 0; i < MAXBULLETS; ++i)
 		testPrimObjs[i] = testCube4;
 	tempRen.asset = &testCube;
@@ -180,6 +192,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
+	
 
 }
 

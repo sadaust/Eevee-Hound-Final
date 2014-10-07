@@ -5,6 +5,7 @@
 #include "PhysicsSystem.h"
 #include <sstream>
 #include "Limbase.h"
+#include "Item.h"
 
 class DXTest {
 private:
@@ -27,12 +28,13 @@ private:
 	Player testPlayer;
 	int numCon;
 	DWORD cTime,lTime,tTime;
-	float dist, distX, distZ, rot, angle;
+	float dist, distX, distZ, rot, angle,i_distx,i_distz;
 	Terrain testTerrain, testTerrain2;
 	PhysicsSystem testPhys;
 	Bullet testBullet;
 	BulletVec testBullVec;
 	Limbase PartList;
+	ItemBox itemDrop;
 	//dt in seconds
 	float dt;
 public:
