@@ -101,9 +101,9 @@ void Limbase::CaseAction(int partNumber,Player& p_data){
 				if(p_data.getGrounded()==false&&p_data.getJumpCount()<2){
 					p_data.setVelocityY(0.3f);
 					p_data.incrementJumpCount();
-					if(p_data.getJumpCount()==2){
-						p_data.setJumpCount(0);
-					}
+					//if(p_data.getJumpCount()==2){
+						//p_data.setJumpCount(0);
+					//}
 				}
 				
 			}

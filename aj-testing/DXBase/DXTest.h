@@ -16,7 +16,7 @@ private:
 	PrimObj testCube,testCube2, testCube3, testCube4, testCube5,testCube6;
 	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
-	TextStruct testText;
+	TextStruct testText,testText2;
 	ModelObj testMod;
 	D3DMATERIAL9 testMat;
 	InputHandler input;

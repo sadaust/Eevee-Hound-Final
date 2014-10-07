@@ -74,6 +74,7 @@ public:
 	void addLimb(Limb part);
 	void setJumpCount(int j_count){jumpCount=j_count;}
 	int getJumpCount(){return jumpCount;}
+	int getHealth(){return curHealth;}
 	void incrementJumpCount(){jumpCount++;}
 	void itemAccess(ItemBox &a_item);
 };

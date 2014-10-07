@@ -27,6 +27,8 @@ void Player::takeDamage(int a_damage) {
 
 
 Player::Player() {
+	maxHealth = 100;
+	curHealth = 100;
 	pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
 	facing = 0;
@@ -57,6 +59,7 @@ void Player::testInit(float a_x, float a_y, float a_z, float a_rot) {
 	speed = 5.0f;
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
+
 }
 
 
@@ -126,7 +129,7 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 		velocityY = 0.2f;
 		onGround = false;
 	}
-	if(a_state.buttons[binds::legPower]) {
+	if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
 		//get part !0 
 		if (!Limbs.getLeg()==0){
 			part_list.CaseAction(Limbs.getLeg(),*this);
@@ -275,6 +278,7 @@ void Player::setVelocityY(float a_velocityY) {
 
 void Player::toggleGrounded(bool a_grounded) {
 	onGround = a_grounded;
+	setJumpCount(0);
 }
 
 void Player::togglecheckItem(bool a_item){

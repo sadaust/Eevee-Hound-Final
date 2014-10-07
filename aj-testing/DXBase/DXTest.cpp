@@ -16,8 +16,8 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	angle = 0;
 	dist2 = 2;
 	angle2 = 0;
-	distX2 = 5;
-	distZ2 = 5;
+	distX2 = 2;
+	distZ2 = 0;
 	//second player stuff
 	distX3=4;
 	distZ3=0;
@@ -34,10 +34,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	ss<<numCon;
 	testText.text = ss.str();
 	testText.textColor = D3DCOLOR(0xFFFFFFFF);
-	testText.rec.top = 0;
-	testText.rec.left = 0;
+	testText.rec.top = 700;
+	testText.rec.left = 50;
 	testText.rec.right = 100;
-	testText.rec.bottom = 100;
+	testText.rec.bottom = 800;
+	testText2 = testText;
 	tempRen.asset = &testText;
 	tempRen.locCamNum = 5;
 	tempRen.type = text;
@@ -122,7 +123,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	temp.drawDist = 200.0f;
 	temp.fov_deg = 90.0f;
 
-	temp2.cam_look_pos.x = 0;
+	/*temp2.cam_look_pos.x = 0;
 	temp2.cam_look_pos.y = 0;
 	temp2.cam_look_pos.z = 0;
 	temp2.cam_pos.x = 0;
@@ -132,9 +133,9 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	temp2.cam_up_vec.y = 0;
 	temp2.cam_up_vec.z = 1;
 	temp2.drawDist = 200.0f;
-	temp2.fov_deg = 90.0f;
+	temp2.fov_deg = 90.0f;*/
 
-	temp3 = temp4 = temp;
+	temp2 = temp3 = temp4 = temp;
 	
 	temp3.cam_pos.x = 0;
 	temp3.cam_pos.z = -2;
@@ -179,7 +180,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 
 	DXVid.setViewCount(2);
 	DXVid.toggleSS();
-	DXVid.setSSvSplit(false);
+	DXVid.setSSvSplit(true);
 	DXVid.setCam(1,&temp);
 	DXVid.setCam(2,&temp2);
 	DXVid.setCam(3,&temp3);
@@ -281,9 +282,6 @@ void DXTest::update() {
 				
 			dist += iState.lY*dt;
 			//D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
-			ss.str("");
-			ss<<tem/32767.0f;
-			testText.text = ss.str();
 			
 			tem = iState.lX;
 			rot += (tem*dt)*10;
@@ -358,6 +356,10 @@ void DXTest::update() {
 						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
 						testBullVec.DeactivateABullet(i);
 					}
+					if(testPhys.SenseCollision(testPlayer2,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testPlayer2, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
 				}
 			}
 			//temp.cam_look_pos.x = 0;
@@ -375,12 +377,12 @@ void DXTest::update() {
 			temp.cam_look_pos.z = testPlayer.getPos().z;
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
-			if(iState.buttons[binds::leftAttack]) { 
+			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
 				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,RangedDefaultLifeSpan, testDamage);
 			}
-			if(iState.buttons[binds::rightAttack]) { 
+			if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
 				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,MeleeDefaultLifeSpan, testDamage);
@@ -394,10 +396,7 @@ void DXTest::update() {
 				
 			dist2 += iState.lY*dt;
 			//D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
-			ss2.str("");
-			ss2<<tem2/32767.0f;
-			testText.text = ss2.str();
-			
+
 			tem2 = iState.lX;
 			rot2 += (tem2*dt)*10;
 			tem2 = iState.lY;
@@ -488,12 +487,12 @@ void DXTest::update() {
 			temp2.cam_look_pos.z = testPlayer2.getPos().z;
 			DXVid.rotateCam(temp2,2,rot2,angle2);
 			////////////////////////////////
-			if(iState.buttons[binds::leftAttack]) { 
+			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer2.getPos();
 				tempvec.y += 1.5f;
 				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,RangedDefaultLifeSpan, testDamage);
 			}
-			if(iState.buttons[binds::rightAttack]) { 
+			if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer2.getPos();
 				tempvec.y += 1.5f;
 				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
@@ -598,12 +597,29 @@ void DXTest::draw() {
 		tempRen.type = model;
 		DXVid.addRen(tempRen);
 		
+		//text
+		testText.textColor = D3DCOLOR(0xFFFFFFFF);
+		testText.rec.top = 500;
+		testText.rec.left = 50;
+		testText.rec.right = 100;
+		testText.rec.bottom = 600;
+		testText2 = testText;
+
+		ss.str("");
+		ss<<testPlayer.getHealth();
+		testText.text = ss.str();
 		tempRen.asset = &testText;
 		tempRen.type = text;
-		tempRen.locCamNum = 2;
+		tempRen.locCamNum = 1;
 		DXVid.addRen(tempRen);
 
-		DXVid.Render();
+		ss.str("");
+		ss<<testPlayer2.getHealth();
+		testText2.text = ss.str();
+		tempRen.asset = &testText2;
+		tempRen.locCamNum = 2;
+		DXVid.addRen(tempRen);
+		
 		DXVid.Render();
 		//DXVid.clearRen();
 	}

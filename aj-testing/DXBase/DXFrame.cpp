@@ -315,7 +315,7 @@ void DXFrame::Render() {
 	if(!m_pD3DDevice)
 		return;
 	//*************************************************************************
-	RECT rect;
+	RECT rect,tempRec;
 	GetWindowRect(m_hWnd, &rect);
 	std::stringstream ss;
 	D3DRECT winRect;
@@ -396,7 +396,12 @@ void DXFrame::Render() {
 						break;
 					case text:
 						tempText = (TextStruct*)tempRen->asset;
-						m_pD3DFont->DrawText(0,tempText->text.c_str(),-1,&rect,DT_TOP|DT_CENTER|DT_NOCLIP,tempText->textColor);
+						tempRec = tempText->rec;
+						tempRec.bottom += viewPorts[i].viewPort.Y;
+						tempRec.top += viewPorts[i].viewPort.Y;
+						tempRec.left += viewPorts[i].viewPort.X;
+						tempRec.right += viewPorts[i].viewPort.X;
+						m_pD3DFont->DrawText(0,tempText->text.c_str(),-1,&tempRec,DT_TOP|DT_CENTER|DT_NOCLIP,tempText->textColor);
 						break;
 					default:
 						break;

@@ -365,6 +365,7 @@ bool PhysicsSystem::SenseCollision(Player& a_player, Bullet &a_bullet) {
 				//a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getStruct()->top,a_player.getProspectivePos().z));
 				//a_player.toggleGrounded(true);
 				//a_player.setVelocityY(0);
+				a_bullet.HitPlayer(a_player);
 				return true;
 			}
 		}
