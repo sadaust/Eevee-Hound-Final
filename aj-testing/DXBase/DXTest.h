@@ -13,7 +13,7 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube,testCube2, testCube3, testCube4, testCube5;
+	PrimObj testCube,testCube2, testCube3, testCube4, testCube5,testCube6;
 	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
 	TextStruct testText;
@@ -22,13 +22,13 @@ private:
 	InputHandler input;
 	listenProp tempProp;
 	D3DLIGHT9 m_Light;
-	std::stringstream ss;
+	std::stringstream ss,ss2;
 	SoundStruct* testSound;
 	MusicStruct* testMusic;
-	Player testPlayer;
+	Player testPlayer,testPlayer2;
 	int numCon;
 	DWORD cTime,lTime,tTime;
-	float dist, distX, distZ, rot, angle, distX2, distZ2;
+	float dist, distX, distZ, rot, angle, distX2, distZ2, distX3, distZ3;
 	Terrain testTerrain, testTerrain2;
 	PhysicsSystem testPhys;
 	Bullet testBullet;
