@@ -2,6 +2,10 @@
 #include "PhysicsSystem.h"
 
 
+
+
+
+
 Bullet::Bullet() {
 
 }
@@ -12,12 +16,17 @@ Bullet::~Bullet() {
 }
 
 
-void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle) {
+void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	pos = a_pos;
+	rot = a_rot;
+	angle = a_angle;
+	rotate3Dvector(&a_velocity, a_rot, a_angle);
 	velocity = a_velocity;
 	structpoi = a_structpoi;
 	prospectivePos = pos;
 	speed = 5.0f;
+	lifespan = a_lifespan;
+	damage = a_damage;
 }
 
 
@@ -29,7 +38,7 @@ void Bullet::Update(float a_dt) {
 	prospectivePos.x += velocity.x*a_dt;
 	prospectivePos.y += velocity.y*a_dt;
 	prospectivePos.z += velocity.z*a_dt;
-
+	lifespan -= a_dt;
 
 
 }
@@ -42,6 +51,26 @@ D3DXVECTOR3 Bullet::getPos() {
 
 D3DXVECTOR3 Bullet::getProspectivePos() {
 	return prospectivePos;
+}
+
+
+int Bullet::getDamage() {
+	return damage;
+}
+
+
+float Bullet::getLifeSpan() {
+	return lifespan;
+}
+
+
+float Bullet::getRot() {
+	return rot;
+}
+
+
+float Bullet::getAngle() {
+	return angle;
 }
 
 
@@ -64,7 +93,7 @@ void Bullet::HitPlayer(Player& a_player) {
 	  //////////////////////////////////////////////
 	 // Add in damage and stuff here probably    //
 	//////////////////////////////////////////////
-
+	a_player.takeDamage(damage);
 	
 }
 
@@ -81,7 +110,7 @@ BulletVec::~BulletVec() {
 
 void BulletVec::Init() {
 	for(int i = 0; i < MAXBULLETS; ++i) {
-		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0);
+		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0,0,0);
 		bools[i] = false;
 	}
 }
@@ -91,6 +120,9 @@ void BulletVec::Update(float a_dt) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(bools[i]) {
 			bullets[i].Update(a_dt);
+			if(bullets[i].getLifeSpan() <= 0) {
+				DeactivateABullet(i);
+			}
 		}
 	}
 }
@@ -106,10 +138,10 @@ bool BulletVec::GetActive(int a_index) {
 }
 
 
-bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle) {
+bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(!bools[i]) {
-			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle);
+			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle, a_lifespan, a_damage);
 			bools[i] = true;
 			return true;
 		}

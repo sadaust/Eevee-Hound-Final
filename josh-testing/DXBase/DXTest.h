@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "PhysicsSystem.h"
 #include <sstream>
+#include "Limbase.h"
 
 class DXTest {
 private:
@@ -31,6 +32,8 @@ private:
 	PhysicsSystem testPhys;
 	Bullet testBullet;
 	BulletVec testBullVec;
+	Limbase PartList;
+	float dist2, rot2, angle2;
 	//dt in seconds
 	float dt;
 public:

@@ -6,6 +6,26 @@ const float maxSpeed   = 20.0f;
 const float terminalVelocity = 10.0f;
 
 
+  ///////////////////////////
+ // Game Statistics/Math  //
+///////////////////////////
+
+
+
+void Player::takeDamage(int a_damage) {
+	curHealth -= a_damage;
+	if(curHealth < 0)
+		curHealth = 0;
+}
+
+
+
+  //////////////////////////// ~~~~~~~~~~~~
+ // End of game Statistics // ~~~~~~~~~~~~
+//////////////////////////// ~~~~~~~~~~~~
+
+
+
 Player::Player() {
 	pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
@@ -15,6 +35,9 @@ Player::Player() {
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
 	onGround = false;
+	checkItem= false;
+	R_arm= false;
+	jumpCount=0;
 }
 
 
@@ -37,20 +60,33 @@ void Player::testInit(float a_x, float a_y, float a_z, float a_rot) {
 }
 
 
-void rotate2Dvector(D3DXVECTOR2* pV2, float angle)
-{
-	// use local variables to find transformed components
-	float Vx1 = cosf(angle)*pV2->x - sinf(angle)*pV2->y;
-	float Vy1 = sinf(angle)*pV2->x + cosf(angle)*pV2->y;
-	// store results thru the pointer
-	pV2->x = Vx1;
-	pV2->y = Vy1;
-
-	return;
+void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle) {
+	float Y = sinf(a_angle) * a_vector->x + cosf(a_angle) * a_vector->y;
+	float X = cosf(a_angle) * a_vector->x - sinf(a_angle) * a_vector->y;
+	a_vector->x = X;
+	a_vector->y = Y;
 }
 
-void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_angle) {
-	int tempint;
+
+void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
+	D3DXVECTOR2 Yaw, Pitch;
+	a_rot = D3DXToRadian(a_rot);
+	a_angle = D3DXToRadian(a_angle);
+	Pitch.x = a_vector->z;				
+	Pitch.y = a_vector->y;				// the final Y
+	rotate2Dvector(&Pitch, a_angle);	// XY rotation 
+	Yaw.x = a_vector->x;				// the final X
+	Yaw.y = Pitch.x;					// the final Z
+	rotate2Dvector(&Yaw,a_rot);			// XZ rotation
+	
+	a_vector->x = Yaw.x; // X
+	a_vector->y = Pitch.y; // Y
+	a_vector->z = -(Yaw.y); // Z
+}
+
+
+void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list) {
+	float tempfloat;
 
 	
 	pos.x = prospectivePos.x;
@@ -64,26 +100,16 @@ void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_ang
 
 
 
-	tempint = a_state.Gamepad.sThumbLX;
-	if(tempint < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tempint > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-		tempint = 0;
-	//pos.x += (tempint/32767.0f)*a_dt;
-	velocityXZ.x = (tempint/32767.0f)*a_dt*speed;
+	tempfloat = a_state.lX;
+	velocityXZ.x = tempfloat*a_dt*speed;
 
-	tempint = a_state.Gamepad.sThumbLY;
-	if(tempint < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tempint > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-		tempint = 0;
-	//pos.z += (tempint/32767.0f)*a_dt;
-	velocityXZ.y = (tempint/32767.0f)*a_dt*speed;
+	tempfloat = a_state.lY;
+	velocityXZ.y = tempfloat*a_dt*speed;
 
-	tempint = a_state.Gamepad.sThumbRX;
-	if(tempint < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tempint > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-		tempint = 0;
-	a_rot += ((tempint/32767.0f)*a_dt)*turnspeedX;
-	tempint = a_state.Gamepad.sThumbRY;
-	if(tempint < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tempint > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-		tempint = 0;
-	a_angle -= ((tempint/32767.0f)*a_dt)*turnspeedY; // minus to uninvert it
+	tempfloat = a_state.rX;
+	a_rot += (tempfloat*a_dt)*turnspeedX;
+	tempfloat = a_state.rY;
+	a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
 	if(a_angle >= 90)
 		a_angle = 89.9f;
 	else if(a_angle <=-90)
@@ -96,10 +122,26 @@ void Player::Update(XINPUT_STATE a_state, float a_dt, float &a_rot, float &a_ang
 		velocityY = terminalVelocity;
 	//if(pos.y <= 0 && velocityY <= 0)
 	//	velocityY = 0;
-	if(a_state.Gamepad.wButtons&XINPUT_GAMEPAD_A && onGround) {
+	if(a_state.buttons[binds::jump] && onGround) {
 		velocityY = 0.2f;
 		onGround = false;
 	}
+	if(a_state.buttons[binds::legPower]) {
+		//get part !0 
+		if (Limbs.getLeg()==0){
+			part_list.CaseAction(Limbs.getLeg(),*this);
+		// find that part 
+		// execute that function
+		}
+	}
+	if(a_state.buttons[binds::use]) {
+		//if item is coliding with character
+		// make bool switch here.
+		//
+		//bring menue up 
+		// 
+	}
+	
 	
 	
 	facing = D3DXToRadian(a_rot);
@@ -232,3 +274,20 @@ void Player::toggleGrounded(bool a_grounded) {
 	onGround = a_grounded;
 }
 
+void Player::addLimb(Limb part){
+	if(part.getPartType()==head){
+		Limbs.setHead(part.getPartID());
+	}
+	if(part.getPartType()==arm&&R_arm==true){
+		Limbs.setRarm(part.getPartID());
+	}
+	if(part.getPartType()==arm&&R_arm==false){
+		Limbs.setLarm(part.getPartID());
+	}
+	if(part.getPartType()==leg){
+		Limbs.setLeg(part.getPartID());
+	}
+	if(part.getPartType()==body){
+		Limbs.setBody(part.getPartID());
+	}
+}

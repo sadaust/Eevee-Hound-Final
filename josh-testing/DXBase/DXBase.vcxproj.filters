@@ -42,6 +42,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Limbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXFrame.h">
@@ -74,6 +80,21 @@
     <ClInclude Include="ShapeDefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Limbase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LimbHold.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Limb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemSwapMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="uvtest.png">
@@ -87,5 +108,10 @@
     <Media Include="plinkhit.wav">
       <Filter>Resource Files</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PartList.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

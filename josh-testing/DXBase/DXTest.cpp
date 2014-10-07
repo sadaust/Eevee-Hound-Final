@@ -13,6 +13,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	distZ = 0;
 	rot = 0;
 	angle = 0;
+	dist2 = 2;
+	rot2 = 0;
+	angle2 = 0;
+
+
 	input.init(hWnd,hInst);
 	sFrame.Init();
 	tTime = cTime = lTime = GetTickCount();
@@ -28,6 +33,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempRen.asset = &testText;
 	tempRen.locCamNum = 5;
 	tempRen.type = text;
+	Limbase PartList;
 	
 	DXVid.init(hWnd,hInst,bWindowed);
 	DXVid.addRen(tempRen);
@@ -163,13 +169,13 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testPlayer.testInit(distX,0,distZ,rot);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
-	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0);
+	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0,RangedDefaultLifeSpan,1);
 	testBullVec.Init();
-	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo,0,0);
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
+	testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
+	testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
+	testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
 
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
@@ -238,20 +244,19 @@ void DXTest::update() {
 	cTime = timeGetTime();
 	dt = (float)(cTime-lTime);
 	dt /= CLOCKS_PER_SEC;
-	SHORT tem;
-	D3DXMATRIX matrixlove,matrixlove2;
+	SHORT tem = 0;
 	input.update();
 	sFrame.update();
 	if(cTime>tTime) {
 	for(int i = 0; i<numCon;++i) {
-		input.getState(i,state);
-		input.setVibration(i,(state.Gamepad.bLeftTrigger/255.0f),(state.Gamepad.bRightTrigger/255.0f));
-		input.getState(4,iState);
+		input.getState(i,iState);
+		//input.setVibration(i,(iState.buttons[binds::leftAttack]),(iState.buttons[binds::leftAttack])));
+		//input.getState(4,iState);
 		if(i == 0) {
 			
-			tem = state.Gamepad.sThumbLY;
-			if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-				tem = 0;
+			//tem = state.Gamepad.sThumbLY;
+			//if(tem < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE&&tem > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+			//	tem = 0;
 				
 			dist += iState.lY*dt;
 			//D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
@@ -259,31 +264,27 @@ void DXTest::update() {
 			ss<<tem/32767.0f;
 			testText.text = ss.str();
 			
-			tem = state.Gamepad.sThumbRX;
-			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-				tem = 0;
-			rot += ((tem/32767.0f)*dt)*10;
-			tem = state.Gamepad.sThumbRY;
-			if(tem < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&& tem > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
-				tem = 0;
-			angle += ((tem/32767.0f)*dt)*10;
+			tem = iState.lX;
+			rot += (tem*dt)*10;
+			tem = iState.lY;
+			angle += (tem*dt)*10;
 			if(angle >= 90)
 				angle = 89.9f;
 			else if(angle <=-90)
 				angle = -89.9f;
 			DXVid.rotateCam(temp,2,rot,angle);
 			
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
-				//sFrame.Play(*testSound,dist,0,0,0,0,0);
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
-				DXVid.setSSvSplit(true);
-			if(state.Gamepad.wButtons&XINPUT_GAMEPAD_Y)
-				DXVid.setSSvSplit(false);
+			//if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
+			//	//sFrame.Play(*testSound,dist,0,0,0,0,0);
+			//if(state.Gamepad.wButtons&XINPUT_GAMEPAD_B)
+			//	DXVid.setSSvSplit(true);
+			//if(state.Gamepad.wButtons&XINPUT_GAMEPAD_Y)
+			//	DXVid.setSSvSplit(false);
 
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer.Update(state, dt,rot, angle);
+			testPlayer.Update(iState, dt,rot, angle,PartList);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
 			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
@@ -322,28 +323,7 @@ void DXTest::update() {
 			//temp.cam_look_pos.y = 0;
 			
 			
-			matrixlove = testCube.matrix;
-			matrixlove2 = testCube.matrix;
-
-			D3DXMatrixRotationY(&matrixlove2,testPlayer.getFacing());
-			D3DXMatrixTranslation(&matrixlove,testPlayer.getPos().x,testPlayer.getPos().y,testPlayer.getPos().z);
 			
-			//testCube.matrix = matrixlove;
-			
-			D3DXMatrixMultiply(&testCube.matrix,&matrixlove2, &matrixlove);
-
-
-			D3DXMatrixTranslation(&testCube2.matrix,testTerrain2.getPos().x,testTerrain2.getPos().y-0.5f,testTerrain2.getPos().z);
-			D3DXMatrixTranslation(&testCube3.matrix,testTerrain.getPos().x,testTerrain.getPos().y-0.5f,testTerrain.getPos().z);
-			D3DXMatrixTranslation(&testCube4.matrix,testBullet.getPos().x,testBullet.getPos().y-0.5f,testBullet.getPos().z);
-
-			D3DXVECTOR3 temppos;
-			for(int i = 0; i < MAXBULLETS; ++i) {
-				if(testBullVec.GetActive(i)) {
-					temppos = testBullVec.GetBullet(i).getPos();
-					D3DXMatrixTranslation(&testPrimObjs[i].matrix,temppos.x,temppos.y-0.5f,temppos.z);
-				}
-			}
 
 
 
@@ -354,8 +334,15 @@ void DXTest::update() {
 			temp.cam_look_pos.z = testPlayer.getPos().z;
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
-			if(state.Gamepad.bLeftTrigger > 0) { 
-				testBullVec.ActivateABullet(temp.cam_pos,D3DXVECTOR3(1,0,0),testCube4.primInfo,rot,angle);
+			if(iState.buttons[binds::leftAttack]) { 
+				D3DXVECTOR3 tempvec = testPlayer.getPos();
+				tempvec.y += 1.5f;
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,RangedDefaultLifeSpan, testDamage);
+			}
+			if(iState.buttons[binds::rightAttack]) { 
+				D3DXVECTOR3 tempvec = testPlayer.getPos();
+				tempvec.y += 1.5f;
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,MeleeDefaultLifeSpan, testDamage);
 			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
@@ -372,9 +359,82 @@ void DXTest::update() {
 
 void DXTest::draw() {
 	RenInfo tempRen;
+	D3DXMATRIX TransMat, RotMat;
 	if(DXVid.rendererLost()) {
 
 	} else {
+		DXVid.clearRen();
+		
+
+		  /////////////////////////////////////////////////////// ~~~~~~~~~~~~~~~~~~
+		 // START OF PRIMITIVE DRAWING                        // ~~~~~~~~~~~~~~~~~~  A lot of this is pretty temporary until we just have all of the 
+		/////////////////////////////////////////////////////// ~~~~~~~~~~~~~~~~~~   players in a for loop or a draw function, along with all the bullets, and the map, etc.
+
+
+		TransMat = testCube.matrix;
+		RotMat = testCube.matrix; // translates and rotates the testCube which is what draws where the player is
+		D3DXMatrixRotationY(&RotMat,testPlayer.getFacing());
+		D3DXMatrixTranslation(&TransMat,testPlayer.getPos().x,testPlayer.getPos().y,testPlayer.getPos().z);
+		D3DXMatrixMultiply(&testCube.matrix,&RotMat, &TransMat);
+		
+
+		// translates the three cubes(testcube2,3,4) that draw where the floor is, the giant pillar is, and where the first test bullet is
+		D3DXMatrixTranslation(&testCube2.matrix,testTerrain2.getPos().x,testTerrain2.getPos().y-0.5f,testTerrain2.getPos().z);
+		D3DXMatrixTranslation(&testCube3.matrix,testTerrain.getPos().x,testTerrain.getPos().y-0.5f,testTerrain.getPos().z);
+		D3DXMatrixTranslation(&testCube4.matrix,testBullet.getPos().x,testBullet.getPos().y-0.5f,testBullet.getPos().z);
+
+
+
+
+
+		// adds all the prims
+		tempRen.type = primitive;
+		tempRen.asset = &testCube;
+		tempRen.locCamNum = 0;
+		DXVid.addRen(tempRen);
+		tempRen.asset = &testCube2;
+		DXVid.addRen(tempRen);
+		tempRen.asset = &testCube3;
+		DXVid.addRen(tempRen);
+		tempRen.asset = &testCube4;
+		DXVid.addRen(tempRen);
+
+
+		  ////////////////////////////////////////////////////////////////////////////
+		 // draws(translates and adds) the whole bullvec only if they're active    //
+		////////////////////////////////////////////////////////////////////////////
+		D3DXVECTOR3 temppos;
+		Bullet tempbullet;
+		for(int i = 0; i < MAXBULLETS; ++i) {
+			if(testBullVec.GetActive(i)) {
+				tempbullet = testBullVec.GetBullet(i);
+				temppos = tempbullet.getPos();
+				D3DXMatrixIdentity(&TransMat);
+				D3DXMatrixIdentity(&RotMat);
+				D3DXMatrixRotationYawPitchRoll(&RotMat, D3DXToRadian(tempbullet.getRot()), D3DXToRadian(tempbullet.getAngle()), 0);
+				D3DXMatrixTranslation(&TransMat, tempbullet.getPos().x, tempbullet.getPos().y-.5f, tempbullet.getPos().z);
+				D3DXMatrixMultiply(&testPrimObjs[i].matrix, &RotMat, &TransMat);
+				tempRen.asset = &testPrimObjs[i];
+				DXVid.addRen(tempRen);
+			}
+		}
+		  ///////////////////////////////////////////////////////  ~~~~~~~~~~~~~~~~~~~~~~
+		 // done drawing primitives                           //  ~~~~~~~~~~~~~~~~~~~~~~
+		///////////////////////////////////////////////////////  ~~~~~~~~~~~~~~~~~~~~~~
+		tempRen.asset = &testSprite;
+		tempRen.type = sprite;
+		DXVid.addRen(tempRen);
+
+		tempRen.asset = &testMod;
+		tempRen.type = model;
+		DXVid.addRen(tempRen);
+		
+		tempRen.asset = &testText;
+		tempRen.type = text;
+		tempRen.locCamNum = 2;
+		DXVid.addRen(tempRen);
+
+		DXVid.Render();
 		DXVid.Render();
 		//DXVid.clearRen();
 	}
