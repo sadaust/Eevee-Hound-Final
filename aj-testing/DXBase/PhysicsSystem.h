@@ -2,11 +2,14 @@
 #include "Player.h"
 #include "ResDefs.h"
 #include "ShapeDefs.h"
+#include "ItemBox.h"
 
 
 const float RangedDefaultLifeSpan = 20.0f;
-const float MeleeDefaultLifeSpan = 1.2f;
+const float MeleeDefaultLifeSpan = 0.2f;
 const int MAXBULLETS = 256;
+const float BulletSpeed = 10.1f;
+const int testDamage = 1;
 enum TerrainType {
 	FLOOR,
 	WALL,
@@ -35,16 +38,20 @@ private:
 	float speed; // figure out what to do with this later
 	int damage;
 	float lifespan;
+	float rot;
+	float angle;
 	//bool active;
 public:
 	Bullet();
 	~Bullet();
-	void Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan); // Add parameters
+	void Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage); // Add parameters
 	void Update(float a_dt); // Parameters?
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
 	int getDamage();
 	float getLifeSpan();
+	float getRot();
+	float getAngle();
 	//bool getActive();
 	//void setActive(bool a_active); moving these into bulletvec
 	void HitWall();
@@ -62,7 +69,7 @@ public:
 	void Update(float a_dt);
 	Bullet& GetBullet(int a_index);
 	bool GetActive(int a_index);
-	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan);
+	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage);
 	bool DeactivateABullet(int a_index);
 };
 
@@ -93,10 +100,14 @@ public:
 	PhysicsSystem();
 	~PhysicsSystem();
 	bool SenseCollision(Player& a_player, Terrain &a_terrain);
+	bool SenseCollision(ItemBox& a_item, Terrain &a_terrain);
 	bool SenseCollision(Player& a_player, Bullet &a_bullet);
 	bool SenseCollision(Terrain &a_terrain, Bullet &a_bullet);
+	bool SenseCollision(Player& a_player, ItemBox &a_item);
+	bool SenseCollision(Player& a_player, Player& a_player2);
 	bool ResolveCollision(Player& a_player, Terrain &a_terrain);
 	bool ResolveCollision(Player& a_player, Bullet &a_bullet);
 	bool ResolveCollision(Terrain &a_terrain, Bullet &a_bullet);
-
+	bool ResolveCollision(Player& a_player, Player& a_player2);
+	bool ResolveCollision(ItemBox& a_item, Terrain &a_terrain);
 };

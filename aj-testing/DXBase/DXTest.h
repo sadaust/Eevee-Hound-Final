@@ -5,7 +5,7 @@
 #include "PhysicsSystem.h"
 #include <sstream>
 #include "Limbase.h"
-#include "Item.h"
+#include "ItemBox.h"
 
 class DXTest {
 private:
@@ -13,7 +13,7 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube,testCube2, testCube3, testCube4;
+	PrimObj testCube,testCube2, testCube3, testCube4, testCube5;
 	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
 	TextStruct testText;
@@ -28,13 +28,14 @@ private:
 	Player testPlayer;
 	int numCon;
 	DWORD cTime,lTime,tTime;
-	float dist, distX, distZ, rot, angle,i_distx,i_distz;
+	float dist, distX, distZ, rot, angle, distX2, distZ2;
 	Terrain testTerrain, testTerrain2;
 	PhysicsSystem testPhys;
 	Bullet testBullet;
 	BulletVec testBullVec;
 	Limbase PartList;
 	ItemBox itemDrop;
+	float dist2, rot2, angle2;
 	//dt in seconds
 	float dt;
 public:

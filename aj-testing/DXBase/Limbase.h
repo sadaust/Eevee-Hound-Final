@@ -18,7 +18,7 @@ private:
 	Limb part[NUMPARTS];
 public:
 	Limbase();
-	int getPartRan();
+	Limb getPartRan();
 	Limb getPart(int);
 	void CaseAction(int,Player&);
 	//~Limbase();

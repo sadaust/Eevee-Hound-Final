@@ -16,13 +16,17 @@ Bullet::~Bullet() {
 }
 
 
-void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan) {
+void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	pos = a_pos;
+	rot = a_rot;
+	angle = a_angle;
+	rotate3Dvector(&a_velocity, a_rot, a_angle);
 	velocity = a_velocity;
 	structpoi = a_structpoi;
 	prospectivePos = pos;
 	speed = 5.0f;
 	lifespan = a_lifespan;
+	damage = a_damage;
 }
 
 
@@ -60,6 +64,16 @@ float Bullet::getLifeSpan() {
 }
 
 
+float Bullet::getRot() {
+	return rot;
+}
+
+
+float Bullet::getAngle() {
+	return angle;
+}
+
+
 //bool Bullet::getActive() {
 //	return active;
 //}
@@ -79,7 +93,7 @@ void Bullet::HitPlayer(Player& a_player) {
 	  //////////////////////////////////////////////
 	 // Add in damage and stuff here probably    //
 	//////////////////////////////////////////////
-
+	a_player.takeDamage(damage);
 	
 }
 
@@ -96,7 +110,7 @@ BulletVec::~BulletVec() {
 
 void BulletVec::Init() {
 	for(int i = 0; i < MAXBULLETS; ++i) {
-		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0,0);
+		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0,0,0);
 		bools[i] = false;
 	}
 }
@@ -124,10 +138,10 @@ bool BulletVec::GetActive(int a_index) {
 }
 
 
-bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan) {
+bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(!bools[i]) {
-			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle, a_lifespan);
+			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle, a_lifespan, a_damage);
 			bools[i] = true;
 			return true;
 		}
@@ -206,6 +220,70 @@ float PhysicsSystem::closestPoint(float a_point, float a_1, float a_2) {
 	}
 }
 
+bool PhysicsSystem::SenseCollision(ItemBox &a_item, Terrain &a_terrain) {
+	float distX = 0.0f;
+	float distZ = 0.0f;
+	float closestX = 0.0f;
+	float closestZ = 0.0f;
+	float tempDist = 0.0f;
+	if(a_item.getProspectivePos().y < a_terrain.getPos().y+a_terrain.getBound().top) { // y,y,top
+		if(a_item.getProspectivePos().y > a_terrain.getPos().y+a_terrain.getBound().bottom-a_item.getBound().height) { //y,y,bottom
+			  ////////////////////////
+			 // POSITION INSIDE    //
+			////////////////////////
+			if(a_item.getProspectivePos().x < a_terrain.getPos().x+a_terrain.getBound().right+a_item.getBound().radius) {//x,x,right
+				if(a_item.getProspectivePos().x > a_terrain.getPos().x+a_terrain.getBound().left-a_item.getBound().radius) {//x,x,left
+					if(a_item.getProspectivePos().z > a_terrain.getPos().z+a_terrain.getBound().back-a_item.getBound().radius) {//z,z,back
+						if(a_item.getProspectivePos().z < a_terrain.getPos().z+a_terrain.getBound().front+a_item.getBound().radius) {//z,z,front
+							//a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getStruct()->top,a_item.getProspectivePos().z));
+							//a_item.setVelocityY(0.0f);
+							//a_item.toggleGrounded(true);
+							return true;
+							  //////////////////////////
+							 // Player is inside     //
+							//////////////////////////
+						}
+					}
+				}
+			} 
+
+
+
+
+			  /////////////////
+			 // CORNER      //
+			/////////////////
+			closestX = closestPoint(a_item.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
+			closestZ = closestPoint(a_item.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
+			// Finds the closest point
+			distX = a_item.getProspectivePos().x-closestX;
+			distZ = a_item.getProspectivePos().z-closestZ;
+			// Finds distances in straight lines between the points
+
+			tempDist = (distX*distX)+(distZ*distZ);
+
+
+			if(tempDist < (a_item.getBound().radius*a_item.getBound().radius)) {
+				//a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getStruct()->top,a_item.getProspectivePos().z));
+				//a_item.toggleGrounded(true);
+				//a_item.setVelocityY(0);
+				return true;
+			}
+			else {
+				return false;
+			}
+
+
+
+
+
+		}
+	}
+
+
+	//a_item.toggleGrounded(false);
+	return false;
+}
 
 bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 	float distX = 0.0f;
@@ -321,6 +399,51 @@ bool PhysicsSystem::SenseCollision(Terrain &a_terrain, Bullet &a_bullet) {
 }
 
 
+bool PhysicsSystem::SenseCollision(Player& a_player, ItemBox &a_item) {
+	if(a_player.getProspectivePos().y < a_item.getPos().y+a_item.getBound().height) { // y,y,top
+		if(a_player.getProspectivePos().y > a_item.getPos().y-a_player.getBound().height) { //y,y,bottom
+			float distX = 0;
+			float distZ = 0;
+			float tempDist = 0;
+			distX = a_item.getProspectivePos().x-a_player.getProspectivePos().x;
+			distZ = a_item.getProspectivePos().z-a_player.getProspectivePos().z;
+			// Finds distances in straight lines between the points
+			tempDist = (distX*distX)+(distZ*distZ);
+			if(tempDist <= a_item.getBound().radius + a_player.getBound().radius) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+
+bool PhysicsSystem::SenseCollision(Player& a_player, Player& a_player2) {
+	if(a_player.getProspectivePos().y < a_player2.getPos().y+a_player2.getBound().height) { // y,y,top
+		if(a_player.getProspectivePos().y > a_player2.getPos().y-a_player.getBound().height) { //y,y,bottom
+			float distX = 0;
+			float distZ = 0;
+			float tempDist = 0;
+			distX = a_player2.getProspectivePos().x-a_player.getProspectivePos().x;
+			distZ = a_player2.getProspectivePos().z-a_player.getProspectivePos().z;
+			// Finds distances in straight lines between the points
+			tempDist = (distX*distX)+(distZ*distZ);
+			if(tempDist <= a_player2.getBound().radius + a_player.getBound().radius) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+bool  PhysicsSystem::ResolveCollision(Player& a_player, Player& a_player2){
+	
+	
+	return true;
+}
+
 bool PhysicsSystem::ResolveCollision(Player& a_player, Terrain &a_terrain) {
 	float closestX = 0, closestZ = 0, distX = 0, distZ = 0;
 	if(a_terrain.getType() == FLOOR) {
@@ -397,6 +520,82 @@ bool PhysicsSystem::ResolveCollision(Player& a_player, Terrain &a_terrain) {
 	return true;
 }
 
+
+bool PhysicsSystem::ResolveCollision(ItemBox& a_item, Terrain &a_terrain) {
+	float closestX = 0, closestZ = 0, distX = 0, distZ = 0;
+	if(a_terrain.getType() == FLOOR) {
+		a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getBound().top,a_item.getProspectivePos().z));
+		a_item.toggleGrounded(true);
+		a_item.setVelocityY(0);
+	}
+	else if(a_terrain.getType() == WALL) {
+		//if(a_item.getProspectivePos().x-(a_terrain.getPos().x+a_terrain.getStruct()->right)
+		closestX = closestPoint(a_item.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
+		closestZ = closestPoint(a_item.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
+		//distX = a_item.getProspectivePos().x-closestX;
+		//distZ = a_item.getProspectivePos().z-closestZ;
+
+
+		if(closestX == a_terrain.getPos().x + a_terrain.getBound().right && closestZ == a_terrain.getPos().z + a_terrain.getBound().front) { // RIGHT and FRONT are closest
+			distX = closestX-a_item.getProspectivePos().x; // closest minus pos for right
+			distZ = closestZ-a_item.getProspectivePos().z; // closest minus pos for front
+			if(distX < 0 && distX < distZ) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().right + a_item.getBound().radius, a_item.getProspectivePos().y, a_item.getProspectivePos().z));
+			}
+			if(distZ < 0 && distZ < distX) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_item.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().front + a_item.getBound().radius));
+			}
+		}
+		else if(closestX == a_terrain.getPos().x + a_terrain.getBound().right && closestZ == a_terrain.getPos().z + a_terrain.getBound().back) { // RIGHT and BACK are closest
+			distX = closestX-a_item.getProspectivePos().x; // closest minus pos for right
+			distZ = a_item.getProspectivePos().z-closestZ; // pos minus closest for back
+			if(distX < 0 && distX < distZ) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().right + a_item.getBound().radius, a_item.getProspectivePos().y, a_item.getProspectivePos().z));
+			}
+			if(distZ < 0 && distZ < distX) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_item.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().back - a_item.getBound().radius));
+			}
+		}
+		else if(closestX == a_terrain.getPos().x + a_terrain.getBound().left && closestZ == a_terrain.getPos().z + a_terrain.getBound().back) { // LEFT and BACK are closest
+			distX = a_item.getProspectivePos().x-closestX; // pos minus closest for left
+			distZ = a_item.getProspectivePos().z-closestZ; // pos minus closest for back
+			if(distX < 0 && distX < distZ) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().left - a_item.getBound().radius, a_item.getProspectivePos().y, a_item.getProspectivePos().z));
+			}
+			if(distZ < 0 && distZ < distX) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_item.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().back - a_item.getBound().radius));
+			}
+		}
+		else if(closestX == a_terrain.getPos().x + a_terrain.getBound().left && closestZ == a_terrain.getPos().z + a_terrain.getBound().front) { // LEFT and FRONT are closest
+			distX = a_item.getProspectivePos().x-closestX; // pos minus closest for left
+			distZ = closestZ-a_item.getProspectivePos().z; // clsest minus pos for front
+			if(distX < 0 && distX < distZ) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().left - a_item.getBound().radius, a_item.getProspectivePos().y, a_item.getProspectivePos().z));
+			}
+			if(distZ < 0 && distZ < distX) {
+				a_item.setProspectivePos(D3DXVECTOR3(a_item.getProspectivePos().x,a_item.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().front + a_item.getBound().radius));
+			}
+		}
+	}
+	else if(a_terrain.getType() == CEILING) {
+
+	}
+	else if(a_terrain.getType() == FLOORWALL) {
+
+	}
+	else if(a_terrain.getType() == FLOORCEILING) {
+
+	}
+
+
+
+
+
+
+
+
+	return true;
+}
 
 bool PhysicsSystem::ResolveCollision(Player& a_player, Bullet &a_bullet) {
 	a_bullet.HitPlayer(a_player);
