@@ -176,13 +176,13 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testPlayer.testInit(distX,0,distZ,rot);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
-	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0);
+	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0,RangedDefaultLifeSpan);
 	testBullVec.Init();
-	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo,0,0);
-	testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo,0,0);
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan);
+	testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan);
+	testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan);
+	testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan);
+	testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo,0,0, RangedDefaultLifeSpan);
 
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
@@ -369,7 +369,10 @@ void DXTest::update() {
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
 			if(state.Gamepad.bLeftTrigger > 0) { 
-				testBullVec.ActivateABullet(temp.cam_pos,D3DXVECTOR3(1,0,0),testCube4.primInfo,rot,angle);
+				testBullVec.ActivateABullet(temp.cam_pos,D3DXVECTOR3(1,0,0),testCube4.primInfo,rot,angle,RangedDefaultLifeSpan);
+			}
+			if(state.Gamepad.bRightTrigger > 0) { 
+				testBullVec.ActivateABullet(temp.cam_pos,D3DXVECTOR3(1,0,0),testCube4.primInfo,rot,angle,MeleeDefaultLifeSpan);
 			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);

@@ -3,6 +3,9 @@
 #include "ResDefs.h"
 #include "ShapeDefs.h"
 
+
+const float RangedDefaultLifeSpan = 20.0f;
+const float MeleeDefaultLifeSpan = 1.2f;
 const int MAXBULLETS = 256;
 enum TerrainType {
 	FLOOR,
@@ -30,14 +33,18 @@ private:
 	D3DXVECTOR3 pos, prospectivePos, velocity;
 	PrimStruct* structpoi; // this too, if we don't want cubes. VV
 	float speed; // figure out what to do with this later
+	int damage;
+	float lifespan;
 	//bool active;
 public:
 	Bullet();
 	~Bullet();
-	void Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle); // Add parameters
+	void Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan); // Add parameters
 	void Update(float a_dt); // Parameters?
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
+	int getDamage();
+	float getLifeSpan();
 	//bool getActive();
 	//void setActive(bool a_active); moving these into bulletvec
 	void HitWall();
@@ -55,7 +62,7 @@ public:
 	void Update(float a_dt);
 	Bullet& GetBullet(int a_index);
 	bool GetActive(int a_index);
-	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle);
+	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan);
 	bool DeactivateABullet(int a_index);
 };
 
