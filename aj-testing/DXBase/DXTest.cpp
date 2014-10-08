@@ -481,21 +481,26 @@ void DXTest::update() {
 
 
 			///*D3DXMatrixTranslation(&testCube.matrix,0,0,distX);*/
-			
+
 			temp2.cam_look_pos.x = testPlayer2.getPos().x;
 			temp2.cam_look_pos.y = testPlayer2.getPos().y;
 			temp2.cam_look_pos.z = testPlayer2.getPos().z;
 			DXVid.rotateCam(temp2,2,rot2,angle2);
 			////////////////////////////////
-			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer2.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,RangedDefaultLifeSpan, testDamage);
-			}
-			if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer2.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
+			if(testPlayer2.isAlive()) {
+				if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = testPlayer2.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,RangedDefaultLifeSpan, testDamage);
+				}
+				if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
+					D3DXVECTOR3 tempvec = testPlayer2.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
+				}
+			} else {
+				if(testPlayer2.getTimer()<=0)
+					testPlayer2.respawn(spawn);
 			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
@@ -550,17 +555,23 @@ void DXTest::draw() {
 
 		// adds all the prims
 		tempRen.type = primitive;
-		tempRen.asset = &testCube;
 		tempRen.locCamNum = 0;
-		DXVid.addRen(tempRen);
+		//p1
+		if(testPlayer.isAlive()){
+			tempRen.asset = &testCube;
+			DXVid.addRen(tempRen);
+		}
 		tempRen.asset = &testCube2;
 		DXVid.addRen(tempRen);
 		tempRen.asset = &testCube3;
 		DXVid.addRen(tempRen);
 		tempRen.asset = &testCube4;
 		DXVid.addRen(tempRen);
-		tempRen.asset = &testCube6;
-		DXVid.addRen(tempRen);
+		//p2
+		if(testPlayer2.isAlive()) {
+			tempRen.asset = &testCube6;
+			DXVid.addRen(tempRen);
+		}
 
 		if(itemDrop.getActive()){
 			tempRen.asset = &testCube5;

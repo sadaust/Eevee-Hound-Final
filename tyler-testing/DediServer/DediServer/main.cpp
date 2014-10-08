@@ -32,6 +32,7 @@ void main(int argc, char *argv[]) {
 	while(go == true) {
 		if(net.update())
 			go = false;
+		net.sendMSGs();
 	}
 	net.shutdown();
 }

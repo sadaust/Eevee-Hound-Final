@@ -6,6 +6,7 @@
 #include <sstream>
 #include "Limbase.h"
 #include "ItemBox.h"
+#include "spawnPoint.h"
 
 class DXTest {
 private:
@@ -35,6 +36,7 @@ private:
 	BulletVec testBullVec;
 	Limbase PartList;
 	ItemBox itemDrop;
+	sPoint spawn;
 	float dist2, rot2, angle2;
 	//dt in seconds
 	float dt;

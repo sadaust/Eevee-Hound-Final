@@ -33,10 +33,16 @@ private:
 	void FDClient();
 public:
 	networking();
+	//starts a server and sets its port
 	bool init(int port);
+	//recives messages and dissconects timed out clients recive and send share message space
 	bool update();
+	char* getMSG(int cli,int& leng);
+	//sends clients their messages and dissconects timed out clients
 	bool sendMSGs();
+	//sets a message length and message recive and send share message space
 	bool setMSG(int cli,int msgLength,char*msg);
+	//shuts down server and dissconects clients
 	bool shutdown();
 	~networking();
 };

@@ -41,7 +41,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
 	testMat.Power = 0.0f;
 
-	testMod.matrix = testCube.matrix;
+	//testMod.matrix = testCube.matrix;
 	D3DXMatrixScaling(&testMod.matrix,0.01,0.01,0.01);
 	testMod.mod = resMan.loadXFile("tiny.x");
 	for(int i = 0;i< testMod.mod->numMats;++i) {

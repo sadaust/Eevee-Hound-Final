@@ -1,4 +1,5 @@
 #include "networking.h"
+#include <iostream>
 
 void shutdown_close(SOCKET s) {
 
@@ -71,6 +72,15 @@ bool networking::init(int port) {
 	return false;
 }
 
+char* networking::getMSG(int cli,int& leng) {
+	if(cli>=0&&cli<maxClients) {
+		leng = msgs[cli].msgLength;
+		return msgs[cli].msg;
+	}
+	leng = 0;
+	return 0;
+}
+
 bool networking::update() {
 	FD_ZERO(&fd);
 	FD_SET(srvr_socket,&fd);
@@ -104,10 +114,11 @@ bool networking::update() {
 
 		} else if(result > 0) {
 			for(int i = 0; i < fd.fd_count; ++i) {
-				if ((recv_msg_len = recvfrom(fd.fd_array[i], recv_buf, MYBUFSIZE, 0,
+				if ((recv_msg_len = recvfrom(fd.fd_array[i], msgs[i].msg, MYBUFSIZE, 0,
 					(struct sockaddr *) &clnt_addr[i], &addr_len )) == SOCKET_ERROR) {
 						//disconnect client
 						printf("recvfrom() failed with error: %d\n",WSAGetLastError());
+						msgs[i].msgLength = 0;
 						for(int z = 0; z < maxClients;++z) {
 							if(clients[z] == fd.fd_array[i]) {
 								shutdown_close(clients[z]);
@@ -118,7 +129,11 @@ bool networking::update() {
 						}
 				} else {
 					//handel tcp msg
-					printf("%d\n",recv_msg_len);
+					msgs[i].msgLength = recv_msg_len;
+					printf("%d\n",curClients);
+					for(int z = 0; z < msgs[i].msgLength;++z)
+						std::cout<<msgs[i].msg[z];
+					printf("\n");
 				}
 			}
 		}
