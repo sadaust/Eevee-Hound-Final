@@ -48,6 +48,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXFrame.h">
@@ -83,16 +86,16 @@
     <ClInclude Include="Limbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LimbHold.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Limb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemSwapMenu.h">
+    <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
+    <ClInclude Include="PlayerLimbs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

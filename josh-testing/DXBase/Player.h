@@ -2,13 +2,18 @@
 #include "DXFrame.h"
 #include "InputHandler.h"
 #include "ShapeDefs.h"
-#include "LimbHold.h"
+#include "PlayerLimbs.h"
 #include "Limb.h"
 #include "Limbase.h"
+#include "ItemBox.h"
 //#include "PhysicsSystem.h"
 
+const int numplayers = 2;
 void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle);
 void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle);
+
+
+
 
 
 class Player {
@@ -24,7 +29,7 @@ private:
 	bool onGround, checkItem, R_arm;
 	int jumpCount;
 
-
+	Limb ProsteticTestLimb;
 
 	  ///////////////////////////
 	 // Game Statistics/Math  //
@@ -69,10 +74,12 @@ public:
 	void toggleRarm(bool right_a);
 	void togglecheckItem(bool item);
 	bool getGrounded(){return onGround;}
+	bool getcheckItem(){return checkItem;}
 	void addLimb(Limb part);
 	void setJumpCount(int j_count){jumpCount=j_count;}
 	int getJumpCount(){return jumpCount;}
 	void incrementJumpCount(){jumpCount++;}
+	void itemAccess(ItemBox &a_item);
 };
 
 

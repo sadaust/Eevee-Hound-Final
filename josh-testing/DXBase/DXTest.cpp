@@ -16,6 +16,9 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	dist2 = 2;
 	rot2 = 0;
 	angle2 = 0;
+	distX2 = 5;
+	distZ2 = 5;
+	
 
 
 	input.init(hWnd,hInst);
@@ -63,8 +66,11 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	D3DXMatrixIdentity(&testCube.matrix);
 	testCube2 = testCube;
 	testCube4 = testCube;
+	testCube5 = testCube;
+	testCube6 = testCube;
 	testCube2.primInfo = resMan.loadPrim("WallTest",20,1,1);
 	testCube4.primInfo = resMan.loadPrim("BulletTest",0.1f,0.1f,0.1f);
+	testCube5.primInfo = resMan.loadPrim("ItemTest",0.5f,0.5f,0.5f);
 	for(int i = 0; i < MAXBULLETS; ++i)
 		testPrimObjs[i] = testCube4;
 	tempRen.asset = &testCube;
@@ -76,6 +82,10 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	tempRen.asset = &testCube3;
 	DXVid.addRen(tempRen);
 	tempRen.asset = &testCube4;
+	DXVid.addRen(tempRen);
+	tempRen.asset = &testCube5;
+	DXVid.addRen(tempRen);
+	tempRen.asset = &testCube6;
 	DXVid.addRen(tempRen);
 	for(int i = 0; i < 256; ++i) {
 		tempRen.asset = &testPrimObjs[i];
@@ -166,7 +176,9 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.setCam(2,&temp2);
 	DXVid.setCam(3,&temp3);
 	DXVid.setCam(4,&temp4);
-	testPlayer.testInit(distX,0,distZ,rot);
+	testPlayer[0].testInit(distX,0,distZ,rot);
+	testPlayer[1].testInit(5, 5, 5, rot);
+	itemDrop.ItemBoxInit(distX2,5,distZ2);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
 	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0,RangedDefaultLifeSpan,1);
@@ -284,24 +296,79 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer.Update(iState, dt,rot, angle,PartList);
+			testPlayer[0].Update(iState, dt,rot, angle,PartList);
+			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
-			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
-				testPhys.ResolveCollision(testPlayer,testTerrain);
+
+
+			
+			//temp.cam_look_pos.x = 0;
+			//temp.cam_look_pos.y = 0;
+			
+			
+			
+
+
+
+			///*D3DXMatrixTranslation(&testCube.matrix,0,0,distX);*/
+			
+			temp.cam_look_pos.x = testPlayer[i].getPos().x;
+			temp.cam_look_pos.y = testPlayer[i].getPos().y;
+			temp.cam_look_pos.z = testPlayer[i].getPos().z;
+			DXVid.rotateCam(temp,2,rot,angle);
+			////////////////////////////////
+			if(iState.buttons[binds::leftAttack]) { 
+				D3DXVECTOR3 tempvec = testPlayer[i].getPos();
+				tempvec.y += 1.5f;
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,RangedDefaultLifeSpan, testDamage);
 			}
-			if(testPhys.SenseCollision(testPlayer,testTerrain2)) {
-				testPhys.ResolveCollision(testPlayer,testTerrain2);
+			if(iState.buttons[binds::rightAttack]) { 
+				D3DXVECTOR3 tempvec = testPlayer[i].getPos();
+				tempvec.y += 1.5f;
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,MeleeDefaultLifeSpan, testDamage);
 			}
-			if(testPhys.SenseCollision(testTerrain,testBullet)) {
-				testPhys.ResolveCollision(testTerrain,testBullet);
+			
+			
+			// collision detection
+			
+			for(int i = 0; i < numplayers; ++i) {
+				if(testPhys.SenseCollision(testPlayer[i],testTerrain)) {
+					testPhys.ResolveCollision(testPlayer[i],testTerrain);
+				}
+				if(testPhys.SenseCollision(testPlayer[i],testTerrain2)) {
+					testPhys.ResolveCollision(testPlayer[i],testTerrain2);
+				}
+				if(testPhys.SenseCollision(testTerrain,testBullet)) {
+					testPhys.ResolveCollision(testTerrain,testBullet);
+				}
+				if(testPhys.SenseCollision(testTerrain2,testBullet)) {
+					testPhys.ResolveCollision(testTerrain2,testBullet);
+				}
+				if(testPhys.SenseCollision(testPlayer[i],testBullet)) {
+					testPhys.ResolveCollision(testPlayer[i],testBullet);
+				}
+				if(testPhys.SenseCollision(itemDrop,testTerrain)) {
+					testPhys.ResolveCollision(itemDrop,testTerrain);
+				}
+				if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
+					testPhys.ResolveCollision(itemDrop,testTerrain2);
+				}
+				if(testPhys.SenseCollision(testPlayer[i],itemDrop)) {
+					//setplayer item collision to true
+					testPlayer[i].togglecheckItem(true);
+					//pass colliding item to player test to see if passing works.
+					testPlayer[i].itemAccess(itemDrop);
+
+				}
+				if(!testPhys.SenseCollision(testPlayer[i],itemDrop)){
+					//setplayer item collision to false
+					testPlayer[i].togglecheckItem(false);
+				}
 			}
-			if(testPhys.SenseCollision(testTerrain2,testBullet)) {
-				testPhys.ResolveCollision(testTerrain2,testBullet);
-			}
-			if(testPhys.SenseCollision(testPlayer,testBullet)) {
-				testPhys.ResolveCollision(testPlayer,testBullet);
-			}
+
+
+
 
 			for(int i = 0; i < MAXBULLETS; ++i) {
 				if(testBullVec.GetActive(i)) {
@@ -313,36 +380,13 @@ void DXTest::update() {
 						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
 						testBullVec.DeactivateABullet(i);
 					}
-					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
+					for(int i = 0; i < numplayers; ++i) {
+						if(testPhys.SenseCollision(testPlayer[i],testBullVec.GetBullet(i))) {
+							testPhys.ResolveCollision(testPlayer[i], testBullVec.GetBullet(i));
+							testBullVec.DeactivateABullet(i);
+						}
 					}
 				}
-			}
-			//temp.cam_look_pos.x = 0;
-			//temp.cam_look_pos.y = 0;
-			
-			
-			
-
-
-
-			///*D3DXMatrixTranslation(&testCube.matrix,0,0,distX);*/
-			
-			temp.cam_look_pos.x = testPlayer.getPos().x;
-			temp.cam_look_pos.y = testPlayer.getPos().y;
-			temp.cam_look_pos.z = testPlayer.getPos().z;
-			DXVid.rotateCam(temp,2,rot,angle);
-			////////////////////////////////
-			if(iState.buttons[binds::leftAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,RangedDefaultLifeSpan, testDamage);
-			}
-			if(iState.buttons[binds::rightAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,rot,angle,MeleeDefaultLifeSpan, testDamage);
 			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
@@ -373,15 +417,25 @@ void DXTest::draw() {
 
 		TransMat = testCube.matrix;
 		RotMat = testCube.matrix; // translates and rotates the testCube which is what draws where the player is
-		D3DXMatrixRotationY(&RotMat,testPlayer.getFacing());
-		D3DXMatrixTranslation(&TransMat,testPlayer.getPos().x,testPlayer.getPos().y,testPlayer.getPos().z);
+		D3DXMatrixRotationY(&RotMat,testPlayer[0].getFacing());
+		D3DXMatrixTranslation(&TransMat,testPlayer[0].getPos().x,testPlayer[0].getPos().y,testPlayer[0].getPos().z);
 		D3DXMatrixMultiply(&testCube.matrix,&RotMat, &TransMat);
+
+
+
+		// player 2
+		TransMat = testCube6.matrix;
+		RotMat = testCube6.matrix; // translates and rotates the testCube which is what draws where the player is
+		D3DXMatrixRotationY(&RotMat,testPlayer[1].getFacing());
+		D3DXMatrixTranslation(&TransMat,testPlayer[1].getPos().x,testPlayer[1].getPos().y,testPlayer[1].getPos().z);
+		D3DXMatrixMultiply(&testCube6.matrix,&RotMat, &TransMat);
 		
 
 		// translates the three cubes(testcube2,3,4) that draw where the floor is, the giant pillar is, and where the first test bullet is
 		D3DXMatrixTranslation(&testCube2.matrix,testTerrain2.getPos().x,testTerrain2.getPos().y-0.5f,testTerrain2.getPos().z);
 		D3DXMatrixTranslation(&testCube3.matrix,testTerrain.getPos().x,testTerrain.getPos().y-0.5f,testTerrain.getPos().z);
 		D3DXMatrixTranslation(&testCube4.matrix,testBullet.getPos().x,testBullet.getPos().y-0.5f,testBullet.getPos().z);
+		D3DXMatrixTranslation(&testCube5.matrix,itemDrop.getPos().x,itemDrop.getPos().y-0.25f,itemDrop.getPos().z);
 
 
 
@@ -398,6 +452,10 @@ void DXTest::draw() {
 		DXVid.addRen(tempRen);
 		tempRen.asset = &testCube4;
 		DXVid.addRen(tempRen);
+		if(itemDrop.getActive()){
+			tempRen.asset = &testCube5;
+			DXVid.addRen(tempRen);
+		}
 
 
 		  ////////////////////////////////////////////////////////////////////////////

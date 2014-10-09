@@ -128,7 +128,7 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 	}
 	if(a_state.buttons[binds::legPower]) {
 		//get part !0 
-		if (Limbs.getLeg()==0){
+		if (!Limbs.getLeg()==0){
 			part_list.CaseAction(Limbs.getLeg(),*this);
 		// find that part 
 		// execute that function
@@ -136,6 +136,9 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 	}
 	if(a_state.buttons[binds::use]) {
 		//if item is coliding with character
+		if(getcheckItem()){
+			addLimb(ProsteticTestLimb);
+		}
 		// make bool switch here.
 		//
 		//bring menue up 
@@ -274,6 +277,9 @@ void Player::toggleGrounded(bool a_grounded) {
 	onGround = a_grounded;
 }
 
+void Player::togglecheckItem(bool a_item){
+	checkItem=a_item;
+}
 void Player::addLimb(Limb part){
 	if(part.getPartType()==head){
 		Limbs.setHead(part.getPartID());
@@ -290,4 +296,12 @@ void Player::addLimb(Limb part){
 	if(part.getPartType()==body){
 		Limbs.setBody(part.getPartID());
 	}
+}
+
+void Player::itemAccess(ItemBox &a_item){
+	// should handle bringing up itme swap menue etc in the future \
+	// to be changed to list of accessable parts (maybe in area)
+	//for now just passes test item to player
+	ProsteticTestLimb=a_item.getPart();
+	a_item.toggleActive(false);
 }
