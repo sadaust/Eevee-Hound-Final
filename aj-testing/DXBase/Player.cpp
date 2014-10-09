@@ -129,6 +129,22 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 			velocityY = terminalVelocity;
 		//if(pos.y <= 0 && velocityY <= 0)
 		//	velocityY = 0;
+		/////////////////////////////////////
+		//////////PLAYER CONTROLS////////////
+		/////////////////////////////////////
+
+		// need to deal with object for bullet 
+		/*if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+			D3DXVECTOR3 tempvec = getPos();
+			tempvec.y += 1.5f;
+			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+		}
+		if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
+			D3DXVECTOR3 tempvec = getPos();
+			tempvec.y += 1.5f;
+			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,MeleeDefaultLifeSpan, testDamage);
+		}
+*/
 		if(a_state.buttons[binds::jump] && onGround) {
 			velocityY = 0.2f;
 			onGround = false;
@@ -136,7 +152,7 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 		if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
 			//get part !0 
 			if (!Limbs.getLeg()==0){
-				part_list.CaseAction(Limbs.getLeg(),*this);
+				part_list.CaseAction(Limbs.getLeg(),*this,a_state);
 				// find that part 
 				// execute that function
 			}
