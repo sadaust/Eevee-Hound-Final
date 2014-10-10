@@ -14,7 +14,7 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube,testCube2, testCube3, testCube4, testCube5,testCube6, testCube7, testCube8;
+	PrimObj testCube,testCube2, testCube3, testCube4, testCube5,testCube6;
 	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
 	TextStruct testText,testText2;

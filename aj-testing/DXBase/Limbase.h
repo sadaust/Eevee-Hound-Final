@@ -16,8 +16,8 @@ class Player;
 
 class Limbase {
 private:
-	bool bearactive;
 	Limb part[NUMPARTS];
+	bool bearactive;
 public:
 	bool activebear(){return bearactive;}
 	void toggleBear(bool a_bear);

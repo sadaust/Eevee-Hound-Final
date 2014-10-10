@@ -72,16 +72,19 @@ public:
 	void toggleGrounded(bool a_ground);
 	void toggleRarm(bool right_a);
 	void togglecheckItem(bool item);
-	bool getGrounded(){return onGround;}
-	bool getcheckItem(){return checkItem;}
-	bool isAlive(){return alive;}
+	bool getGrounded();
+	bool getcheckItem();
+	bool isAlive();
 	void addLimb(Limb part);
-	void setJumpCount(int j_count){jumpCount=j_count;}
-	int getJumpCount(){return jumpCount;}
-	int getHealth(){return curHealth;}
-	void incrementJumpCount(){jumpCount++;}
+	void setJumpCount(int j_count);
+	int getJumpCount();
+	int getHealth();
+	void incrementJumpCount();
 	void itemAccess(ItemBox &a_item);
 	void respawn(sPoint& spawn);
+	void setMaxHealth(int m_health);
+	void setCurHealth(int c_health);
+	int getMaxHealth();
 };
 
 

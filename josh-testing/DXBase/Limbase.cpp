@@ -62,6 +62,8 @@ Limbase::Limbase(){
    part[19].setID(20);
    part[19].setName("Pheonix");
    part[19].setType(body);
+
+   bearactive = false;
 }
 
 Limb Limbase::getPartRan(){
@@ -136,6 +138,10 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state){
 			}
 			else if (part[partNumber-1].getPartName()=="Bear"){
 				//HP increased
+				if(bearactive==false){
+					p_data.setMaxHealth(200);
+					bearactive==true;
+				}
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle"){
 				//damage taken reduced
@@ -146,6 +152,7 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state){
 		{
 			if (part[partNumber-1].getPartName()=="Pheonix"){
 				// all enemy players displayed on the map
+				// lazer beam eyes
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//target rect on screen

@@ -313,9 +313,27 @@ void Player::toggleGrounded(bool a_grounded) {
 	setJumpCount(0);
 }
 
-void Player::togglecheckItem(bool a_item){
+
+void Player::togglecheckItem(bool a_item) {
 	checkItem=a_item;
 }
+
+
+bool Player::getGrounded() {
+	return onGround;
+}
+
+
+bool Player::getcheckItem() {
+	return checkItem;
+}
+
+
+bool Player::isAlive() {
+	return alive;
+}
+
+
 void Player::addLimb(Limb part){
 	if(part.getPartType()==head){
 		Limbs.setHead(part.getPartID());
@@ -334,6 +352,27 @@ void Player::addLimb(Limb part){
 	}
 }
 
+
+void Player::setJumpCount(int j_count) {
+	jumpCount=j_count;
+}
+
+
+int Player::getJumpCount() {
+	return jumpCount;
+}
+
+
+int Player::getHealth() {
+	return curHealth;
+}
+
+
+void Player::incrementJumpCount() {
+	jumpCount++;
+}
+
+
 void Player::itemAccess(ItemBox &a_item){
 	// should handle bringing up itme swap menue etc in the future \
 	// to be changed to list of accessable parts (maybe in area)
@@ -341,3 +380,20 @@ void Player::itemAccess(ItemBox &a_item){
 	ProsteticTestLimb=a_item.getPart();
 	a_item.toggleActive(false);
 }
+
+
+void Player::setMaxHealth(int m_health) {
+	maxHealth=m_health;
+}
+
+
+void Player::setCurHealth(int c_health) {
+	curHealth=c_health;
+}
+
+
+int Player::getMaxHealth() {
+	return maxHealth;
+}
+
+

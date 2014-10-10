@@ -74,16 +74,13 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testCube4 = testCube;
 	testCube5 = testCube;
 	testCube6 = testCube;
-	testCube7 = testCube;
-	testCube8 = testCube;
 	testCube2.primInfo = resMan.loadPrim("WallTest",20,1,1);
 	testCube4.primInfo = resMan.loadPrim("BulletTest",0.1f,0.1f,0.1f);
 	testCube5.primInfo = resMan.loadPrim("ItemTest",0.5f,0.5f,0.5f);
 	testCube6.primInfo = resMan.loadPrim("CuberTest2",1,1,1);
-	testCube7.primInfo = resMan.loadPrim("LazerBeamz",0.25,0.25,10);
-	testCube8.primInfo = resMan.loadPrim("RockSolid",2.5,2.5,2.5);
+
 	for(int i = 0; i < MAXBULLETS; ++i)
-		testPrimObjs[i] = testCube8;
+		testPrimObjs[i] = testCube4;
 	tempRen.asset = &testCube;
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
@@ -98,12 +95,10 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.addRen(tempRen);
 	tempRen.asset = &testCube6;
 	DXVid.addRen(tempRen);
-	//for(int i = 0; i < 256; ++i) {
-	//	tempRen.asset = &testPrimObjs[i];
-	//	DXVid.addRen(tempRen);
-//	}
-	testBullVec.Init(resMan);
-	
+	for(int i = 0; i < 256; ++i) {
+		tempRen.asset = &testPrimObjs[i];
+		DXVid.addRen(tempRen);
+	}
 
 
 	testSprite.image = resMan.loadTexture("xboxControllerSpriteFont.tga",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0);
@@ -195,12 +190,13 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	itemDrop.ItemBoxInit(distX2,5,distZ2);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
-	//testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0,RangedDefaultLifeSpan,1);
-	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
-	//testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
-	//testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
-	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
-	//testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4.primInfo,0,0, RangedDefaultLifeSpan,1);
+	testBullet.Init(D3DXVECTOR3(20,5,2),D3DXVECTOR3(-3,0,0),testCube4,0,0,RangedDefaultLifeSpan,1);
+	testBullVec.Init(resMan);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4,0,0, RangedDefaultLifeSpan,1);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(10,4,2),D3DXVECTOR3(-2,0,0),testCube4,0,0, RangedDefaultLifeSpan,1);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(37,4,3),D3DXVECTOR3(-7,0,0),testCube4,0,0, RangedDefaultLifeSpan,1);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,-.2,0),testCube4,0,0, RangedDefaultLifeSpan,1);
+	//testBullVec.ActivateABullet(D3DXVECTOR3(0,5,0),D3DXVECTOR3(1,-1,1),testCube4,0,0, RangedDefaultLifeSpan,1);
 
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
@@ -384,12 +380,12 @@ void DXTest::update() {
 			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4,rot,angle,RangedDefaultLifeSpan, testDamage);
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,RangedDefaultLifeSpan, testDamage);
 			}
 			if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4,rot,angle,MeleeDefaultLifeSpan, testDamage);
+				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,MeleeDefaultLifeSpan, testDamage);
 			}
 		}
 		if(i == 1) {
@@ -495,12 +491,12 @@ void DXTest::update() {
 				if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
 					D3DXVECTOR3 tempvec = testPlayer2.getPos();
 					tempvec.y += 1.5f;
-					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4,rot2,angle2,RangedDefaultLifeSpan, testDamage);
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot2,angle2,RangedDefaultLifeSpan, testDamage);
 				}
 				if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
 					D3DXVECTOR3 tempvec = testPlayer2.getPos();
 					tempvec.y += 1.5f;
-					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
 				}
 			} else {
 				if(testPlayer2.getTimer()<=0)
@@ -586,24 +582,7 @@ void DXTest::draw() {
 		  ////////////////////////////////////////////////////////////////////////////
 		 // draws(translates and adds) the whole bullvec only if they're active    //
 		////////////////////////////////////////////////////////////////////////////
-	/*	D3DXVECTOR3 temppos;
-		Bullet tempbullet;
-		for(int i = 0; i < MAXBULLETS; ++i) {
-			if(testBullVec.GetActive(i)) {
-				tempbullet = testBullVec.GetBullet(i);
-				temppos = tempbullet.getPos();
-				D3DXMatrixIdentity(&TransMat);
-				D3DXMatrixIdentity(&RotMat);
-				D3DXMatrixRotationYawPitchRoll(&RotMat, D3DXToRadian(tempbullet.getRot()), D3DXToRadian(tempbullet.getAngle()), 0);
-				D3DXMatrixTranslation(&TransMat, tempbullet.getPos().x, tempbullet.getPos().y-.5f, tempbullet.getPos().z);
-				D3DXMatrixMultiply(&testPrimObjs[i].matrix, &RotMat, &TransMat);
-				tempRen.asset = &testPrimObjs[i];
-				DXVid.addRen(tempRen);
-			}
-		}*/
-
-		testBullVec.RenderBullVec(DXVid);
-
+		testBullVec.Render(DXVid);
 		  ///////////////////////////////////////////////////////  ~~~~~~~~~~~~~~~~~~~~~~
 		 // done drawing primitives                           //  ~~~~~~~~~~~~~~~~~~~~~~
 		///////////////////////////////////////////////////////  ~~~~~~~~~~~~~~~~~~~~~~
