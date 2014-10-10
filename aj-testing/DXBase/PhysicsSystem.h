@@ -3,6 +3,7 @@
 #include "ResDefs.h"
 #include "ShapeDefs.h"
 #include "ItemBox.h"
+#include "ResourceManager.h"
 
 
 const float RangedDefaultLifeSpan = 20.0f;
@@ -10,6 +11,7 @@ const float MeleeDefaultLifeSpan = 0.2f;
 const int MAXBULLETS = 256;
 const float BulletSpeed = 10.1f;
 const int testDamage = 1;
+const int bulletTypes= 3;
 enum TerrainType {
 	FLOOR,
 	WALL,
@@ -34,7 +36,7 @@ enum TerrainType {
 class Bullet {
 private:
 	D3DXVECTOR3 pos, prospectivePos, velocity;
-	PrimStruct* structpoi; // this too, if we don't want cubes. VV
+	PrimObj structpoi; // this too, if we don't want cubes. VV
 	float speed; // figure out what to do with this later
 	int damage;
 	float lifespan;
@@ -44,7 +46,8 @@ private:
 public:
 	Bullet();
 	~Bullet();
-	void Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage); // Add parameters
+	void Init(); // Add parameters
+	void Init_Type(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimObj  a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage);
 	void Update(float a_dt); // Parameters?
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
@@ -52,6 +55,8 @@ public:
 	float getLifeSpan();
 	float getRot();
 	float getAngle();
+	PrimObj getPrimObj(){return structpoi;}
+	void setPrimObj(PrimObj a_prim){structpoi=a_prim;}
 	//bool getActive();
 	//void setActive(bool a_active); moving these into bulletvec
 	void HitWall();
@@ -60,16 +65,21 @@ public:
 
 class BulletVec {
 private:
+	PrimObj b_render[bulletTypes];
 	Bullet bullets[MAXBULLETS];
 	bool bools[MAXBULLETS];
+	RenInfo tempRen;
+	D3DMATERIAL9 testMat;
+	RenInfo tempRen;
 public:
+	void RenderBullVec(DXFrame& DXVid);
 	BulletVec();
 	~BulletVec();
-	void Init();
+	void Init(ResourceManager& resMan);
 	void Update(float a_dt);
 	Bullet& GetBullet(int a_index);
 	bool GetActive(int a_index);
-	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage);
+	bool ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimObj  a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage);
 	bool DeactivateABullet(int a_index);
 };
 

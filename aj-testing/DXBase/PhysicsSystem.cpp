@@ -16,7 +16,19 @@ Bullet::~Bullet() {
 }
 
 
-void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
+void Bullet::Init() {
+	pos = D3DXVECTOR3(0,0,0);
+	rot = 0;
+	angle = 0;
+	rotate3Dvector(&D3DXVECTOR3(0,0,0), 0, 0);
+	velocity = D3DXVECTOR3(0,0,0);
+	//structpoi = NULL;
+	prospectivePos = pos;
+	speed = 0;
+	lifespan = 0;
+	damage = 0;
+}
+void Bullet::Init_Type(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimObj  a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage){
 	pos = a_pos;
 	rot = a_rot;
 	angle = a_angle;
@@ -28,7 +40,6 @@ void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_stru
 	lifespan = a_lifespan;
 	damage = a_damage;
 }
-
 
 void Bullet::Update(float a_dt) {
 	pos.x = prospectivePos.x;
@@ -108,13 +119,57 @@ BulletVec::~BulletVec() {
 }
 
 
-void BulletVec::Init() {
+void BulletVec::Init(ResourceManager& resMan) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
-		bullets[i].Init(D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0), NULL,0,0,0,0);
+		bullets[i].Init();
 		bools[i] = false;
 	}
+	
+		//regular bullet
+		testMat.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
+		testMat.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		// Diffuse color reflected
+		testMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Emissive color reflected
+		testMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
+		testMat.Power = 0.0f;
+		b_render[0].mat=&testMat;
+		b_render[0].Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+		b_render[0].primInfo = resMan.loadPrim("CuberTest",1,1,1);
+		D3DXMatrixIdentity(&b_render[0].matrix);
+		//lazer bullet
+		b_render[1]=b_render[0];
+		b_render[1].primInfo = resMan.loadPrim("LazerBeamz",0.25,0.25,10);
+		//rock bullet
+		b_render[2]=b_render[0];
+		b_render[2].primInfo = resMan.loadPrim("RockSolid",2.5,2.5,2.5);
 }
 
+void BulletVec::RenderBullVec(DXFrame& DXVid ){
+		D3DXVECTOR3 temppos;
+		D3DXMATRIX TransMat;
+		D3DXMATRIX RotMat;
+		PrimObj tempObj;
+		
+		tempObj=b_render[0];
+
+		Bullet tempbullet;
+		tempRen.locCamNum = 0;
+		tempRen.type = primitive;
+		for(int i = 0; i < MAXBULLETS; ++i) {
+			if(GetActive(i)) {
+				tempbullet = GetBullet(i);
+				temppos = tempbullet.getPos();
+				D3DXMatrixIdentity(&TransMat);
+				D3DXMatrixIdentity(&RotMat);
+				D3DXMatrixRotationYawPitchRoll(&RotMat, D3DXToRadian(tempbullet.getRot()), D3DXToRadian(tempbullet.getAngle()), 0);
+				D3DXMatrixTranslation(&TransMat, tempbullet.getPos().x, tempbullet.getPos().y-.5f, tempbullet.getPos().z);
+				tempObj.matrix=bullets[i].getPrimObj().matrix;
+				D3DXMatrixMultiply(&tempObj.matrix, &RotMat, &TransMat);
+				bullets[i].setPrimObj(tempObj);
+				tempRen.asset = &bullets[i].getPrimObj();
+				DXVid.addRen(tempRen);
+			}
+		}
+}
 
 void BulletVec::Update(float a_dt) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
@@ -138,11 +193,20 @@ bool BulletVec::GetActive(int a_index) {
 }
 
 
-bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimStruct * a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
+bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimObj  a_structpoi, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
-		if(!bools[i]) {
-			bullets[i].Init(a_pos, a_velocity, a_structpoi, a_rot, a_angle, a_lifespan, a_damage);
+		if(!GetActive(i)) {
+			int b_type=1;
+			//switch(b_type){
+			//case 0:
+			//	// based on type of bullet set this type of primobj
+			//	break;
+			//}
+			//actually make use of structpoi 
+			//make sure change stuff in dxtest to actually draw from thie bullet type instead of test.
+			bullets[i].Init_Type(a_pos, a_velocity, a_structpoi, a_rot, a_angle, a_lifespan, a_damage);
 			bools[i] = true;
+
 			return true;
 		}
 	}

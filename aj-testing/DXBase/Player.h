@@ -82,6 +82,9 @@ public:
 	void incrementJumpCount(){jumpCount++;}
 	void itemAccess(ItemBox &a_item);
 	void respawn(sPoint& spawn);
+	void setMaxHealth(int m_health){maxHealth=m_health;}
+	void setCurHealth(int c_health){curHealth=c_health;}
+	int getMaxHealth(){return maxHealth;}
 };
 
 
