@@ -199,6 +199,10 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 		//else {
 		//	onGround = false;
 		//}
+		if(pos.y < -200) {
+			alive = false;
+			timer = 3;
+		}
 		if(curHealth <= 0) {
 			alive = false;
 			timer = 3;

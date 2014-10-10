@@ -577,17 +577,21 @@ void DXTest::draw() {
 			tempRen.asset = &testCube;
 			DXVid.addRen(tempRen);
 		}
+		hud[0].drawHud(testPlayer,DXVid,1);
+
 		tempRen.asset = &testCube2;
 		DXVid.addRen(tempRen);
 		tempRen.asset = &testCube3;
 		DXVid.addRen(tempRen);
 		tempRen.asset = &testCube4;
 		DXVid.addRen(tempRen);
+
 		//p2
 		if(testPlayer2.isAlive()) {
 			tempRen.asset = &testCube6;
 			DXVid.addRen(tempRen);
 		}
+		hud[1].drawHud(testPlayer2,DXVid,2);
 
 		if(itemDrop.getActive()){
 			tempRen.asset = &testCube5;
@@ -611,27 +615,27 @@ void DXTest::draw() {
 		DXVid.addRen(tempRen);
 		
 		//text
-		testText.textColor = D3DCOLOR(0xFFFFFFFF);
-		testText.rec.top = 500;
-		testText.rec.left = 50;
-		testText.rec.right = 100;
-		testText.rec.bottom = 600;
-		testText2 = testText;
+		//testText.textColor = D3DCOLOR(0xFFFFFFFF);
+		//testText.rec.top = 500;
+		//testText.rec.left = 50;
+		//testText.rec.right = 100;
+		//testText.rec.bottom = 600;
+		//testText2 = testText;
 
-		ss.str("");
-		ss<<testPlayer.getHealth();
-		testText.text = ss.str();
-		tempRen.asset = &testText;
-		tempRen.type = text;
-		tempRen.locCamNum = 1;
-		DXVid.addRen(tempRen);
+		//ss.str("");
+		//ss<<testPlayer.getHealth();
+		//testText.text = ss.str();
+		//tempRen.asset = &testText;
+		//tempRen.type = text;
+		//tempRen.locCamNum = 1;
+		//DXVid.addRen(tempRen);
 
-		ss.str("");
-		ss<<testPlayer2.getHealth();
-		testText2.text = ss.str();
-		tempRen.asset = &testText2;
-		tempRen.locCamNum = 2;
-		DXVid.addRen(tempRen);
+		//ss.str("");
+		//ss<<testPlayer2.getHealth();
+		//testText2.text = ss.str();
+		//tempRen.asset = &testText2;
+		//tempRen.locCamNum = 2;
+		//DXVid.addRen(tempRen);
 		
 		DXVid.Render();
 		//DXVid.clearRen();

@@ -81,6 +81,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="DXFrame.cpp" />
     <ClCompile Include="DXTest.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="Limbase.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DXFrame.h" />
     <ClInclude Include="DXTest.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="Limb.h" />

@@ -7,9 +7,11 @@
 #include "Limbase.h"
 #include "ItemBox.h"
 #include "spawnPoint.h"
+#include "HUD.h"
 
 class DXTest {
 private:
+	HUD hud[4];
 	cam temp,temp2,temp3,temp4;
 	ResourceManager resMan;
 	DXFrame DXVid;

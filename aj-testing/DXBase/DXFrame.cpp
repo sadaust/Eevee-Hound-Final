@@ -390,7 +390,7 @@ void DXFrame::Render() {
 							tempSprite->posY /= w_height;
 						}
 						D3DXMatrixScaling(&scale,tempSprite->scalX,tempSprite->scalY,1);
-						D3DXMatrixTranslation(&loc,(tempSprite->posX*w_width)+viewPorts[i].viewPort.X,(tempSprite->posY*w_height)+viewPorts[i].viewPort.Y,1);
+						D3DXMatrixTranslation(&loc,(tempSprite->posX*viewPorts[i].viewPort.Width)+viewPorts[i].viewPort.X,(tempSprite->posY*viewPorts[i].viewPort.Height)+viewPorts[i].viewPort.Y,1);
 						loc = scale*loc;
 						//set sprite trans
 						m_pD3DSprite->SetTransform(&loc);
@@ -415,10 +415,10 @@ void DXFrame::Render() {
 							tempText->rec.top /= w_height;
 						}
 						//copy
-						tempRec.bottom = tempText->rec.bottom*w_height;
-						tempRec.top = tempText->rec.top*w_height;
-						tempRec.left = tempText->rec.left*w_width;
-						tempRec.right = tempText->rec.right*w_width;
+						tempRec.bottom = tempText->rec.bottom*viewPorts[i].viewPort.Height;
+						tempRec.top = tempText->rec.top*viewPorts[i].viewPort.Height;
+						tempRec.left = tempText->rec.left*viewPorts[i].viewPort.Width;
+						tempRec.right = tempText->rec.right*viewPorts[i].viewPort.Width;
 						//offset
 						tempRec.bottom += viewPorts[i].viewPort.Y;
 						tempRec.top += viewPorts[i].viewPort.Y;
