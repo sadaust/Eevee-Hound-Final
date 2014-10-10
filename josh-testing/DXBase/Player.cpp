@@ -6,8 +6,8 @@ const float maxSpeed   = 20.0f;
 const float terminalVelocity = 10.0f;
 
 
-  ///////////////////////////
- // Game Statistics/Math  //
+///////////////////////////
+// Game Statistics/Math  //
 ///////////////////////////
 
 
@@ -20,13 +20,15 @@ void Player::takeDamage(int a_damage) {
 
 
 
-  //////////////////////////// ~~~~~~~~~~~~
- // End of game Statistics // ~~~~~~~~~~~~
+//////////////////////////// ~~~~~~~~~~~~
+// End of game Statistics // ~~~~~~~~~~~~
 //////////////////////////// ~~~~~~~~~~~~
 
 
 
 Player::Player() {
+	maxHealth = 100;
+	curHealth = 100;
 	pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
 	facing = 0;
@@ -37,6 +39,8 @@ Player::Player() {
 	onGround = false;
 	checkItem= false;
 	R_arm= false;
+	alive = true;
+	timer = 0;
 	jumpCount=0;
 }
 
@@ -57,6 +61,7 @@ void Player::testInit(float a_x, float a_y, float a_z, float a_rot) {
 	speed = 5.0f;
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
+
 }
 
 
@@ -78,7 +83,7 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 	Yaw.x = a_vector->x;				// the final X
 	Yaw.y = Pitch.x;					// the final Z
 	rotate2Dvector(&Yaw,a_rot);			// XZ rotation
-	
+
 	a_vector->x = Yaw.x; // X
 	a_vector->y = Pitch.y; // Y
 	a_vector->z = -(Yaw.y); // Z
@@ -88,99 +93,129 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list) {
 	float tempfloat;
 
-	
-	pos.x = prospectivePos.x;
-	pos.y = prospectivePos.y;
-	pos.z = prospectivePos.z;
+	//check alive
+	if(alive) {
+		//do if alive
+		pos.x = prospectivePos.x;
+		pos.y = prospectivePos.y;
+		pos.z = prospectivePos.z;
 
 
-	  ////////////////////////////////////////
-	 // Takes inputs, sets prospective pos //
-	////////////////////////////////////////
+		////////////////////////////////////////
+		// Takes inputs, sets prospective pos //
+		////////////////////////////////////////
 
 
 
-	tempfloat = a_state.lX;
-	velocityXZ.x = tempfloat*a_dt*speed;
+		tempfloat = a_state.lX;
+		velocityXZ.x = tempfloat*a_dt*speed;
 
-	tempfloat = a_state.lY;
-	velocityXZ.y = tempfloat*a_dt*speed;
+		tempfloat = a_state.lY;
+		velocityXZ.y = tempfloat*a_dt*speed;
 
-	tempfloat = a_state.rX;
-	a_rot += (tempfloat*a_dt)*turnspeedX;
-	tempfloat = a_state.rY;
-	a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
-	if(a_angle >= 90)
-		a_angle = 89.9f;
-	else if(a_angle <=-90)
-		a_angle = -89.9f;
-	
-	velocityY -= 0.3f*a_dt;
-	if(velocityY < -terminalVelocity)
-		velocityY = -terminalVelocity;
-	if(velocityY > terminalVelocity)
-		velocityY = terminalVelocity;
-	//if(pos.y <= 0 && velocityY <= 0)
-	//	velocityY = 0;
-	if(a_state.buttons[binds::jump] && onGround) {
-		velocityY = 0.2f;
-		onGround = false;
-	}
-	if(a_state.buttons[binds::legPower]) {
-		//get part !0 
-		if (!Limbs.getLeg()==0){
-			part_list.CaseAction(Limbs.getLeg(),*this);
-		// find that part 
-		// execute that function
+		tempfloat = a_state.rX;
+		a_rot += (tempfloat*a_dt)*turnspeedX;
+		tempfloat = a_state.rY;
+		a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
+		if(a_angle >= 90)
+			a_angle = 89.9f;
+		else if(a_angle <=-90)
+			a_angle = -89.9f;
+
+		velocityY -= 0.3f*a_dt;
+		if(velocityY < -terminalVelocity)
+			velocityY = -terminalVelocity;
+		if(velocityY > terminalVelocity)
+			velocityY = terminalVelocity;
+		//if(pos.y <= 0 && velocityY <= 0)
+		//	velocityY = 0;
+		/////////////////////////////////////
+		//////////PLAYER CONTROLS////////////
+		/////////////////////////////////////
+
+		// need to deal with object for bullet 
+		/*if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+			D3DXVECTOR3 tempvec = getPos();
+			tempvec.y += 1.5f;
+			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+		}
+		if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
+			D3DXVECTOR3 tempvec = getPos();
+			tempvec.y += 1.5f;
+			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,MeleeDefaultLifeSpan, testDamage);
+		}
+*/
+		if(a_state.buttons[binds::jump] && onGround) {
+			velocityY = 0.2f;
+			onGround = false;
+		}
+		if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
+			//get part !0 
+			if (!Limbs.getLeg()==0){
+				part_list.CaseAction(Limbs.getLeg(),*this,a_state);
+				// find that part 
+				// execute that function
+			}
+		}
+		if(a_state.buttons[binds::use]) {
+			//if item is coliding with character
+			if(getcheckItem()){
+				addLimb(ProsteticTestLimb);
+			}
+			// make bool switch here.
+			//
+			//bring menue up 
+			// 
+		}
+
+
+
+		facing = D3DXToRadian(a_rot);
+
+		//D3DXMATRIX matrixlovetemptest;
+		//D3DXVECTOR2 tempveloc = velocityXZ;
+		//float templength = D3DXVec2Length(&velocityXZ);
+		//D3DXVec2Normalize(&velocityXZ,&velocityXZ);
+		//D3DXMatrixTransformation2D(&matrixlovetemptest,NULL,NULL,NULL,&D3DXVECTOR2(pos.x,pos.z),facing,&velocityXZ);
+		//D3DXVECTOR4 matrixtemplove4;
+		//D3DXVec2Transform(&matrixtemplove4, &velocityXZ, &matrixlovetemptest);
+
+		//velocityXZ.x = matrixtemplove4.x;
+		//velocityXZ.y = matrixtemplove4.y;
+		//D3DXVECTOR2 tempveloc = velocityXZ;
+		//if(D3DXVec2Length(&velocityXZ) >= maxSpeed)
+		//	velocityXZ = tempveloc;
+		rotate2Dvector(&velocityXZ,-facing);
+
+		prospectivePos.x += velocityXZ.x;
+		prospectivePos.y += velocityY;
+		prospectivePos.z += velocityXZ.y;
+
+
+		//if() {
+		//	onGround = true;
+		//	velocityY = 0;
+		//}
+		//else {
+		//	onGround = false;
+		//}
+		if(curHealth <= 0) {
+			alive = false;
+			timer = 3;
+		}
+	} else {
+		//do if dead
+		if(timer>=0) {
+			timer -= a_dt;
 		}
 	}
-	if(a_state.buttons[binds::use]) {
-		//if item is coliding with character
-		if(getcheckItem()){
-			addLimb(ProsteticTestLimb);
-		}
-		// make bool switch here.
-		//
-		//bring menue up 
-		// 
-	}
-	
-	
-	
-	facing = D3DXToRadian(a_rot);
 
-	//D3DXMATRIX matrixlovetemptest;
-	//D3DXVECTOR2 tempveloc = velocityXZ;
-	//float templength = D3DXVec2Length(&velocityXZ);
-	//D3DXVec2Normalize(&velocityXZ,&velocityXZ);
-	//D3DXMatrixTransformation2D(&matrixlovetemptest,NULL,NULL,NULL,&D3DXVECTOR2(pos.x,pos.z),facing,&velocityXZ);
-	//D3DXVECTOR4 matrixtemplove4;
-	//D3DXVec2Transform(&matrixtemplove4, &velocityXZ, &matrixlovetemptest);
+}
 
-	//velocityXZ.x = matrixtemplove4.x;
-	//velocityXZ.y = matrixtemplove4.y;
-	//D3DXVECTOR2 tempveloc = velocityXZ;
-	//if(D3DXVec2Length(&velocityXZ) >= maxSpeed)
-	//	velocityXZ = tempveloc;
-	rotate2Dvector(&velocityXZ,-facing);
-
-	prospectivePos.x += velocityXZ.x;
-	prospectivePos.y += velocityY;
-	prospectivePos.z += velocityXZ.y;
-
-
-	//if() {
-	//	onGround = true;
-	//	velocityY = 0;
-	//}
-	//else {
-	//	onGround = false;
-	//}
-
-
-
-
-
+void Player::respawn(sPoint& spawn) {
+	alive = true;
+	curHealth = maxHealth;
+	pos = spawn.getPos();
 }
 
 
@@ -246,7 +281,7 @@ void Player::setProspectivePos(D3DXVECTOR3 a_prospos) {
 	prospectivePos = a_prospos;
 }
 
-	
+
 void Player::setFacing(float a_facing) {
 	facing = a_facing;
 }
@@ -275,6 +310,7 @@ void Player::setVelocityY(float a_velocityY) {
 
 void Player::toggleGrounded(bool a_grounded) {
 	onGround = a_grounded;
+	setJumpCount(0);
 }
 
 void Player::togglecheckItem(bool a_item){

@@ -74,8 +74,8 @@ Limb Limbase::getPart(int partnum){
 	return part[partnum];
 }
 
-void Limbase::CaseAction(int partNumber,Player& p_data){
-	partNumber=18;
+void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state){
+	//partNumber=18;
 	switch (part[partNumber-1].getPartType()){
 	case arm:
 		{
@@ -101,14 +101,21 @@ void Limbase::CaseAction(int partNumber,Player& p_data){
 				if(p_data.getGrounded()==false&&p_data.getJumpCount()<2){
 					p_data.setVelocityY(0.3f);
 					p_data.incrementJumpCount();
-					if(p_data.getJumpCount()==2){
-						p_data.setJumpCount(0);
-					}
+					//if(p_data.getJumpCount()==2){
+						//p_data.setJumpCount(0);
+					//}
 				}
 				
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){
-				//movement speed boost
+				//minor teleport
+				D3DXVECTOR2 move;
+				float tempfloat;
+				tempfloat = a_state.lX;
+				move.x = tempfloat*5.0f;
+				tempfloat = a_state.lY;
+				move.y = tempfloat*5.0f;
+				p_data.setVelocityXZ(move);
 			}
 			else if (part[partNumber-1].getPartName()=="Bear"){
 				//
@@ -148,10 +155,6 @@ void Limbase::CaseAction(int partNumber,Player& p_data){
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle"){
 				// chance to poison enemy on attack.
-				D3DXVECTOR2 move;
-				move.x=0.2f;
-				move.y=0.2f;
-				p_data.setVelocityXZ(move);
 			}
 			else break;
 		}

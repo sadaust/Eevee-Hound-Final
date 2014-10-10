@@ -136,7 +136,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 	out.rX = 0;
 	out.rY = 0;
 	for(int i = 0; i < 9; ++i) {
-		out.buttons[i] = state[controllerNum].buttons[i];
+		out.buttonLast[i] = state[controllerNum].buttons[i];
 	}
 	//get input
 	if(controllerNum >= 0 && controllerNum < 4) {

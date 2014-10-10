@@ -6,14 +6,11 @@
 #include "Limb.h"
 #include "Limbase.h"
 #include "ItemBox.h"
+#include "spawnPoint.h"
 //#include "PhysicsSystem.h"
 
-const int numplayers = 2;
 void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle);
 void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle);
-
-
-
 
 
 class Player {
@@ -24,9 +21,10 @@ private:
 	float facing, 
 		moving, 
 		velocityY,
-		speed;
+		speed,
+		timer;
 	cylinder boundingCyl;
-	bool onGround, checkItem, R_arm;
+	bool onGround, checkItem, R_arm, alive;
 	int jumpCount;
 
 	Limb ProsteticTestLimb;
@@ -58,6 +56,7 @@ public:
 	D3DXVECTOR3 getProspectivePos();
 	float getFacing();
 	float getMoving();
+	float getTimer(){return timer;}
 	D3DXVECTOR2 getVelocityXZ();
 	float getVelocityY();
 	cylinder getBound();
@@ -75,11 +74,14 @@ public:
 	void togglecheckItem(bool item);
 	bool getGrounded(){return onGround;}
 	bool getcheckItem(){return checkItem;}
+	bool isAlive(){return alive;}
 	void addLimb(Limb part);
 	void setJumpCount(int j_count){jumpCount=j_count;}
 	int getJumpCount(){return jumpCount;}
+	int getHealth(){return curHealth;}
 	void incrementJumpCount(){jumpCount++;}
 	void itemAccess(ItemBox &a_item);
+	void respawn(sPoint& spawn);
 };
 
 

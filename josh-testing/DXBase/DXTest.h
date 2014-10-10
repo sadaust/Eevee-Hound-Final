@@ -6,6 +6,7 @@
 #include <sstream>
 #include "Limbase.h"
 #include "ItemBox.h"
+#include "spawnPoint.h"
 
 class DXTest {
 private:
@@ -13,28 +14,29 @@ private:
 	ResourceManager resMan;
 	DXFrame DXVid;
 	SoundFrame sFrame;
-	PrimObj testCube,testCube2, testCube3, testCube4, testCube5, testCube6;
+	PrimObj testCube,testCube2, testCube3, testCube4, testCube5,testCube6;
 	PrimObj testPrimObjs[MAXBULLETS];
 	SpriteObj testSprite;
-	TextStruct testText;
+	TextStruct testText,testText2;
 	ModelObj testMod;
 	D3DMATERIAL9 testMat;
 	InputHandler input;
 	listenProp tempProp;
 	D3DLIGHT9 m_Light;
-	std::stringstream ss;
+	std::stringstream ss,ss2;
 	SoundStruct* testSound;
 	MusicStruct* testMusic;
-	Player testPlayer[numplayers];
+	Player testPlayer,testPlayer2;
 	int numCon;
 	DWORD cTime,lTime,tTime;
-	float dist, distX, distZ, rot, angle, distX2, distZ2;
+	float dist, distX, distZ, rot, angle, distX2, distZ2, distX3, distZ3;
 	Terrain testTerrain, testTerrain2;
 	PhysicsSystem testPhys;
 	Bullet testBullet;
 	BulletVec testBullVec;
 	Limbase PartList;
 	ItemBox itemDrop;
+	sPoint spawn;
 	float dist2, rot2, angle2;
 	//dt in seconds
 	float dt;

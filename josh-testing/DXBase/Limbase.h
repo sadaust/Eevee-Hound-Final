@@ -5,6 +5,7 @@
 #include <sstream>
 #include "Limb.h"
 #include "DXFrame.h"
+#include "InputHandler.h"
 //#include "Player.h"
 
 class Player;
@@ -20,6 +21,6 @@ public:
 	Limbase();
 	Limb getPartRan();
 	Limb getPart(int);
-	void CaseAction(int,Player&);
+	void CaseAction(int,Player&,inputState&);
 	//~Limbase();
 };
