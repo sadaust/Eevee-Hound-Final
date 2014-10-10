@@ -383,8 +383,14 @@ void DXFrame::Render() {
 					case sprite:
 						tempSprite = (SpriteObj*)tempRen->asset;
 						m_pD3DSprite->Begin(NULL);
+						if(tempSprite->posX>1) {
+							tempSprite->posX /= w_width;
+						}
+						if(tempSprite->posY>1) {
+							tempSprite->posY /= w_height;
+						}
 						D3DXMatrixScaling(&scale,tempSprite->scalX,tempSprite->scalY,1);
-						D3DXMatrixTranslation(&loc,tempSprite->posX+viewPorts[i].viewPort.X,tempSprite->posY+viewPorts[i].viewPort.Y,1);
+						D3DXMatrixTranslation(&loc,(tempSprite->posX*w_width)+viewPorts[i].viewPort.X,(tempSprite->posY*w_height)+viewPorts[i].viewPort.Y,1);
 						loc = scale*loc;
 						//set sprite trans
 						m_pD3DSprite->SetTransform(&loc);
@@ -396,7 +402,24 @@ void DXFrame::Render() {
 						break;
 					case text:
 						tempText = (TextStruct*)tempRen->asset;
-						tempRec = tempText->rec;
+						if(tempText->rec.bottom > 1) {
+							tempText->rec.bottom /= w_height;
+						}
+						if(tempText->rec.left > 1) {
+							tempText->rec.left /= w_width;
+						}
+						if(tempText->rec.right > 1) {
+							tempText->rec.right /= w_width;
+						}
+						if(tempText->rec.top > 1) {
+							tempText->rec.top /= w_height;
+						}
+						//copy
+						tempRec.bottom = tempText->rec.bottom*w_height;
+						tempRec.top = tempText->rec.top*w_height;
+						tempRec.left = tempText->rec.left*w_width;
+						tempRec.right = tempText->rec.right*w_width;
+						//offset
 						tempRec.bottom += viewPorts[i].viewPort.Y;
 						tempRec.top += viewPorts[i].viewPort.Y;
 						tempRec.left += viewPorts[i].viewPort.X;

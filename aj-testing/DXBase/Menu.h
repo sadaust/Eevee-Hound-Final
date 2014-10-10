@@ -25,9 +25,9 @@ public:
 	Screen();
 	void Init(); // not sure if we need this or if this will even be used
 	void AddButt(Button a_butt);
-	void AddButt(int a_index, RECT a_rect, char* a_text, bool a_clickable);
+	void AddButt(int a_index, frect a_rect, char* a_text, bool a_clickable);
 	Button& GetButt(int a_index);
-	void SetButt(int a_index, RECT a_rect, char* a_text, bool a_clickable);
+	void SetButt(int a_index, frect a_rect, char* a_text, bool a_clickable);
 };
 
 

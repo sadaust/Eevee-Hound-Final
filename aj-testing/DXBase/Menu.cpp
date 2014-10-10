@@ -28,7 +28,7 @@ void Screen::AddButt(Button a_butt) {
 }
 
 
-void AddButt(int a_index, RECT a_rect, char* a_text, bool a_clickable) {
+void Screen::AddButt(int a_index, frect a_rect, char* a_text, bool a_clickable) {
 	Button tempbutt;
 	tempbutt.text.rec = a_rect;
 	tempbutt.text.text = a_text;
@@ -41,7 +41,7 @@ Button& Screen::GetButt(int a_index) {
 }
 
 
-void Screen::SetButt(int a_index, RECT a_rect, char* a_text, bool a_clickable) {
+void Screen::SetButt(int a_index, frect a_rect, char* a_text, bool a_clickable) {
 	buttons[a_index].text.rec = a_rect;
 	buttons[a_index].text.text = a_text;
 	buttons[a_index].clickable = a_clickable;
@@ -61,7 +61,7 @@ Menu::Menu() {
 void Menu::Init() {
 	Screen tempscreen;
 	Button tempbutt;
-	RECT temprect;
+	frect temprect;
 	temprect.bottom = 40;
 	temprect.top = 20;
 	temprect.left = 50;

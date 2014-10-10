@@ -333,6 +333,9 @@ resStruct* ResourceManager::getRes(LPCSTR name) {
 TextureStruct* ResourceManager::loadTexture(LPCSTR name,UINT Width,UINT Height,UINT MipLevels,DWORD Usage,D3DFORMAT Format,D3DPOOL Pool,DWORD Filter,DWORD MipFilter,D3DCOLOR ColorKey,PALETTEENTRY *pPalette) {
 	TextureStruct tempTex;
 	resStruct tempRes;
+	if(isResLoaded(name)) {
+		return (TextureStruct*)getRes(name)->res;
+	} else {
 	tempRes.type = texture;
 	tempRes.name = name;
 	loadDev->Load2D(name,Width,Height,MipLevels,Usage,Format,Pool,Filter,MipFilter,ColorKey,&tempTex.texInfo,pPalette,&tempTex.objTex);
@@ -341,12 +344,16 @@ TextureStruct* ResourceManager::loadTexture(LPCSTR name,UINT Width,UINT Height,U
 	tempRes.res = &textureList.back();
 	resources.push_back(tempRes);
 	return (TextureStruct*)tempRes.res;
+	}
 }
 
 //load a primitive to get a pointer to it
 PrimStruct* ResourceManager::loadPrim(LPCSTR name,float height,float width,float depth) {
 	PrimStruct tempPrim;
 	resStruct tempRes;
+	if(isResLoaded(name)) {
+		return (PrimStruct*)getRes(name)->res;
+	} else {
 	tempRes.type = prim;
 	tempRes.name = name;
 	loadDev->CreateUVCube(tempPrim,height,width,depth);
@@ -354,12 +361,16 @@ PrimStruct* ResourceManager::loadPrim(LPCSTR name,float height,float width,float
 	tempRes.res = &primList.back();
 	resources.push_back(tempRes);
 	return (PrimStruct*)tempRes.res;
+	}
 }
 
 //use this to create cubes with the center point off center
 PrimStruct* ResourceManager::loadPrim(LPCSTR name,float bottom,float top,float left,float right,float front, float back) {
 	PrimStruct tempPrim;
 	resStruct tempRes;
+	if(isResLoaded(name)) {
+		return (PrimStruct*)getRes(name)->res;
+	} else {
 	tempRes.type = prim;
 	tempRes.name = name;
 	loadDev->uncenterdUVCube(tempPrim,bottom,top,left,right,front,back);
@@ -367,6 +378,7 @@ PrimStruct* ResourceManager::loadPrim(LPCSTR name,float bottom,float top,float l
 	tempRes.res = &primList.back();
 	resources.push_back(tempRes);
 	return (PrimStruct*)tempRes.res;
+	}
 }
 
 //load a model from a file then return a pointer to it
@@ -374,6 +386,9 @@ ModelStruct* ResourceManager::loadXFile(LPCSTR name) {
 	ModelStruct tempMod;
 	resStruct tempRes;
 	resStruct* res;
+	if(isResLoaded(name)) {
+		return (ModelStruct*)getRes(name)->res;
+	}
 	tempRes.type = xModel;
 	tempRes.name = name;
 	loadDev->loadXFile(name,tempMod);
@@ -395,6 +410,9 @@ ModelStruct* ResourceManager::loadXFile(LPCSTR name) {
 SoundStruct* ResourceManager::loadSound(LPCSTR name,float minDist, float maxDist,float volume) {
 	SoundStruct tempSound;
 	resStruct tempRes;
+	if(isResLoaded(name)) {
+		return (SoundStruct*)getRes(name)->res;
+	} else {
 	tempRes.type = soundEffect;
 	tempRes.name = name;
 	soundDev->load(name,&tempSound.sound);
@@ -405,12 +423,16 @@ SoundStruct* ResourceManager::loadSound(LPCSTR name,float minDist, float maxDist
 	tempRes.res = &soundList.back();
 	resources.push_back(tempRes);
 	return (SoundStruct*)tempRes.res;
+	}
 }
 
 //loade a sound stream for music and return a pointer to it. volume is 0.0f-1.0f.
 MusicStruct* ResourceManager::loadMusic(LPCSTR name,float volume) {
 	MusicStruct tempMusic;
 	resStruct tempRes;
+	if(isResLoaded(name)) {
+		return (MusicStruct*)getRes(name)->res;
+	} else {
 	tempRes.type = music;
 	tempRes.name = name;
 	soundDev->loadStream(name,&tempMusic.sound);
@@ -419,4 +441,5 @@ MusicStruct* ResourceManager::loadMusic(LPCSTR name,float volume) {
 	tempRes.res = &musicList.back();
 	resources.push_back(tempRes);
 	return (MusicStruct*)tempRes.res;
+	}
 }
