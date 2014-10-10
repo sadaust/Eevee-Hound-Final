@@ -244,7 +244,8 @@ bool PhysicsSystem::SenseCollision(Player& a_player, Player& a_player2) {
 
 bool  PhysicsSystem::ResolveCollision(Player& a_player, Player& a_player2){
 	
-	
+	a_player.setProspectivePos(a_player.getPos());
+	a_player.setJumpCount(0);
 	return true;
 }
 

@@ -340,6 +340,9 @@ void DXTest::update() {
 				//setplayer item collision to false
 				testPlayer.togglecheckItem(false);
 			}
+			if(testPhys.SenseCollision(testPlayer,testPlayer2)) {
+				testPhys.ResolveCollision(testPlayer,testPlayer2);
+			}
 			
 
 			for(int i = 0; i < MAXBULLETS; ++i) {
@@ -461,6 +464,9 @@ void DXTest::update() {
 			if(!testPhys.SenseCollision(testPlayer2,itemDrop)){
 				//setplayer item collision to false
 				testPlayer2.togglecheckItem(false);
+			}
+			if(testPhys.SenseCollision(testPlayer2,testPlayer)) {
+				testPhys.ResolveCollision(testPlayer2,testPlayer);
 			}
 			
 
