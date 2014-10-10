@@ -131,7 +131,7 @@ void BulletVec::Init(ResourceManager& resMan) {
 	testMat.Power = 0.0f;
 	b_render[0].mat = &testMat;
 	b_render[0].Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
-	b_render[0].primInfo = resMan.loadPrim("CuberTest",0.1f,0.1f,0.1f);
+	b_render[0].primInfo = resMan.loadPrim("bulletCube",0.1f,0.1f,0.1f);
 	D3DXMatrixIdentity(&b_render[0].matrix);
 	//lazer bullet
 	b_render[1]=b_render[0];
@@ -150,7 +150,7 @@ void BulletVec::Render(DXFrame& DXVid) {
 	tempRen.locCamNum = 0;
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(GetActive(i)) {
-			bullets[i].setPrimObj(b_render[0]);
+			bullets[i].setPrimObj(b_render[1]);
 			D3DXMatrixIdentity(&TransMat);
 			D3DXMatrixIdentity(&RotMat);
 			D3DXMatrixRotationYawPitchRoll(&RotMat, D3DXToRadian(bullets[i].getRot()), D3DXToRadian(bullets[i].getAngle()), 0);

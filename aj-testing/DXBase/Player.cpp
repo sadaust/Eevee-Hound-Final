@@ -94,6 +94,15 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 	float tempfloat;
 
 	//check alive
+	tempfloat = a_state.rX;
+		a_rot += (tempfloat*a_dt)*turnspeedX;
+		tempfloat = a_state.rY;
+		a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
+		if(a_angle >= 90)
+			a_angle = 89.9f;
+		else if(a_angle <=-90)
+			a_angle = -89.9f;
+
 	if(alive) {
 		//do if alive
 		pos.x = prospectivePos.x;
@@ -112,15 +121,6 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 
 		tempfloat = a_state.lY;
 		velocityXZ.y = tempfloat*a_dt*speed;
-
-		tempfloat = a_state.rX;
-		a_rot += (tempfloat*a_dt)*turnspeedX;
-		tempfloat = a_state.rY;
-		a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
-		if(a_angle >= 90)
-			a_angle = 89.9f;
-		else if(a_angle <=-90)
-			a_angle = -89.9f;
 
 		velocityY -= 0.3f*a_dt;
 		if(velocityY < -terminalVelocity)
@@ -216,6 +216,13 @@ void Player::respawn(sPoint& spawn) {
 	alive = true;
 	curHealth = maxHealth;
 	pos = spawn.getPos();
+	prospectivePos = pos;
+	
+	Limbs.setBody(0);
+	Limbs.setHead(0);
+	Limbs.setLarm(0);
+	Limbs.setRarm(0);
+	Limbs.setLeg(0);
 }
 
 

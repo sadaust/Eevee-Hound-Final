@@ -377,6 +377,7 @@ void DXTest::update() {
 			temp.cam_look_pos.z = testPlayer.getPos().z;
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
+			if(testPlayer.isAlive())  {
 			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
@@ -386,6 +387,13 @@ void DXTest::update() {
 				D3DXVECTOR3 tempvec = testPlayer.getPos();
 				tempvec.y += 1.5f;
 				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,MeleeDefaultLifeSpan, testDamage);
+			}
+			
+			} else {
+				if(testPlayer.getTimer()<=0) {
+					testPlayer.respawn(spawn);
+					rot = spawn.getRot();
+				}
 			}
 		}
 		if(i == 1) {
@@ -499,8 +507,10 @@ void DXTest::update() {
 					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot2,angle2,MeleeDefaultLifeSpan, testDamage);
 				}
 			} else {
-				if(testPlayer2.getTimer()<=0)
+				if(testPlayer2.getTimer()<=0) {
 					testPlayer2.respawn(spawn);
+					rot2 = spawn.getRot();
+				}
 			}
 		}
 		tTime = cTime+(CLOCKS_PER_SEC/60);
