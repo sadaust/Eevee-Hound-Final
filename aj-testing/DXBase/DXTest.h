@@ -8,9 +8,11 @@
 #include "ItemBox.h"
 #include "spawnPoint.h"
 #include "HUD.h"
+#include "Map.h"
 
 class DXTest {
 private:
+	Map mapSys;
 	HUD hud[4];
 	cam temp,temp2,temp3,temp4;
 	ResourceManager resMan;

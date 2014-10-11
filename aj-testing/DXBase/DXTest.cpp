@@ -206,7 +206,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
-
+	mapSys.LoadMap("testMap.txt",resMan);
 }
 
 bool DXTest::devLost() {
@@ -337,6 +337,19 @@ void DXTest::update() {
 				testPlayer.itemAccess(itemDrop);
 			 
 			}
+
+			for(i = 0;i<mapSys.numFloors();++i){
+				if(testPhys.SenseCollision(testPlayer,mapSys.GetFloor(i))) {
+					testPhys.ResolveCollision(testPlayer,mapSys.GetFloor(i));
+				}
+			}
+
+			for(i = 0;i<mapSys.numWalls();++i){
+				if(testPhys.SenseCollision(testPlayer,mapSys.GetWall(i))) {
+					testPhys.ResolveCollision(testPlayer,mapSys.GetWall(i));
+				}
+			}
+
 			if(!testPhys.SenseCollision(testPlayer,itemDrop)){
 				//setplayer item collision to false
 				testPlayer.togglecheckItem(false);
@@ -638,7 +651,7 @@ void DXTest::draw() {
 		//tempRen.asset = &testText2;
 		//tempRen.locCamNum = 2;
 		//DXVid.addRen(tempRen);
-		
+		mapSys.render(DXVid);
 		DXVid.Render();
 		//DXVid.clearRen();
 	}
