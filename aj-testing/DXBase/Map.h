@@ -9,7 +9,9 @@
 class Map {
 private:
 	std::vector<Terrain> walls;
+	std::vector<int> wallZone;
 	std::vector<Terrain> floors;
+	std::vector<int> floorZone;
 	std::vector<sPoint> spawnPoints;
 	std::vector<PrimObj> renderInfo;
 	D3DMATERIAL9 mat;

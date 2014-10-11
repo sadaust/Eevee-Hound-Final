@@ -1,5 +1,5 @@
 #test comment
-#floor f topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
-#walls w topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
-w -10 -10 -1 -8 5 3
+#floor f length width hight centerPos.x centerPos.y centerPos.z zone
+#walls w length width hight centerPos.x centerPos.y centerPos.z zone
+w 10 20 5 -8 5 3 0
 #spawn s pos.x pos.y pos.z rot
