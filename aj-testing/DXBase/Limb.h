@@ -13,8 +13,8 @@ private:
 	Limbtype type;
 	std::string name;
 public:
-	Limb(){ID=14;type=leg;name="Tiger";} // initialzed for testing
-	void LimbInit(){ID=14;type=leg;name="Tiger";} // ""
+	Limb(){ID=2;type=arm;name="Turtle";} // initialzed for testing
+	void LimbInit(){ID=2;type=arm;name="Turtle";} // ""
 	void setID(int x){ID=x;}
 	void setType(Limbtype l_type){type=l_type;}
 	void setName(std::string P_name){name=P_name;}

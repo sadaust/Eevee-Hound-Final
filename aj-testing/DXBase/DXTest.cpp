@@ -79,8 +79,8 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	testCube5.primInfo = resMan.loadPrim("ItemTest",0.5f,0.5f,0.5f);
 	testCube6.primInfo = resMan.loadPrim("CuberTest2",1,1,1);
 
-	for(int i = 0; i < MAXBULLETS; ++i)
-		testPrimObjs[i] = testCube4;
+//	for(int i = 0; i < MAXBULLETS; ++i)
+//		testPrimObjs[i] = testCube4;
 	tempRen.asset = &testCube;
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
@@ -95,10 +95,10 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.addRen(tempRen);
 	tempRen.asset = &testCube6;
 	DXVid.addRen(tempRen);
-	for(int i = 0; i < 256; ++i) {
-		tempRen.asset = &testPrimObjs[i];
-		DXVid.addRen(tempRen);
-	}
+//	for(int i = 0; i < 256; ++i) {
+//		tempRen.asset = &testPrimObjs[i];
+//		DXVid.addRen(tempRen);
+//}
 
 
 	testSprite.image = resMan.loadTexture("xboxControllerSpriteFont.tga",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,0,0);
@@ -282,7 +282,7 @@ void DXTest::update() {
 				
 			dist += iState.lY*dt;
 			//D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
-			
+		/*	
 			tem = iState.lX;
 			rot += (tem*dt)*10;
 			tem = iState.lY;
@@ -291,7 +291,7 @@ void DXTest::update() {
 				angle = 89.9f;
 			else if(angle <=-90)
 				angle = -89.9f;
-			DXVid.rotateCam(temp,2,rot,angle);
+			*/
 			
 			//if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
 			//	//sFrame.Play(*testSound,dist,0,0,0,0,0);
@@ -303,7 +303,8 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer.Update(iState, dt,rot, angle,PartList);
+			testPlayer.Update(iState, dt,rot, angle,PartList,testBullVec);
+			DXVid.rotateCam(temp,2,rot,angle);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
@@ -381,18 +382,18 @@ void DXTest::update() {
 			DXVid.rotateCam(temp,2,rot,angle);
 			////////////////////////////////
 			if(testPlayer.isAlive())  {
-			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,RangedDefaultLifeSpan, testDamage);
-			}
-			if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
-				D3DXVECTOR3 tempvec = testPlayer.getPos();
-				tempvec.y += 1.5f;
-				testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,MeleeDefaultLifeSpan, testDamage);
-			}
-			
-			} else {
+	/*			if(iState.buttons[binds::leftAttack]&&!iState.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = testPlayer.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,RangedDefaultLifeSpan, testDamage);
+				}
+				if(iState.buttons[binds::rightAttack]&&!iState.buttonLast[binds::rightAttack]) { 
+					D3DXVECTOR3 tempvec = testPlayer.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,rot,angle,MeleeDefaultLifeSpan, testDamage);
+				}*/
+			} 
+			else {
 				if(testPlayer.getTimer()<=0) {
 					testPlayer.respawn(spawn);
 					rot = spawn.getRot();
@@ -408,15 +409,15 @@ void DXTest::update() {
 			dist2 += iState.lY*dt;
 			//D3DXMatrixTranslation(&testCube.matrix,0,0,dist);
 
-			tem2 = iState.lX;
+			/*tem2 = iState.lX;
 			rot2 += (tem2*dt)*10;
 			tem2 = iState.lY;
 			angle2 += (tem2*dt)*10;
 			if(angle2 >= 90)
 				angle2 = 89.9f;
 			else if(angle2 <=-90)
-				angle2 = -89.9f;
-			DXVid.rotateCam(temp2,2,rot2,angle2);
+				angle2 = -89.9f;*/
+			
 			
 			//if(state.Gamepad.wButtons&XINPUT_GAMEPAD_A)
 			//	//sFrame.Play(*testSound,dist,0,0,0,0,0);
@@ -428,7 +429,8 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer2.Update(iState, dt,rot2, angle2,PartList);
+			testPlayer2.Update(iState, dt,rot2, angle2,PartList,testBullVec);
+			DXVid.rotateCam(temp2,2,rot2,angle2);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);

@@ -150,7 +150,7 @@ void BulletVec::Render(DXFrame& DXVid) {
 	tempRen.locCamNum = 0;
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(GetActive(i)) {
-			bullets[i].setPrimObj(b_render[1]);
+			//bullets[i].setPrimObj(b_render[1]);
 			D3DXMatrixIdentity(&TransMat);
 			D3DXMatrixIdentity(&RotMat);
 			D3DXMatrixRotationYawPitchRoll(&RotMat, D3DXToRadian(bullets[i].getRot()), D3DXToRadian(bullets[i].getAngle()), 0);

@@ -90,7 +90,7 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 }
 
 
-void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list) {
+void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list,BulletVec &a_bulvec) {
 	float tempfloat;
 
 	//check alive
@@ -134,25 +134,33 @@ void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angl
 		/////////////////////////////////////
 
 		// need to deal with object for bullet 
-		/*if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
-			D3DXVECTOR3 tempvec = getPos();
-			tempvec.y += 1.5f;
-			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+		//left attack Left Trigger
+		if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+			if (!Limbs.getLarm()==0){
+				part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,a_rot,a_angle);
+			}
 		}
+		//right attack Right Trigger
 		if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
-			D3DXVECTOR3 tempvec = getPos();
-			tempvec.y += 1.5f;
-			a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),testCube4.primInfo,a_rot,a_angle,MeleeDefaultLifeSpan, testDamage);
+			if(Limbs.getRarm()==0){
+				D3DXVECTOR3 tempvec = getPos();
+				tempvec.y += 1.5f;
+				a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,a_rot,a_angle,MeleeDefaultLifeSpan, testDamage);
+			}
+			else if(!Limbs.getRarm()==0){
+				part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,a_rot,a_angle);
+			}
 		}
-*/
+		// jump  A
 		if(a_state.buttons[binds::jump] && onGround) {
 			velocityY = 0.2f;
 			onGround = false;
 		}
+		//leg power B
 		if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
 			//get part !0 
 			if (!Limbs.getLeg()==0){
-				part_list.CaseAction(Limbs.getLeg(),*this,a_state);
+				part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,a_rot,a_angle);
 				// find that part 
 				// execute that function
 			}

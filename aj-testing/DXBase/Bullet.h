@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "ResourceManager.h"
 
+class Player;
 
 const float RangedDefaultLifeSpan = 20.0f;
 const float MeleeDefaultLifeSpan = 0.2f;

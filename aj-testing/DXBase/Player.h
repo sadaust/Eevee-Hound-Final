@@ -7,7 +7,12 @@
 #include "Limbase.h"
 #include "ItemBox.h"
 #include "spawnPoint.h"
+#include "Bullet.h"
 //#include "PhysicsSystem.h"
+
+class Limbase;
+class ItemBox;
+class BulletVec;
 
 void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle);
 void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle);
@@ -50,7 +55,7 @@ public:
 	Player();
 	~Player();
 	void testInit(float a_x, float a_y, float a_z, float a_rot);
-	void Update(inputState& a_input, float a_dt, float &a_rot, float &a_angle,Limbase part_list);
+	void Update(inputState& a_input, float a_dt, float &a_rot, float &a_angle,Limbase part_list,BulletVec &a_bulvec);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();

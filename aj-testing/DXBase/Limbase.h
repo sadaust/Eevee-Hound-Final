@@ -6,9 +6,11 @@
 #include "Limb.h"
 #include "DXFrame.h"
 #include "InputHandler.h"
+#include "Bullet.h"
 //#include "Player.h"
 
 class Player;
+class BulletVec;
 
 #define NUMPARTS 20
 
@@ -24,6 +26,6 @@ public:
 	Limbase();
 	Limb getPartRan();
 	Limb getPart(int);
-	void CaseAction(int,Player&,inputState&);
+	void CaseAction(int,Player&,inputState&,BulletVec&,float& a_rot,float& a_angle);
 	//~Limbase();
 };

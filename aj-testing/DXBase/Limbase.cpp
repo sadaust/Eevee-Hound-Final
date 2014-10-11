@@ -76,22 +76,37 @@ Limb Limbase::getPart(int partnum){
 	return part[partnum];
 }
 
-void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state){
+void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle){
 	//partNumber=18;
 	switch (part[partNumber-1].getPartType()){
 	case arm:
 		{
-			if (part[partNumber-1].getPartName()=="Pheonix")	{
+			if (part[partNumber-1].getPartName()=="Pheonix"){
 				//shoot fireball
+				if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = p_data.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+				}
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//claw attack
 			}
 			else if (part[partNumber-1].getPartName()=="Bear"){
-				//bearpull
+				//rock throw
+				if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = p_data.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),2,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+				}
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle"){
-				//throw slwoing bubble
+				//lazer beam
+				if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = p_data.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),1,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+				}
 			}
 			else break;
 		}
@@ -109,7 +124,7 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state){
 				}
 				
 			}
-			else if (part[partNumber-1].getPartName()=="Tiger"){
+			else if (part[partNumber].getPartName()=="Tiger"){
 				//minor teleport
 				D3DXVECTOR2 move;
 				float tempfloat;
