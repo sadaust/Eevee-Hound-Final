@@ -90,14 +90,19 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 				}
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){
-				//claw attack
-			}
-			else if (part[partNumber-1].getPartName()=="Bear"){
 				//rock throw
 				if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
 					D3DXVECTOR3 tempvec = p_data.getPos();
 					tempvec.y += 1.5f;
 					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),2,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+				}
+			}
+			else if (part[partNumber-1].getPartName()=="Bear"){
+				//bear grab
+				if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+					D3DXVECTOR3 tempvec = p_data.getPos();
+					tempvec.y += 1.5f;
+					testBullVec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),3,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
 				}
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle"){

@@ -404,6 +404,10 @@ bool PhysicsSystem::ResolveCollision(ItemBox& a_item, Terrain &a_terrain) {
 
 bool PhysicsSystem::ResolveCollision(Player& a_player, Bullet &a_bullet) {
 	a_bullet.HitPlayer(a_player);
+	if(a_bullet.getBullType()==grab){
+		a_player.setPos(a_bullet.getStartpos());
+		a_player.setProspectivePos(a_bullet.getStartpos());
+	}
 	return true;
 }
 

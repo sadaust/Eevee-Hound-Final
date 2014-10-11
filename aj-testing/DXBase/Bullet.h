@@ -10,26 +10,28 @@ const float MeleeDefaultLifeSpan = 0.2f;
 const int MAXBULLETS = 256;
 const float BulletSpeed = 10.1f;
 const int testDamage = 1;
-const int bulletTypes= 3;
+const int bulletTypes= 4;
 
 
 enum BulletType {
 	defaultbullet,
 	laser,
-	boulder
+	boulder,
+	grab
 };
 
 
 
 class Bullet {
 private:
-	D3DXVECTOR3 pos, prospectivePos, velocity;
+	D3DXVECTOR3 pos, prospectivePos, velocity, startpos;
 	PrimObj structpoi; // this too, if we don't want cubes. VV
 	float speed; // figure out what to do with this later
 	int damage;
 	float lifespan;
 	float rot;
 	float angle;
+	BulletType a_bultype;
 	//bool active;
 public:
 	Bullet();
@@ -44,6 +46,10 @@ public:
 	float getAngle();
 	PrimObj& getPrimObj();
 	void setPrimObj(PrimObj a_prim);
+	D3DXVECTOR3 getStartpos(){return startpos;}
+	void setStartpos(D3DXVECTOR3 a_startpos){startpos=a_startpos;}
+	void setBullType(BulletType a_typeofbul){a_bultype=a_typeofbul;}
+	BulletType getBullType(){return a_bultype;}
 	//bool getActive();
 	//void setActive(bool a_active); moving these into bulletvec
 	void HitWall();

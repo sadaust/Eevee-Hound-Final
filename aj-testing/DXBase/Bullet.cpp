@@ -139,6 +139,9 @@ void BulletVec::Init(ResourceManager& resMan) {
 	//rock bullet
 	b_render[2]=b_render[0];
 	b_render[2].primInfo = resMan.loadPrim("RockSolid",2.5,2.5,2.5);
+	//grab bullet
+	b_render[3]=b_render[0];
+	b_render[3].primInfo = resMan.loadPrim("Grabby",0.5,0.5,0.5);
 
 }
 
@@ -189,6 +192,19 @@ bool BulletVec::GetActive(int a_index) {
 bool BulletVec::ActivateABullet(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, int a_type, float a_rot, float a_angle, float a_lifespan, int a_damage) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(!bools[i]) {
+			if(a_type==defaultbullet){
+				bullets[i].setBullType(defaultbullet);
+			}
+			if(a_type==laser){
+				bullets[i].setBullType(laser);
+			}
+			if(a_type==boulder){
+				bullets[i].setBullType(boulder);
+			}
+			if(a_type==grab){
+				bullets[i].setBullType(grab);
+				bullets[i].setStartpos(a_pos);
+			}
 			bullets[i].Init(a_pos, a_velocity, b_render[a_type], a_rot, a_angle, a_lifespan, a_damage);
 			bools[i] = true;
 			return true;
