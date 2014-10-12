@@ -118,6 +118,9 @@
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="el.jpg" />
+    <Image Include="Elimination.jpg" />
+    <Image Include="imbination.jpg" />
     <Image Include="uvtest.png" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="PartList.txt" />
+    <Text Include="testMap.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

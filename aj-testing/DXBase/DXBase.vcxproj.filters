@@ -130,6 +130,15 @@
     <Image Include="uvtest.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="el.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Elimination.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="imbination.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="battle.mp3">
@@ -141,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="PartList.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="testMap.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
