@@ -5,6 +5,7 @@
 #include "ItemBox.h"
 #include "Bullet.h"
 #include "Terrain.h"
+#include "Map.h"
 
 
 
@@ -14,6 +15,7 @@ private:
 public:
 	PhysicsSystem();
 	~PhysicsSystem();
+	void DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map);
 	bool SenseCollision(Player& a_player, Terrain &a_terrain);
 	bool SenseCollision(ItemBox& a_item, Terrain &a_terrain);
 	bool SenseCollision(Player& a_player, Bullet &a_bullet);

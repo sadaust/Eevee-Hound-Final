@@ -185,8 +185,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.setCam(2,&temp2);
 	DXVid.setCam(3,&temp3);
 	DXVid.setCam(4,&temp4);
-	testPlayer.testInit(distX,0,distZ,rot);
-	testPlayer2.testInit(distX3,0,distZ3,rot2);
+	
 	itemDrop.ItemBoxInit(distX2,5,distZ2);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
@@ -207,6 +206,7 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	mapSys.LoadMap("testMap.txt",resMan);
+	playVec.Init(mapSys, resMan);
 }
 
 bool DXTest::devLost() {
@@ -303,82 +303,12 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer.Update(iState, dt,rot, angle,PartList,testBullVec);
+			playVec.Update(iState, dt,PartList,testBullVec);
 			DXVid.rotateCam(temp,2,rot,angle);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
-			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
-				testPhys.ResolveCollision(testPlayer,testTerrain);
-			}
-			if(testPhys.SenseCollision(testPlayer,testTerrain2)) {
-				testPhys.ResolveCollision(testPlayer,testTerrain2);
-			}
-			if(testPhys.SenseCollision(testTerrain,testBullet)) {
-				testPhys.ResolveCollision(testTerrain,testBullet);
-			}
-			if(testPhys.SenseCollision(testTerrain2,testBullet)) {
-				testPhys.ResolveCollision(testTerrain2,testBullet);
-			}
-			if(testPhys.SenseCollision(testPlayer,testBullet)) {
-				testPhys.ResolveCollision(testPlayer,testBullet);
-			}
-			if(testPhys.SenseCollision(itemDrop,testTerrain)) {
-				testPhys.ResolveCollision(itemDrop,testTerrain);
-			}
-			if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
-				testPhys.ResolveCollision(itemDrop,testTerrain2);
-			}
-			if(testPhys.SenseCollision(testPlayer,itemDrop)) {
-				//setplayer item collision to true
-				testPlayer.togglecheckItem(true);
-				//pass colliding item to player test to see if passing works.
-				testPlayer.itemAccess(itemDrop);
-			 
-			}
-
-			for(i = 0;i<mapSys.numFloors();++i){
-				if(testPhys.SenseCollision(testPlayer,mapSys.GetFloor(i))) {
-					testPhys.ResolveCollision(testPlayer,mapSys.GetFloor(i));
-				}
-			}
-
-			for(i = 0;i<mapSys.numWalls();++i){
-				if(testPhys.SenseCollision(testPlayer,mapSys.GetWall(i))) {
-					testPhys.ResolveCollision(testPlayer,mapSys.GetWall(i));
-				}
-			}
-
-			if(!testPhys.SenseCollision(testPlayer,itemDrop)){
-				//setplayer item collision to false
-				testPlayer.togglecheckItem(false);
-			}
-			if(testPhys.SenseCollision(testPlayer,testPlayer2)) {
-				testPhys.ResolveCollision(testPlayer,testPlayer2);
-			}
-			
-
-			for(int i = 0; i < MAXBULLETS; ++i) {
-				if(testBullVec.GetActive(i)) {
-					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testTerrain, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-					if(testPhys.SenseCollision(testTerrain2,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-					if(testPhys.SenseCollision(testPlayer2,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testPlayer2, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-				}
-			}
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			
@@ -442,65 +372,16 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			testPlayer2.Update(iState, dt,rot2, angle2,PartList,testBullVec);
+			playVec.Update(
 			DXVid.rotateCam(temp2,2,rot2,angle2);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
-			if(testPhys.SenseCollision(testPlayer2,testTerrain)) {
-				testPhys.ResolveCollision(testPlayer2,testTerrain);
-			}
-			if(testPhys.SenseCollision(testPlayer2,testTerrain2)) {
-				testPhys.ResolveCollision(testPlayer2,testTerrain2);
-			}
-			if(testPhys.SenseCollision(testTerrain,testBullet)) {
-				testPhys.ResolveCollision(testTerrain,testBullet);
-			}
-			if(testPhys.SenseCollision(testTerrain2,testBullet)) {
-				testPhys.ResolveCollision(testTerrain2,testBullet);
-			}
-			if(testPhys.SenseCollision(testPlayer2,testBullet)) {
-				testPhys.ResolveCollision(testPlayer2,testBullet);
-			}
-			if(testPhys.SenseCollision(itemDrop,testTerrain)) {
-				testPhys.ResolveCollision(itemDrop,testTerrain);
-			}
-			if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
-				testPhys.ResolveCollision(itemDrop,testTerrain2);
-			}
-			if(testPhys.SenseCollision(testPlayer2,itemDrop)) {
-				//setplayer item collision to true
-				testPlayer2.togglecheckItem(true);
-				//pass colliding item to player test to see if passing works.
-				testPlayer.itemAccess(itemDrop);
-			 
-			}
-			if(!testPhys.SenseCollision(testPlayer2,itemDrop)){
-				//setplayer item collision to false
-				testPlayer2.togglecheckItem(false);
-			}
-			if(testPhys.SenseCollision(testPlayer2,testPlayer)) {
-				testPhys.ResolveCollision(testPlayer2,testPlayer);
-			}
-			
 
-			for(int i = 0; i < MAXBULLETS; ++i) {
-				if(testBullVec.GetActive(i)) {
-					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testTerrain, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-					if(testPhys.SenseCollision(testTerrain2,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
-						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
-						testBullVec.DeactivateABullet(i);
-					}
-				}
-			}
+			testPhys.DoCollisions(playVec,testBullVec,mapSys);
+
+
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			

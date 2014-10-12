@@ -8,6 +8,7 @@
 #include "ItemBox.h"
 #include "spawnPoint.h"
 #include "Bullet.h"
+#include "Map.h"
 //#include "PhysicsSystem.h"
 
 class Limbase;
@@ -18,12 +19,20 @@ void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle);
 void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle);
 
 
+const int numPlayerPrims = 6;
+const int PrimTypes = 3;
+const int MAXPLAYERS = 16;
+
+
+
 class Player {
 private: 
 	PlayerLimbs Limbs;
+	PrimObj playerPrims[numPlayerPrims]; // 0 is body, 1 is head, 2 and 3 are arms, 4 and 5 are legs
 	D3DXVECTOR3 pos, prospectivePos;
 	D3DXVECTOR2 velocityXZ;
-	float facing, 
+	float facing,
+		angle,
 		moving, 
 		velocityY,
 		speed,
@@ -42,6 +51,10 @@ private:
 
 public:
 	void takeDamage(int a_damage);
+	int getHealth();
+	void setMaxHealth(int m_health);
+	void setCurHealth(int c_health);
+	int getMaxHealth();
 
 
 	  //////////////////////////// ~~~~~~~~~~~~
@@ -54,12 +67,14 @@ private:
 public:
 	Player();
 	~Player();
-	void testInit(float a_x, float a_y, float a_z, float a_rot);
-	void Update(inputState& a_input, float a_dt, float &a_rot, float &a_angle,Limbase part_list,BulletVec &a_bulvec);
+	void Init(sPoint& spawn, PrimObj a_primDefs[]);
+	void Update(inputState& a_input, float a_dt,Limbase part_list,BulletVec &a_bulvec);
+	void Render(DXFrame& DXVid);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
 	float getFacing();
+	float getAngle();
 	float getMoving();
 	float getTimer(){return timer;}
 	D3DXVECTOR2 getVelocityXZ();
@@ -70,6 +85,7 @@ public:
 	void setPos(D3DXVECTOR3 a_pos);
 	void setProspectivePos(D3DXVECTOR3 a_prospos);
 	void setFacing(float a_facing);
+	void setAngle(float a_angle);
 	void setMoving(float a_moving);
 	void setVelocityInts(float a_x, float a_y, float a_z);
 	void setVelocityXZ(D3DXVECTOR2 a_velocityXZ);
@@ -83,14 +99,40 @@ public:
 	void addLimb(Limb part);
 	void setJumpCount(int j_count);
 	int getJumpCount();
-	int getHealth();
+
 	void incrementJumpCount();
 	void itemAccess(ItemBox &a_item);
 	void respawn(sPoint& spawn);
-	void setMaxHealth(int m_health);
-	void setCurHealth(int c_health);
-	int getMaxHealth();
+
+	PrimObj getPrimObj(int a_index);
+	void setPrimObj(PrimObj a_prim, int a_index);
+
+
 };
+
+
+
+
+
+class PlayerVec {
+private:
+	Player players[MAXPLAYERS];
+	bool active[MAXPLAYERS];
+	int numPlayers;
+	PrimObj playerDefaultPrims[numPlayerPrims]; // 0 is body, 1 is head, 2 and 3 are arms, 4 and 5 are legs
+	D3DMATERIAL9  PlayMat; // used for the player primobj's
+public:
+	PlayerVec();
+	~PlayerVec();
+	void Init(Map& a_man, ResourceManager& resMan);
+	void Update(inputState& a_input, float a_dt, Limbase part_list,BulletVec &a_bulvec);
+	void Render(DXFrame& DXVid);
+	void ActivateAPlayer(Map& a_map);
+	void DeactivateAPlayer(int a_index);
+	Player& GetPlayer(int a_index);
+	int GetNumPlayers();
+};
+
 
 
 

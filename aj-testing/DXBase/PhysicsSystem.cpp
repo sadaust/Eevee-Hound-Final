@@ -23,6 +23,80 @@ float PhysicsSystem::closestPoint(float a_point, float a_1, float a_2) {
 	}
 }
 
+
+void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map) {
+
+	// all player stuff but bullets
+	for(int i = 0; i < a_playerVec.GetNumPlayers(); ++i) {
+		if(a_playerVec.GetPlayer(i).isAlive()) { // if player A is alive
+			for(int g = 0; g < a_playerVec.GetNumPlayers(); ++g) { // PLAYER PLAYER COLLISION
+				if(i != g && a_playerVec.GetPlayer(g).isAlive()) { // if target player is alive and isn't player A
+					if(SenseCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g))) { // if they're colliding
+						ResolveCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g)); // resolve the collision
+					}
+				}
+			}
+			// END OF PLAYER PLAYER
+
+			for(int g = 0; g < a_map.numWalls(); ++g) { // PLAYER WALLS
+				if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g))) { // if they're colliding
+					ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g)); // resolve the collision
+				}
+			}
+			for(int g = 0; g < a_map.numFloors(); ++g) { // PLAYER FLOORS
+				if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g))) { // if they're colliding
+					ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g)); // resolve the collision
+				}
+			}
+
+			// END OF MAP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADD ANOTHER FOR LOOP AND ANOTHER VECTOR FOR FLOORWALLS, MAYBE
+
+
+
+
+
+
+
+
+
+		}
+	}
+
+
+
+	// all bullet stuff
+	for(int i = 0; i < MAXBULLETS; ++i) { // START OF BULLETS
+		if(a_bulletVec.GetActive(i)) { // FOR EVERY ACTIVE BULLET
+			for(int g = 0; g < a_playerVec.GetNumPlayers(); ++g) { // for every player
+				if(a_playerVec.GetPlayer(g).isAlive()) {					// if the player is alive
+					if(SenseCollision(a_playerVec.GetPlayer(g), a_bulletVec.GetBullet(i))) { // if they're colliding
+						ResolveCollision(a_playerVec.GetPlayer(g),a_bulletVec.GetBullet(i)); // resolve the collision
+					}
+				}
+			}
+			for(int g = 0; g < a_map.numWalls(); ++g) { // BULLET WALLS
+				if(SenseCollision(a_map.GetWall(g), a_bulletVec.GetBullet(i))) { // if they're colliding
+					ResolveCollision(a_map.GetWall(g), a_bulletVec.GetBullet(i)); // resolve the collision
+				}
+			}
+			for(int g = 0; g < a_map.numFloors(); ++g) { // BULLET FLOORS
+				if(SenseCollision(a_map.GetFloor(g), a_bulletVec.GetBullet(i))) { // if they're colliding
+					ResolveCollision(a_map.GetFloor(g), a_bulletVec.GetBullet(i)); // resolve the collision
+				}
+			}
+
+			
+
+
+
+
+
+
+		}
+	}
+}
+
+
 bool PhysicsSystem::SenseCollision(ItemBox &a_item, Terrain &a_terrain) {
 	float distX = 0.0f;
 	float distZ = 0.0f;
