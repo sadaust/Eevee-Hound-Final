@@ -23,6 +23,7 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 	////////////////////////////////////////////////////////////////FILE I/O STUFF
 	std::stringstream ss;
 	std::ifstream file;
+	std::ofstream debugOut;
 	char lineType;
 	Terrain tempTerrain;
 	D3DVECTOR pos, corner1, corner2, size;
@@ -34,6 +35,7 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 	tempObj.mat = &mat;
 	tempObj.Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
 	file.open(fileName);
+	debugOut.open("debugMap.txt");
 	if(file.is_open()) {
 		while(!file.eof()) {
 			lineType = ' ';
@@ -41,6 +43,7 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 			if(lineType == '#') {
 				//comment line
 				file.ignore(256,'\n');
+				debugOut<<"#\n";
 			} else if(lineType == 'f'||lineType == 'F') {
 				//floor
 				//get top left
@@ -53,9 +56,15 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 				file>>pos.z;
 				//zone
 				file>>zone;
+
+				debugOut<<"f "<<size.x<<' '<<size.z<<' '<<size.y<<' '<<pos.x<<' '<<pos.y<<' '<<pos.z<<' '<<zone<<'\n';
+
 				ss<<"Floor"<<size.x<<"x"<<size.y<<"x"<<size.z;
 
 				tempPrim = resMan.loadPrim(ss.str().c_str(),size.y,size.x,size.z);
+
+				ss.str("");
+
 				D3DXMatrixIdentity(&tempObj.matrix);
 				D3DXMatrixTranslation(&tempObj.matrix,pos.x,pos.y,pos.z);
 				tempObj.primInfo = tempPrim;
@@ -80,9 +89,14 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 				//zone
 				file>>zone;
 
+				debugOut<<"w "<<size.x<<' '<<size.z<<' '<<size.y<<' '<<pos.x<<' '<<pos.y<<' '<<pos.z<<' '<<zone<<'\n';
+
 				ss<<"Wall"<<size.x<<"x"<<size.y<<"x"<<size.z;
 
 				tempPrim = resMan.loadPrim(ss.str().c_str(),size.y,size.x,size.z);
+
+				ss.str("");
+
 				D3DXMatrixIdentity(&tempObj.matrix);
 				D3DXMatrixTranslation(&tempObj.matrix,pos.x,pos.y,pos.z);
 				tempObj.primInfo = tempPrim;
@@ -100,12 +114,17 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 
 				file>>rot;
 
+				debugOut<<"s "<<pos.x<<' '<<pos.y<<' '<<pos.z<<' '<<rot<<'\n';
+
 				tempSpawn.setPoint(pos,rot);
 				
 				AddSpawn(tempSpawn);
+			} else {
+				file.ignore(256,'\n');
 			}
 		}
 		file.close();
+		debugOut.close();
 	}
 }
 

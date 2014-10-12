@@ -99,7 +99,7 @@ void ResourceManager::reloadAll() {
 			tempTex->objTex->Release();
 			tempTex->objTex = 0;
 			//reload
-			loadDev->Load2D(resources[i].name,0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
+			loadDev->Load2D(resources[i].name.c_str(),0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
 			break;
 		case xModel:
 			tempMod = (ModelStruct*)resources[i].res;
@@ -113,7 +113,7 @@ void ResourceManager::reloadAll() {
 			delete [] tempMod->textures;
 			tempMod->numMats = 0;
 			//reload
-			loadDev->loadXFile(resources[i].name,*tempMod);
+			loadDev->loadXFile(resources[i].name.c_str(),*tempMod);
 			for(int i = 0;i<tempMod->numMats;++i) {
 				res = getRes(tempMod->mats[i].pTextureFilename);
 				if(res == 0) {
@@ -128,7 +128,7 @@ void ResourceManager::reloadAll() {
 			tempSound->sound->release();
 			tempSound->sound = 0;
 			//reload
-			soundDev->load(resources[i].name,&tempSound->sound);
+			soundDev->load(resources[i].name.c_str(),&tempSound->sound);
 			break;
 		case music:
 			tempMusic = (MusicStruct*) resources[i].res;
@@ -136,7 +136,7 @@ void ResourceManager::reloadAll() {
 			tempMusic->sound->release();
 			tempMusic->sound = 0;
 			//reload
-			soundDev->loadStream(resources[i].name,&tempMusic->sound);
+			soundDev->loadStream(resources[i].name.c_str(),&tempMusic->sound);
 			break;
 		default:
 			break;
@@ -170,7 +170,7 @@ void ResourceManager::reloadVideo() {
 			tempTex->objTex->Release();
 			tempTex->objTex = 0;
 			//reload
-			loadDev->Load2D(resources[i].name,0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
+			loadDev->Load2D(resources[i].name.c_str(),0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
 			break;
 		case xModel:
 			tempMod = (ModelStruct*)resources[i].res;
@@ -184,7 +184,7 @@ void ResourceManager::reloadVideo() {
 			delete [] tempMod->textures;
 			tempMod->numMats = 0;
 			//reload
-			loadDev->loadXFile(resources[i].name,*tempMod);
+			loadDev->loadXFile(resources[i].name.c_str(),*tempMod);
 			for(int i = 0;i<tempMod->numMats;++i) {
 				res = getRes(tempMod->mats[i].pTextureFilename);
 				if(res == 0) {
@@ -211,7 +211,7 @@ void ResourceManager::reloadSound() {
 			tempSound->sound->release();
 			tempSound->sound = 0;
 			//reload
-			soundDev->load(resources[i].name,&tempSound->sound);
+			soundDev->load(resources[i].name.c_str(),&tempSound->sound);
 			break;
 		case music:
 			tempMusic = (MusicStruct*) resources[i].res;
@@ -219,7 +219,7 @@ void ResourceManager::reloadSound() {
 			tempMusic->sound->release();
 			tempMusic->sound = 0;
 			//reload
-			soundDev->loadStream(resources[i].name,&tempMusic->sound);
+			soundDev->loadStream(resources[i].name.c_str(),&tempMusic->sound);
 			break;
 		default:
 			break;
@@ -256,7 +256,7 @@ void ResourceManager::reload(LPCSTR name) {
 			tempTex->objTex->Release();
 			tempTex->objTex = 0;
 			//reload
-			loadDev->Load2D(tempRes->name,0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
+			loadDev->Load2D(tempRes->name.c_str(),0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,tempTex->mask,&tempTex->texInfo,0,&tempTex->objTex);
 			break;
 		case xModel:
 			tempMod = (ModelStruct*)tempRes->res;
@@ -272,7 +272,7 @@ void ResourceManager::reload(LPCSTR name) {
 			delete [] tempMod->textures;
 			tempMod->numMats = 0;
 			//reload
-			loadDev->loadXFile(tempRes->name,*tempMod);
+			loadDev->loadXFile(tempRes->name.c_str(),*tempMod);
 			for(int i = 0;i<tempMod->numMats;++i) {
 				res = getRes(tempMod->mats[i].pTextureFilename);
 				if(res == 0) {
@@ -287,7 +287,7 @@ void ResourceManager::reload(LPCSTR name) {
 			tempSound->sound->release();
 			tempSound->sound = 0;
 			//reload
-			soundDev->load(tempRes->name,&tempSound->sound);
+			soundDev->load(tempRes->name.c_str(),&tempSound->sound);
 			break;
 		case music:
 			tempMusic = (MusicStruct*) tempRes->res;
@@ -295,7 +295,7 @@ void ResourceManager::reload(LPCSTR name) {
 			tempMusic->sound->release();
 			tempMusic->sound = 0;
 			//reload
-			soundDev->loadStream(tempRes->name,&tempMusic->sound);
+			soundDev->loadStream(tempRes->name.c_str(),&tempMusic->sound);
 			break;
 		default:
 			break;

@@ -35,7 +35,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	lTime = cTime;
 	tTime = cTime;
 	dt = 0;
-	updatesPerSec = 100;
+	updatesPerSec = 600;
 
 	mapSys.LoadMap("TestMap.txt",resMan);
 	bullVec.Init(resMan);
@@ -71,11 +71,12 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 bool Game::update() {
 	//update dt
 	cTime = timeGetTime();
-	dt = (float)(cTime-lTime);
-	dt /= CLOCKS_PER_SEC;
 	
+	input.update();
 	inputState iState;
 	if(cTime>=tTime) {
+		dt = (float)(cTime-lTime);
+		dt /= CLOCKS_PER_SEC;
 		lTime = cTime;
 		if(curState == mainMenu) {
 			//main menu
@@ -100,13 +101,16 @@ void Game::draw() {
 	if(!DXVid.rendererLost()) {
 		DXVid.clearRen();
 		//add render code
-		camera[0].cam_look_pos = playVec.GetPlayer(0).getPos();
-		DXVid.rotateCam(camera[0], 2,playVec.GetPlayer(0).getFacing(),playVec.GetPlayer(0).getAngle());
-		DXVid.setCam(1,&camera[0]);
+		
 		playVec.Render(DXVid);	// draws players
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map
-
+		for(int i = 0; i < 1; ++i) {
+			camera[i].cam_look_pos = playVec.GetPlayer(i).getPos();
+			DXVid.rotateCam(camera[i], 2,playVec.GetPlayer(i).getFacing(),playVec.GetPlayer(i).getAngle());
+			DXVid.setCam(i+1,&camera[i]);
+			hud[i].drawHud(playVec.GetPlayer(i),DXVid,i+1);
+		}
 		DXVid.Render();
 	}
 }

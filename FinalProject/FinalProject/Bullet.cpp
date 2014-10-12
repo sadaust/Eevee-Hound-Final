@@ -25,7 +25,7 @@ void Bullet::Init(D3DXVECTOR3 a_pos, D3DXVECTOR3 a_velocity, PrimObj  a_structpo
 }
 
 
-void Bullet::Update(float a_dt) {
+void Bullet::Update(double a_dt) {
 	pos.x = prospectivePos.x;
 	pos.y = prospectivePos.y;
 	pos.z = prospectivePos.z;
@@ -167,7 +167,7 @@ void BulletVec::Render(DXFrame& DXVid) {
 }
 
 
-void BulletVec::Update(float a_dt) {
+void BulletVec::Update(double a_dt) {
 	for(int i = 0; i < MAXBULLETS; ++i) {
 		if(bools[i]) {
 			bullets[i].Update(a_dt);

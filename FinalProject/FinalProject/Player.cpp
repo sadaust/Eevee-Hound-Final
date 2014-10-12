@@ -3,7 +3,7 @@
 const float turnspeedX = 90.0f;
 const float turnspeedY = 45.0f;
 const float maxSpeed   = 20.0f;
-const float terminalVelocity = 10.0f;
+const float terminalVelocity = 50.0f;
 
 
 ///////////////////////////
@@ -89,7 +89,7 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 }
 
 
-void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec &a_bulvec) {
+void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec) {
 	float tempfloat;
 
 	//check alive
@@ -121,7 +121,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		tempfloat = a_state.lY;
 		velocityXZ.y = tempfloat*a_dt*speed;
 
-		velocityY -= 0.3f*a_dt;
+		velocityY -= gravity*a_dt;
 		if(velocityY < -terminalVelocity)
 			velocityY = -terminalVelocity;
 		if(velocityY > terminalVelocity)
@@ -152,7 +152,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		}
 		// jump  A
 		if(a_state.buttons[binds::jump] && onGround) {
-			velocityY = 0.2f;
+			velocityY = jumpHeight;
 			onGround = false;
 		}
 		//leg power B
@@ -195,9 +195,8 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		rotate2Dvector(&velocityXZ,-D3DXToRadian(facing));
 
 		prospectivePos.x += velocityXZ.x;
-		prospectivePos.y += velocityY;
+		prospectivePos.y += velocityY*a_dt;;
 		prospectivePos.z += velocityXZ.y;
-
 
 		//if() {
 		//	onGround = true;
@@ -245,16 +244,21 @@ void Player::Render(DXFrame& DXVid) {
 
 
 void Player::respawn(sPoint& spawn) {
-	alive = true;
-	curHealth = maxHealth;
-	pos = spawn.getPos();
-	prospectivePos = pos;
-	
-	Limbs.setBody(0);
-	Limbs.setHead(0);
-	Limbs.setLarm(0);
-	Limbs.setRarm(0);
-	Limbs.setLeg(0);
+	if(spawn.isActive()) {
+		alive = true;
+		curHealth = maxHealth;
+		pos = spawn.getPos();
+		prospectivePos = pos;
+
+		velocityY = 0;
+
+
+		Limbs.setBody(0);
+		Limbs.setHead(0);
+		Limbs.setLarm(0);
+		Limbs.setRarm(0);
+		Limbs.setLeg(0);
+	}
 }
 
 
@@ -500,7 +504,7 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 }
 
 
-void PlayerVec::Update(inputState& a_input, float a_dt, Limbase part_list,BulletVec &a_bulvec) {
+void PlayerVec::Update(inputState& a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec) {
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]) {
 			players[i].Update(a_input, a_dt, part_list, a_bulvec);

@@ -23,6 +23,9 @@ const int numPlayerPrims = 6;
 const int PrimTypes = 3;
 const int MAXPLAYERS = 16;
 
+const float jumpHeight  = 13.0f;
+const float gravity = 20.0f;
+
 
 
 class Player {
@@ -34,9 +37,9 @@ private:
 	float facing,
 		angle,
 		moving, 
-		velocityY,
 		speed,
 		timer;
+	double velocityY;
 	cylinder boundingCyl;
 	bool onGround, checkItem, R_arm, alive;
 	int jumpCount;
@@ -68,7 +71,7 @@ public:
 	Player();
 	~Player();
 	void Init(sPoint& spawn, PrimObj a_primDefs[]);
-	void Update(inputState& a_input, float a_dt,Limbase part_list,BulletVec &a_bulvec);
+	void Update(inputState& a_input, double a_dt,Limbase& part_list,BulletVec &a_bulvec);
 	void Render(DXFrame& DXVid);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
@@ -125,7 +128,7 @@ public:
 	PlayerVec();
 	~PlayerVec();
 	void Init(Map& a_man, ResourceManager& resMan);
-	void Update(inputState& a_input, float a_dt, Limbase part_list,BulletVec &a_bulvec);
+	void Update(inputState& a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec);
 	void Render(DXFrame& DXVid);
 	void ActivateAPlayer(Map& a_map);
 	void DeactivateAPlayer(int a_index);

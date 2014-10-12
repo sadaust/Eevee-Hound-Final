@@ -34,6 +34,7 @@ private:
 	Map mapSys;
 	PhysicsSystem physSys;
 	cam camera[4];
+	HUD hud[4];
 
 	//time
 	double dt;

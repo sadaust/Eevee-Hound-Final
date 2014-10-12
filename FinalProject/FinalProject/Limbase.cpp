@@ -121,7 +121,7 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 				//tripple jump
 				//increase jump count function to be made
 				if(p_data.getGrounded()==false&&p_data.getJumpCount()<2){
-					p_data.setVelocityY(0.3f);
+					p_data.setVelocityY(jumpHeight);
 					p_data.incrementJumpCount();
 					//if(p_data.getJumpCount()==2){
 						//p_data.setJumpCount(0);

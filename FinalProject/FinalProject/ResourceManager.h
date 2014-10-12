@@ -5,6 +5,7 @@
 #include "SoundFrame.h"
 #include <vector>
 #include <list>
+#include <string>
 
 enum resType {
 	null,
@@ -17,7 +18,7 @@ enum resType {
 };
 
 struct resStruct {
-	LPCSTR name;
+	std::string name;
 	resType type;
 	void* res;
 };

@@ -71,17 +71,20 @@ void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec,
 				if(a_playerVec.GetPlayer(g).isAlive()) {					// if the player is alive
 					if(SenseCollision(a_playerVec.GetPlayer(g), a_bulletVec.GetBullet(i))) { // if they're colliding
 						ResolveCollision(a_playerVec.GetPlayer(g),a_bulletVec.GetBullet(i)); // resolve the collision
+						a_bulletVec.DeactivateABullet(i);
 					}
 				}
 			}
 			for(int g = 0; g < a_map.numWalls(); ++g) { // BULLET WALLS
 				if(SenseCollision(a_map.GetWall(g), a_bulletVec.GetBullet(i))) { // if they're colliding
 					ResolveCollision(a_map.GetWall(g), a_bulletVec.GetBullet(i)); // resolve the collision
+					a_bulletVec.DeactivateABullet(i);
 				}
 			}
 			for(int g = 0; g < a_map.numFloors(); ++g) { // BULLET FLOORS
 				if(SenseCollision(a_map.GetFloor(g), a_bulletVec.GetBullet(i))) { // if they're colliding
 					ResolveCollision(a_map.GetFloor(g), a_bulletVec.GetBullet(i)); // resolve the collision
+					a_bulletVec.DeactivateABullet(i);
 				}
 			}
 
