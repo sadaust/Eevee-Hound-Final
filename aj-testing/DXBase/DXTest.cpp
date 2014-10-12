@@ -185,7 +185,8 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.setCam(2,&temp2);
 	DXVid.setCam(3,&temp3);
 	DXVid.setCam(4,&temp4);
-	
+	testPlayer.testInit(distX,0,distZ,rot);
+	testPlayer2.testInit(distX3,0,distZ3,rot2);
 	itemDrop.ItemBoxInit(distX2,5,distZ2);
 	testTerrain.Init(D3DXVECTOR3(0,0,0),testCube3.primInfo, FLOOR);
 	testTerrain2.Init(D3DXVECTOR3(2,5,2),testCube2.primInfo, WALL);
@@ -206,7 +207,6 @@ void DXTest::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	//testBullVec.ActivateABullet(D3DXVECTOR3(19,5,2),D3DXVECTOR3(-3,0,0),testCube4.primInfo);
 	mapSys.LoadMap("testMap.txt",resMan);
-	playVec.Init(mapSys, resMan);
 }
 
 bool DXTest::devLost() {
@@ -303,14 +303,12 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			playVec.Update(iState, dt,PartList,testBullVec);
+			testPlayer.Update(iState, dt,rot, angle,PartList,testBullVec);
 			DXVid.rotateCam(temp,2,rot,angle);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
-<<<<<<< HEAD
-=======
 			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
 				testPhys.ResolveCollision(testPlayer,testTerrain);
 			}
@@ -389,7 +387,6 @@ void DXTest::update() {
 					}
 				}
 			}
->>>>>>> origin/master
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			
@@ -453,18 +450,12 @@ void DXTest::update() {
 			  ////////////////////////////////
 			 // Player test stuff ~~~ Josh //
 			////////////////////////////////
-			playVec.Update(
+			testPlayer2.Update(iState, dt,rot2, angle2,PartList,testBullVec);
 			DXVid.rotateCam(temp2,2,rot2,angle2);
 			//testPlayer2.Update(iState, dt, rot2, angle, PartList);
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
-<<<<<<< HEAD
-
-			testPhys.DoCollisions(playVec,testBullVec,mapSys);
-
-
-=======
 			if(testPhys.SenseCollision(testPlayer2,testTerrain)) {
 				testPhys.ResolveCollision(testPlayer2,testTerrain);
 			}
@@ -521,7 +512,6 @@ void DXTest::update() {
 					}
 				}
 			}
->>>>>>> origin/master
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			

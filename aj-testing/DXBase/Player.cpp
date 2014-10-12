@@ -27,20 +27,13 @@ void Player::takeDamage(int a_damage) {
 
 
 Player::Player() {
-
-}
-
-
-Player::~Player() {
-
-}
-
-
-void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	maxHealth = 100;
 	curHealth = 100;
+	pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
+	facing = 0;
 	velocityY = 0;
+	moving = 0;
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
 	onGround = false;
@@ -49,16 +42,26 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	alive = true;
 	timer = 0;
 	jumpCount=0;
-	respawn(spawn);
+}
+
+
+Player::~Player() {
+
+}
+
+
+void Player::testInit(float a_x, float a_y, float a_z, float a_rot) {
+	pos.x = a_x;
+	pos.y = a_y;
+	pos.z = a_z;
+	prospectivePos.x = pos.x;
+	prospectivePos.y = pos.y;
+	prospectivePos.z = pos.z;
+	facing = a_rot;
 	speed = 5.0f;
 	boundingCyl.height = 1;
 	boundingCyl.radius = 0.5f;
-	setPrimObj(a_primDefs[0],0);
-	setPrimObj(a_primDefs[1],1);
-	setPrimObj(a_primDefs[2],2);
-	setPrimObj(a_primDefs[2],3);
-	setPrimObj(a_primDefs[2],4);
-	setPrimObj(a_primDefs[2],5);
+
 }
 
 
@@ -87,18 +90,18 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 }
 
 
-void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec &a_bulvec) {
+void Player::Update(inputState& a_state, float a_dt, float &a_rot, float &a_angle,Limbase part_list,BulletVec &a_bulvec) {
 	float tempfloat;
 
 	//check alive
 	tempfloat = a_state.rX;
-	facing += (tempfloat*a_dt)*turnspeedX;
-	tempfloat = a_state.rY;
-	angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
-	if(angle >= 90)
-		angle = 89.9f;
-	else if(angle <=-90)
-		angle = -89.9f;
+		a_rot += (tempfloat*a_dt)*turnspeedX;
+		tempfloat = a_state.rY;
+		a_angle -= (tempfloat*a_dt)*turnspeedY; // minus to uninvert it
+		if(a_angle >= 90)
+			a_angle = 89.9f;
+		else if(a_angle <=-90)
+			a_angle = -89.9f;
 
 	if(alive) {
 		//do if alive
@@ -134,7 +137,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		//left attack Left Trigger
 		if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
 			if (!Limbs.getLarm()==0){
-				part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,facing,angle);
+				part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,a_rot,a_angle);
 			}
 		}
 		//right attack Right Trigger
@@ -142,10 +145,10 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 			if(Limbs.getRarm()==0){
 				D3DXVECTOR3 tempvec = getPos();
 				tempvec.y += 1.5f;
-				a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
+				a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,a_rot,a_angle,MeleeDefaultLifeSpan, testDamage);
 			}
 			else if(!Limbs.getRarm()==0){
-				part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle);
+				part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,a_rot,a_angle);
 			}
 		}
 		// jump  A
@@ -157,7 +160,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
 			//get part !0 
 			if (!Limbs.getLeg()==0){
-				part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,facing,angle);
+				part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,a_rot,a_angle);
 				// find that part 
 				// execute that function
 			}
@@ -175,7 +178,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 
 
 
-		
+		facing = D3DXToRadian(a_rot);
 
 		//D3DXMATRIX matrixlovetemptest;
 		//D3DXVECTOR2 tempveloc = velocityXZ;
@@ -190,7 +193,7 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 		//D3DXVECTOR2 tempveloc = velocityXZ;
 		//if(D3DXVec2Length(&velocityXZ) >= maxSpeed)
 		//	velocityXZ = tempveloc;
-		rotate2Dvector(&velocityXZ,-D3DXToRadian(facing));
+		rotate2Dvector(&velocityXZ,-facing);
 
 		prospectivePos.x += velocityXZ.x;
 		prospectivePos.y += velocityY;
@@ -220,26 +223,6 @@ void Player::Update(inputState& a_state, float a_dt, Limbase part_list,BulletVec
 	}
 
 }
-
-
-void Player::Render(DXFrame& DXVid) {
-	RenInfo tempRen;
-	D3DXMATRIX TransMat, RotMat, locTransMat;
-	tempRen.type = primitive;
-	tempRen.locCamNum = 0;
-
-	//bullets[i].setPrimObj(b_render[1]);
-	D3DXMatrixIdentity(&TransMat);
-	D3DXMatrixIdentity(&RotMat);
-	D3DXMatrixRotationX(&RotMat, D3DXToRadian(facing));
-	D3DXMatrixTranslation(&locTransMat, 0, .25f, 0);
-	D3DXMatrixMultiply(&playerPrims[0].matrix, &RotMat, &locTransMat);
-	D3DXMatrixTranslation(&TransMat, pos.x, pos.y-.5f, pos.z);
-	D3DXMatrixMultiply(&playerPrims[0].matrix, &playerPrims[0].matrix, &TransMat);
-	tempRen.asset = &playerPrims[0];
-	DXVid.addRen(tempRen);
-}
-
 
 void Player::respawn(sPoint& spawn) {
 	alive = true;
@@ -274,11 +257,6 @@ D3DXVECTOR3 Player::getProspectivePos() {
 
 float Player::getFacing() {
 	return facing;
-}
-
-
-float Player::getAngle() {
-	return angle;
 }
 
 
@@ -325,11 +303,6 @@ void Player::setProspectivePos(D3DXVECTOR3 a_prospos) {
 
 void Player::setFacing(float a_facing) {
 	facing = a_facing;
-}
-
-
-void Player::setAngle(float a_angle) {
-	angle = a_angle;
 }
 
 
@@ -441,110 +414,5 @@ void Player::setCurHealth(int c_health) {
 int Player::getMaxHealth() {
 	return maxHealth;
 }
-
-
-PrimObj Player::getPrimObj(int a_index) {
-	return playerPrims[a_index];
-}
-
-
-void Player::setPrimObj(PrimObj a_prim, int a_index) {
-	playerPrims[a_index].mat = a_prim.mat;
-	playerPrims[a_index].matrix = a_prim.matrix;
-	playerPrims[a_index].primInfo = a_prim.primInfo;
-	playerPrims[a_index].Tex = a_prim.Tex;
-}
-
-
-
-PlayerVec::PlayerVec() {
-
-}
-
-
-PlayerVec::~PlayerVec() {
-
-}
-
-
-void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
-
-
-
-
-	//regular bullet
-	PlayMat.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
-	PlayMat.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		// Diffuse color reflected
-	PlayMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Emissive color reflected
-	PlayMat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
-	PlayMat.Power = 0.0f;
-	playerDefaultPrims[0].mat = &PlayMat;
-	playerDefaultPrims[0].Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
-	// body
-	playerDefaultPrims[0].primInfo = resMan.loadPrim("Body",0.5f,0.5f,0.5f);
-	D3DXMatrixIdentity(&playerDefaultPrims[0].matrix);
-	// head
-	playerDefaultPrims[1]=playerDefaultPrims[0];
-	playerDefaultPrims[1].primInfo = resMan.loadPrim("Head",0.25f, 0.25f, .25f);
-	// limb
-	playerDefaultPrims[2]=playerDefaultPrims[0];
-	playerDefaultPrims[2].primInfo = resMan.loadPrim("Limb",-.5f,0,0.125f,-0.125f,0.125f,-0.125f);
-
-
-
-}
-
-
-void PlayerVec::Update(inputState& a_input, float a_dt, Limbase part_list,BulletVec &a_bulvec) {
-	for(int i = 0; i < MAXPLAYERS; ++i) {
-		if(active[i]) {
-			players[i].Update(a_input, a_dt, part_list, a_bulvec);
-		}
-	}
-}
-
-
-void PlayerVec::Render(DXFrame& DXVid) {
-
-	for(int i = 0; i < MAXPLAYERS; ++i) {
-		if(active[i]) {
-			players[i].Render(DXVid);
-		}
-	}
-}
-
-
-void PlayerVec::ActivateAPlayer(Map& a_map) {
-	int random = rand() % a_map.numSpawn();
-	for(int i = 0; i < MAXPLAYERS; ++i) {
-		if(!active[i]) {
-			
-
-			players[i].Init(a_map.GetSpawn(random),playerDefaultPrims);
-			active[i] = true;
-			++numPlayers;
-			return;
-		}
-	}
-}
-
-
-void PlayerVec::DeactivateAPlayer(int a_index) {
-	active[a_index] = false;
-	--numPlayers;
-}
-
-
-Player& PlayerVec::GetPlayer(int a_index) {
-	return players[a_index];
-}
-
-
-int PlayerVec::GetNumPlayers() {
-	return numPlayers;
-}
-
-
-
 
 

@@ -30,8 +30,7 @@ private:
 	std::stringstream ss,ss2;
 	SoundStruct* testSound;
 	MusicStruct* testMusic;
-	//Player testPlayer,testPlayer2;
-	PlayerVec playVec;
+	Player testPlayer,testPlayer2;
 	int numCon;
 	DWORD cTime,lTime,tTime;
 	float dist, distX, distZ, rot, angle, distX2, distZ2, distX3, distZ3;
