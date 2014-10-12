@@ -133,10 +133,10 @@
     <Image Include="el.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Elimination.jpg">
+    <Image Include="imbination.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="imbination.jpg">
+    <Image Include="Elimbination.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

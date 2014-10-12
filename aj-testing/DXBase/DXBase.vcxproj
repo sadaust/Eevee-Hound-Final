@@ -119,7 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="el.jpg" />
-    <Image Include="Elimination.jpg" />
+    <Image Include="Elimbination.jpg" />
     <Image Include="imbination.jpg" />
     <Image Include="uvtest.png" />
   </ItemGroup>
