@@ -309,6 +309,87 @@ void DXTest::update() {
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
+<<<<<<< HEAD
+=======
+			if(testPhys.SenseCollision(testPlayer,testTerrain)) {
+				testPhys.ResolveCollision(testPlayer,testTerrain);
+			}
+			if(testPhys.SenseCollision(testPlayer,testTerrain2)) {
+				testPhys.ResolveCollision(testPlayer,testTerrain2);
+			}
+			if(testPhys.SenseCollision(testTerrain,testBullet)) {
+				testPhys.ResolveCollision(testTerrain,testBullet);
+			}
+			if(testPhys.SenseCollision(testTerrain2,testBullet)) {
+				testPhys.ResolveCollision(testTerrain2,testBullet);
+			}
+			if(testPhys.SenseCollision(testPlayer,testBullet)) {
+				testPhys.ResolveCollision(testPlayer,testBullet);
+			}
+			if(testPhys.SenseCollision(itemDrop,testTerrain)) {
+				testPhys.ResolveCollision(itemDrop,testTerrain);
+			}
+			if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
+				testPhys.ResolveCollision(itemDrop,testTerrain2);
+			}
+			if(testPhys.SenseCollision(testPlayer,itemDrop)) {
+				//setplayer item collision to true
+				testPlayer.togglecheckItem(true);
+				//pass colliding item to player test to see if passing works.
+				testPlayer.itemAccess(itemDrop);
+			 
+			}
+
+			for(i = 0;i<mapSys.numFloors();++i){
+				if(testPhys.SenseCollision(testPlayer,mapSys.GetFloor(i))) {
+					testPhys.ResolveCollision(testPlayer,mapSys.GetFloor(i));
+				}
+				if(testPhys.SenseCollision(testPlayer2,mapSys.GetFloor(i))) {
+					testPhys.ResolveCollision(testPlayer2,mapSys.GetFloor(i));
+				}
+			}
+
+			for(i = 0;i<mapSys.numWalls();++i){
+				if(testPhys.SenseCollision(testPlayer,mapSys.GetWall(i))) {
+					testPhys.ResolveCollision(testPlayer,mapSys.GetWall(i));
+				}
+				if(testPhys.SenseCollision(testPlayer2,mapSys.GetWall(i))) {
+					testPhys.ResolveCollision(testPlayer2,mapSys.GetWall(i));
+				}
+			}
+
+
+
+			if(!testPhys.SenseCollision(testPlayer,itemDrop)){
+				//setplayer item collision to false
+				testPlayer.togglecheckItem(false);
+			}
+			if(testPhys.SenseCollision(testPlayer,testPlayer2)) {
+				testPhys.ResolveCollision(testPlayer,testPlayer2);
+			}
+			
+
+			for(int i = 0; i < MAXBULLETS; ++i) {
+				if(testBullVec.GetActive(i)) {
+					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testTerrain2,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testPlayer2,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testPlayer2, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+				}
+			}
+>>>>>>> origin/master
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			
@@ -378,10 +459,69 @@ void DXTest::update() {
 			itemDrop.Update(dt);
 			testBullet.Update(dt);
 			testBullVec.Update(dt);
+<<<<<<< HEAD
 
 			testPhys.DoCollisions(playVec,testBullVec,mapSys);
 
 
+=======
+			if(testPhys.SenseCollision(testPlayer2,testTerrain)) {
+				testPhys.ResolveCollision(testPlayer2,testTerrain);
+			}
+			if(testPhys.SenseCollision(testPlayer2,testTerrain2)) {
+				testPhys.ResolveCollision(testPlayer2,testTerrain2);
+			}
+			if(testPhys.SenseCollision(testTerrain,testBullet)) {
+				testPhys.ResolveCollision(testTerrain,testBullet);
+			}
+			if(testPhys.SenseCollision(testTerrain2,testBullet)) {
+				testPhys.ResolveCollision(testTerrain2,testBullet);
+			}
+			if(testPhys.SenseCollision(testPlayer2,testBullet)) {
+				testPhys.ResolveCollision(testPlayer2,testBullet);
+			}
+			if(testPhys.SenseCollision(itemDrop,testTerrain)) {
+				testPhys.ResolveCollision(itemDrop,testTerrain);
+			}
+			if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
+				testPhys.ResolveCollision(itemDrop,testTerrain2);
+			}
+
+
+			if(testPhys.SenseCollision(testPlayer2,itemDrop)) {
+				//setplayer item collision to true
+				testPlayer2.togglecheckItem(true);
+				//pass colliding item to player test to see if passing works.
+				testPlayer.itemAccess(itemDrop);
+			 
+			}
+			if(!testPhys.SenseCollision(testPlayer2,itemDrop)){
+				//setplayer item collision to false
+				testPlayer2.togglecheckItem(false);
+			}
+			if(testPhys.SenseCollision(testPlayer2,testPlayer)) {
+				testPhys.ResolveCollision(testPlayer2,testPlayer);
+			}
+			
+
+		
+			for(int i = 0; i < MAXBULLETS; ++i) {
+				if(testBullVec.GetActive(i)) {
+					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testTerrain2,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testTerrain2, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+					if(testPhys.SenseCollision(testPlayer,testBullVec.GetBullet(i))) {
+						testPhys.ResolveCollision(testPlayer, testBullVec.GetBullet(i));
+						testBullVec.DeactivateABullet(i);
+					}
+				}
+			}
+>>>>>>> origin/master
 			//temp.cam_look_pos.x = 0;
 			//temp.cam_look_pos.y = 0;
 			
