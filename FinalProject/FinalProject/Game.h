@@ -35,7 +35,7 @@ private:
 	PhysicsSystem physSys;
 	cam camera[4];
 	HUD hud[4];
-
+	float test;
 	//time
 	double dt;
 	int updatesPerSec;

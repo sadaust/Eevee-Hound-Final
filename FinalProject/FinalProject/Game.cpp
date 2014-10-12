@@ -8,22 +8,26 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	input.init(hWnd,hInst);
 
 	// Ambient light color emitted from this light
-	m_Light.Ambient = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light.Ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 	// Diffuse light color emitted from this light
 	m_Light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	// Specular light color emitted from this light
-	m_Light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light.Specular = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 	// Light Type (Point) Requires: Position, Range, Attenuation
-	m_Light.Type = D3DLIGHT_POINT;	// Point, alternatively D3DLIGHT_DIRECTIONAL or D3DLIGHT_SPOT
+	m_Light.Type = D3DLIGHT_SPOT;	// Point, alternatively D3DLIGHT_DIRECTIONAL or D3DLIGHT_SPOT
 	// Light Position
-	m_Light.Position = D3DXVECTOR3(30.0f, 10.0f, -10.0f); 
+	m_Light.Position = D3DXVECTOR3(0.0f, 100.0f, 0.0f); 
+	m_Light.Direction = D3DXVECTOR3(0.0f, -1.0f, 0.0);
 	// Range of Light
-	m_Light.Range = 100.0f;
+	m_Light.Range = 1000.0f;
 	// Light Attenuation
 	m_Light.Attenuation0 = 0.0f;	// Constant
 	m_Light.Attenuation1 = 0.05f;	// Linear
 	m_Light.Attenuation2 = 0.0f;	// Quadratic
-
+	//
+	test = 90;
+	m_Light.Phi = D3DXToRadian(test);
+	m_Light.Theta = m_Light.Phi;
 	// Set Light
 	DXVid.setLight(0, &m_Light);
 	//turn on light
@@ -78,6 +82,10 @@ bool Game::update() {
 		dt = (float)(cTime-lTime);
 		dt /= CLOCKS_PER_SEC;
 		lTime = cTime;
+		test -= dt;
+		m_Light.Phi = D3DXToRadian(test);
+		m_Light.Theta = D3DXToRadian(test+10);
+		DXVid.setLight(0, &m_Light);
 		if(curState == mainMenu) {
 			//main menu
 		} else if(curState == client) {
@@ -107,6 +115,7 @@ void Game::draw() {
 		mapSys.render(DXVid);	// draws map
 		for(int i = 0; i < 1; ++i) {
 			camera[i].cam_look_pos = playVec.GetPlayer(i).getPos();
+			camera[i].cam_look_pos.y = playVec.GetPlayer(i).getPos().y+1;
 			DXVid.rotateCam(camera[i], 2,playVec.GetPlayer(i).getFacing(),playVec.GetPlayer(i).getAngle());
 			DXVid.setCam(i+1,&camera[i]);
 			hud[i].drawHud(playVec.GetPlayer(i),DXVid,i+1);

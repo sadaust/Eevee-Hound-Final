@@ -58,4 +58,4 @@ f25 25 1 -25 5 25 2
 
 
 #spawn s pos.x pos.y pos.z rot
-s -20 37.6 2 0
+s 0 0 0 0

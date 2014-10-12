@@ -6,10 +6,10 @@
 
 
 Map::Map() {
-	mat.Ambient = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
-	mat.Diffuse = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);		// Diffuse color reflected
-	mat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Emissive color reflected
-	mat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);		// Specular
+	mat.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);
+	mat.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);		// Diffuse color reflected
+	mat.Emissive = D3DXCOLOR(0.05f, 0.05f, 0.05f, 0.05f);		// Emissive color reflected
+	mat.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f);		// Specular
 	mat.Power = 0.0f;
 }
 
