@@ -342,13 +342,21 @@ void DXTest::update() {
 				if(testPhys.SenseCollision(testPlayer,mapSys.GetFloor(i))) {
 					testPhys.ResolveCollision(testPlayer,mapSys.GetFloor(i));
 				}
+				if(testPhys.SenseCollision(testPlayer2,mapSys.GetFloor(i))) {
+					testPhys.ResolveCollision(testPlayer2,mapSys.GetFloor(i));
+				}
 			}
 
 			for(i = 0;i<mapSys.numWalls();++i){
 				if(testPhys.SenseCollision(testPlayer,mapSys.GetWall(i))) {
 					testPhys.ResolveCollision(testPlayer,mapSys.GetWall(i));
 				}
+				if(testPhys.SenseCollision(testPlayer2,mapSys.GetWall(i))) {
+					testPhys.ResolveCollision(testPlayer2,mapSys.GetWall(i));
+				}
 			}
+
+
 
 			if(!testPhys.SenseCollision(testPlayer,itemDrop)){
 				//setplayer item collision to false
@@ -469,6 +477,8 @@ void DXTest::update() {
 			if(testPhys.SenseCollision(itemDrop,testTerrain2)) {
 				testPhys.ResolveCollision(itemDrop,testTerrain2);
 			}
+
+
 			if(testPhys.SenseCollision(testPlayer2,itemDrop)) {
 				//setplayer item collision to true
 				testPlayer2.togglecheckItem(true);
@@ -485,6 +495,7 @@ void DXTest::update() {
 			}
 			
 
+		
 			for(int i = 0; i < MAXBULLETS; ++i) {
 				if(testBullVec.GetActive(i)) {
 					if(testPhys.SenseCollision(testTerrain,testBullVec.GetBullet(i))) {
