@@ -10,6 +10,9 @@
 #include "HUD.h"
 #include "Map.h"
 #include "Menu.h"
+#include "Player.h"
+#include "Bullet.h"
+
 
 enum gameState {
 	mainMenu,
@@ -26,9 +29,14 @@ private:
 	SoundFrame sFrame;
 	Limbase partList;
 	D3DLIGHT9 m_Light;
+	PlayerVec playVec;
+	BulletVec bullVec;
+	Map mapSys;
+	PhysicsSystem physSys;
+	cam camera[4];
 
 	//time
-	float dt;
+	double dt;
 	int updatesPerSec;
 	DWORD cTime,lTime,tTime;
 public:

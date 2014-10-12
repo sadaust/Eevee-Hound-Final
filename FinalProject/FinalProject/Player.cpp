@@ -59,6 +59,8 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	setPrimObj(a_primDefs[2],3);
 	setPrimObj(a_primDefs[2],4);
 	setPrimObj(a_primDefs[2],5);
+	facing = 0;
+	angle = 0;
 }
 
 
@@ -231,10 +233,11 @@ void Player::Render(DXFrame& DXVid) {
 	//bullets[i].setPrimObj(b_render[1]);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
-	D3DXMatrixRotationX(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
 	D3DXMatrixTranslation(&locTransMat, 0, .25f, 0);
 	D3DXMatrixMultiply(&playerPrims[0].matrix, &RotMat, &locTransMat);
-	D3DXMatrixTranslation(&TransMat, pos.x, pos.y-.5f, pos.z);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&playerPrims[0].matrix, &playerPrims[0].matrix, &TransMat);
 	tempRen.asset = &playerPrims[0];
 	DXVid.addRen(tempRen);
@@ -468,8 +471,10 @@ PlayerVec::~PlayerVec() {
 
 
 void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
-
-
+	for(int i = 0; i < MAXPLAYERS; ++i) {
+		active[i] = false;
+	}
+	numPlayers = 0;
 
 
 	//regular bullet

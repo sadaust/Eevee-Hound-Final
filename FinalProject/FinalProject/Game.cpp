@@ -29,13 +29,43 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	//turn on light
 	DXVid.setLightActive(0,true);
 
-	curState = mainMenu;
+	curState = server;
 
 	cTime = timeGetTime();
 	lTime = cTime;
 	tTime = cTime;
 	dt = 0;
 	updatesPerSec = 100;
+
+	mapSys.LoadMap("TestMap.txt",resMan);
+	bullVec.Init(resMan);
+	playVec.Init(mapSys,resMan);
+
+	for(int i = 0; i < 4; ++i) {
+		camera[i].drawDist = 200.0f;
+		camera[i].fov_deg = 90.0f;
+	}
+	camera[0].cam_look_pos.x = 0;
+	camera[0].cam_look_pos.y = 0;
+	camera[0].cam_look_pos.z = 0;
+	camera[0].cam_pos.x = 5;
+	camera[0].cam_pos.y = 0;
+	camera[0].cam_pos.z = 0;
+	camera[0].cam_up_vec.x = 0;
+	camera[0].cam_up_vec.y = 1;
+	camera[0].cam_up_vec.z = 0;
+	camera[1] = camera[0];
+	camera[2] = camera[0];
+	camera[3] = camera[0];
+
+	/////////////////////////////////////////
+
+	playVec.ActivateAPlayer(mapSys);
+
+
+	/////////////////////////////////////////
+
+
 }
 
 bool Game::update() {
@@ -43,14 +73,22 @@ bool Game::update() {
 	cTime = timeGetTime();
 	dt = (float)(cTime-lTime);
 	dt /= CLOCKS_PER_SEC;
-	lTime = cTime;
+	
+	inputState iState;
 	if(cTime>=tTime) {
+		lTime = cTime;
 		if(curState == mainMenu) {
 			//main menu
 		} else if(curState == client) {
 			//playing as client
 		} else if(curState == server) {
 			//player as host
+			input.getState(0,iState);
+			playVec.Update(iState, dt, partList, bullVec);
+			bullVec.Update(dt);
+			physSys.DoCollisions(playVec,bullVec,mapSys);
+			
+
 		}
 		draw();
 		tTime = cTime+(CLOCKS_PER_SEC/updatesPerSec);
@@ -62,6 +100,12 @@ void Game::draw() {
 	if(!DXVid.rendererLost()) {
 		DXVid.clearRen();
 		//add render code
+		camera[0].cam_look_pos = playVec.GetPlayer(0).getPos();
+		DXVid.rotateCam(camera[0], 2,playVec.GetPlayer(0).getFacing(),playVec.GetPlayer(0).getAngle());
+		DXVid.setCam(1,&camera[0]);
+		playVec.Render(DXVid);	// draws players
+		bullVec.Render(DXVid);	// draws bullets
+		mapSys.render(DXVid);	// draws map
 
 		DXVid.Render();
 	}

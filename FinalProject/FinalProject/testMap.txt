@@ -1,5 +1,50 @@
 #test comment
-#floor f topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
-#walls w topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
-w -10 -10 -1 -8 5 3
+#floor f length width hight centerPos.x centerPos.y centerPos.z zone
+#walls w length width hight centerPos.x centerPos.y centerPos.z zone
+
+
+#//second platform
+f 50 50 5 0 -10 0 1
+
+
+#outer quads
+f 25 25 5 50 -10 0 2
+f 25 25 5 -50 -10 0 2 
+f 25 25 5 0 -10 50 2
+f 25 25 5 0 -10 -50 2
+
+#connecting bridge to quads
+f 5 5 1 30 -5 0 2
+f 5 5 1 -30 -5 0 2 
+f 5 5 1 0 -5 30 2
+f 5 5 1 0 -5 -30 2
+
+#staircase 1
+f 5 5 1 -10 -3 -15 1
+f 5 5 1 -5 -4 -15 1
+f 5 5 1 0 -5 -15 1
+f 5 5 1 5 -6 -15 1
+f 5 5 1 5 -7 -10 1
+#staircase 2
+f 5 5 1 10 -3 15 1
+f 5 5 1 5 -4 15 1
+f 5 5 1 0 -5 15 1
+f 5 5 1 -5 -6 15 1
+f 5 5 1 -5 -7 10 1
+
+#mountain like segments
+f25 25 100 50 -20 50 2
+f25 25 100 -50 -20 -50 2
+f25 25 100 50 -20 -50 2
+f25 25 100 -50 -20 50 2
+
+#half mountains
+f25 25 50 25 -20 25 2
+f25 25 50 -25 -20 -25 2
+f25 25 50 25 -20 -25 2
+f25 25 50 -25 -20 25 2
+
+
+
 #spawn s pos.x pos.y pos.z rot
+s -20 37.6 2
