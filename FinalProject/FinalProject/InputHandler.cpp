@@ -22,6 +22,22 @@ InputHandler::InputHandler() {
 	setBind(binds::left,DIK_A);
 	setBind(binds::right,DIK_D);
 	setBind(binds::sprint,DIK_LSHIFT);
+	//set sensitivity
+	for(int i = 0;i<4;++i) {
+		sens[i].xSens = 1;
+		sens[i].ySens = 1;
+	}
+	sens[4].xSens = 10;
+	sens[4].ySens = 10;
+}
+
+bool InputHandler::setSens(int pNum, float xSens, float ySens) {
+	if(pNum >= 0&&pNum<5) {
+		sens[pNum].xSens = xSens;
+		sens[pNum].ySens = ySens;
+		return true;
+	}
+	return false;
 }
 
 void InputHandler::setBind(binds::bindList bin, int key) {
@@ -72,6 +88,13 @@ void InputHandler::init(HWND& hWnd,HINSTANCE& hInst) {
 	m_pDIObj->CreateDevice(GUID_SysMouse,&m_pDIMouse,NULL);
 	m_pDIMouse->SetDataFormat(&c_dfDIMouse2);
 	m_pDIMouse->SetCooperativeLevel(hWnd,DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+
+	for(int i = 0; i < 5;++i) {
+		for(int z = 0; z < 9; ++z) {
+			state[i].buttonLast[z] = false;
+			state[i].buttons[z] = false;
+		}
+	}
 }
 
 void InputHandler::shutdown() {
@@ -105,6 +128,17 @@ int InputHandler::numGamePads() {
 bool InputHandler::getState(int controllerNum,inputState& out) {
 	XINPUT_STATE xInputState;
 	float temp;
+	//clear input
+	for(int i = 0; i < 9;++i)
+		out.buttons[i] = false;
+	out.lX = 0;
+	out.lY = 0;
+	out.rX = 0;
+	out.rY = 0;
+	for(int i = 0; i < 9; ++i) {
+		out.buttonLast[i] = state[controllerNum].buttons[i];
+	}
+	//get input
 	if(controllerNum >= 0 && controllerNum < 4) {
 		if(XInputGetState(controllerNum,&xInputState) == ERROR_SUCCESS) {
 			//left thumb stick x
@@ -124,12 +158,14 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 				temp = 0;
 			temp /= MAXSHORT;
+			temp *= sens[controllerNum].xSens;
 			out.rX = temp;
 			//right thump stick y
 			temp = xInputState.Gamepad.sThumbRY;
 			if(temp < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE&&temp > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 				temp = 0;
 			temp /= MAXSHORT;
+			temp *= sens[controllerNum].ySens;
 			out.rY = temp;
 			//set buttons
 			//get jump
@@ -150,16 +186,17 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			out.buttons[binds::rightAttack] = xInputState.Gamepad.bRightTrigger > fireTriggerPoint;
 			//get right alt attack
 			out.buttons[binds::rightAltAttack] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_RIGHT_SHOULDER;
+			state[controllerNum] = out;
 			return true;
 		}
 		else
 			return false;
 	} else if(controllerNum == 4) {
 		temp = mouseState.lX;
-		temp /= 1;
+		temp *= sens[4].xSens;
 		out.rX = temp;
 		temp = mouseState.lY;
-		temp /= 1;
+		temp *= sens[4].ySens;
 		out.rY = temp;
 		//check all binds
 		if(getBoundKey(binds[binds::sprint]))
@@ -182,6 +219,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 		for(int i = 0; i < 9; ++i) {
 			out.buttons[i] = getBoundKey(i);
 		}
+		state[controllerNum] = out;
 		return true;
 	}
 	return false;

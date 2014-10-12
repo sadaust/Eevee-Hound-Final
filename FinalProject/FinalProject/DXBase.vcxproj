@@ -11,15 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E256907E-E7C0-4D0D-9676-DBB7CD6D8F7A}</ProjectGuid>
+    <ProjectGuid>{EC66CC96-8C0A-4032-8D30-312623FE878F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FinalProject</RootNamespace>
+    <RootNamespace>DXBase</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -40,6 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Programmers API Windows\api\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -75,34 +78,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="DXFrame.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="HUD.h" />
-    <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="ItemBox.h" />
-    <ClInclude Include="Limb.h" />
-    <ClInclude Include="Limbase.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="PhysicsSystem.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerLimbs.h" />
-    <ClInclude Include="RenVector.h" />
-    <ClInclude Include="ResDefs.h" />
-    <ClInclude Include="ResourceDefinitions.h" />
-    <ClInclude Include="ResourceManager.h" />
-    <ClInclude Include="ShapeDefs.h" />
-    <ClInclude Include="SoundFrame.h" />
-    <ClInclude Include="spawnPoint.h" />
-    <ClInclude Include="Terrain.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="DXFrame.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="DXTest.cpp" />
     <ClCompile Include="HUD.cpp" />
-    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="Limbase.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -111,12 +90,42 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenVector.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="SoundFrame.cpp" />
     <ClCompile Include="Terrain.cpp" />
-    <ClCompile Include="winMain.cpp" />
+    <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fmodex.dll" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="DXFrame.h" />
+    <ClInclude Include="DXTest.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="Limb.h" />
+    <ClInclude Include="Limbase.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="PlayerLimbs.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="PhysicsSystem.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="RenVector.h" />
+    <ClInclude Include="ResDefs.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ShapeDefs.h" />
+    <ClInclude Include="SoundFrame.h" />
+    <ClInclude Include="spawnPoint.h" />
+    <ClInclude Include="Terrain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="uvtest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="battle.mp3" />
+    <Media Include="plinkhit.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="PartList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -76,8 +76,15 @@ struct SpriteObj {
 	float scalX, scalY;
 };
 
+struct frect {
+	float top;
+	float bottom;
+	float left;
+	float right;
+};
+
 struct TextStruct {
-	RECT rec;
+	frect rec;
 	std::string text;
 	D3DCOLOR textColor;
 };

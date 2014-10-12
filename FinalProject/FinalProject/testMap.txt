@@ -1,0 +1,5 @@
+#test comment
+#floor f topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
+#walls w topleft.x topleft.y topleft.z bottomright.x bottomright.y bottomright.z
+w -10 -10 -1 -8 5 3
+#spawn s pos.x pos.y pos.z rot

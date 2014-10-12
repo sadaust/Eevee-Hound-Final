@@ -1,10 +1,10 @@
 #include <Windows.h>
-
+#include "Game.h"
 //windowed res
 #define W_SCREEN_WIDTH 800
 #define W_SCREEN_HEIGHT 600
 
-#define WINDOW_TITLE "H.A.L.T."
+#define WINDOW_TITLE "DX Base"
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 int					g_windowCount;  //keeps track of how many windows we have
@@ -106,7 +106,8 @@ void changeWindow()
 	DestroyWindow(old);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow ) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow )
+{
 	g_hInstance = hInstance;	// Store application handle
 	g_bWindowed = true;		// Windowed mode or full-screen
 	bool run = true;
@@ -114,13 +115,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	InitWindow();
 	MSG msg; 
 	ZeroMemory(&msg, sizeof(msg));
+
+	Game game;
+	game.init(g_hWnd,g_hInstance,g_bWindowed);
 	//Main Loop
-	while(run) { 
-		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+	while(run)
+	{ 
+		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
 			if(msg.message == WM_QUIT)
 				run = false;
+			DispatchMessage(&msg);
 		}
+		if(!game.update()) {
+			run = false;
+		}
+
+		if(game.devLost()) {
+			game.resetDev(g_hWnd,g_hInstance);
+		}
+
 	}
+	game.shutDown();
 	// Unregister window
 	UnregisterClass(WINDOW_TITLE, g_hInstance);
 	// Return successful
@@ -139,7 +155,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wparam, LPARAM lparam)
 		}		
 	case(WM_DESTROY):
 		{
-			PostQuitMessage(0);
+			//decrement the window count due to one being destroyed
+			//--g_windowCount;
+			//if we have no windows quit
+			//if(g_windowCount <= 0)
+				PostQuitMessage(0);
 			break;
 		}
 		return DefWindowProc(hWnd, message, wparam, lparam);

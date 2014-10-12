@@ -35,6 +35,12 @@ struct inputState {
 	float rX;
 	float rY;
 	bool buttons[9];
+	bool buttonLast[9];
+};
+
+struct sensitivity {
+	float xSens;
+	float ySens;
 };
 
 class InputHandler {
@@ -42,12 +48,14 @@ private:
 	IDirectInput8* m_pDIObj;
 	IDirectInputDevice8* m_pDIKeyboard;
 	IDirectInputDevice8* m_pDIMouse;
+	inputState state[5];
 	int binds[binds::last]; 
 	int mouseOffSet;
 	//keyboard state
 	char buffer[256];
 	//mouse state
 	DIMOUSESTATE2 mouseState;
+	sensitivity sens[5];
 	bool getBoundKey(int num);
 	BYTE fireTriggerPoint;
 public:
@@ -63,6 +71,7 @@ public:
 	DIMOUSESTATE2 getMouse();
 	void getKeyboard(char[]);
 	void update();
+	bool setSens(int pNum, float xSens, float ySens);
 	//0-3 controllers 4 keyboard, returns true if it works
 	bool getState(int controllerNum,inputState& out);
 	void shutdown();
