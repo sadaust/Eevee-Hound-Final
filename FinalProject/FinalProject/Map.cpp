@@ -30,10 +30,12 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 	float rot;
 	int zone;
 	PrimStruct *tempPrim;
-	PrimObj tempObj;
+	PrimObj tempObj,tempObj2;
 	sPoint tempSpawn;
 	tempObj.mat = &mat;
-	tempObj.Tex = resMan.loadTexture("uvtest.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	tempObj2.mat= &mat;
+	tempObj2.Tex = resMan.loadTexture("Grassfloor.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	tempObj.Tex = resMan.loadTexture("Grass.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
 	file.open(fileName);
 	debugOut.open("debugMap.txt");
 	if(file.is_open()) {
@@ -65,10 +67,10 @@ void Map::LoadMap(char* fileName, ResourceManager& resMan) {
 
 				ss.str("");
 
-				D3DXMatrixIdentity(&tempObj.matrix);
-				D3DXMatrixTranslation(&tempObj.matrix,pos.x,pos.y,pos.z);
-				tempObj.primInfo = tempPrim;
-				renderInfo.push_back(tempObj);
+				D3DXMatrixIdentity(&tempObj2.matrix);
+				D3DXMatrixTranslation(&tempObj2.matrix,pos.x,pos.y,pos.z);
+				tempObj2.primInfo = tempPrim;
+				renderInfo.push_back(tempObj2);
 
 				tempTerrain.Init(pos,tempPrim,FLOOR);
 

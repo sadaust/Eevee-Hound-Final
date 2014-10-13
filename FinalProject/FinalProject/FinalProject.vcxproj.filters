@@ -145,4 +145,15 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="uvtest.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="GrassFloor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

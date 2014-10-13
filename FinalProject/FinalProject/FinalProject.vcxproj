@@ -126,6 +126,11 @@
   <ItemGroup>
     <Text Include="testMap.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grass.png" />
+    <Image Include="GrassFloor.png" />
+    <Image Include="uvtest.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
