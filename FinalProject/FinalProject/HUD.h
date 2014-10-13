@@ -7,6 +7,7 @@ class HUD {
 private:
 	TextStruct hp;
 	TextStruct timer;
+	TextStruct item;
 public:
 	void drawHud(Player& player, DXFrame& frame, GameMode& gMode,int camNum);
 };

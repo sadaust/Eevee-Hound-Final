@@ -62,6 +62,7 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	facing = 0;
 	angle = 0;
 	spectator = false;
+	ProsteticTestLimb.setName("None");
 }
 
 
@@ -161,7 +162,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 				}
 			}
 			// jump  A
-			if(a_state.buttons[binds::jump] && onGround) {
+			if(a_state.buttons[binds::jump] && onGround && !a_state.buttonLast[binds::jump]) {
 				velocityY = jumpHeight;
 				onGround = false;
 			}
@@ -178,6 +179,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 				//if item is coliding with character
 				if(getcheckItem()){
 					addLimb(ProsteticTestLimb);
+					togglecheckItem(false);
 				}
 				// make bool switch here.
 				//
@@ -265,7 +267,7 @@ void Player::Render(DXFrame& DXVid) {
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
-	D3DXMatrixTranslation(&locTransMat, -.5f, 1.75f, 0);
+	D3DXMatrixTranslation(&locTransMat, -.3f, 1.0f, 0);
 	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
 	D3DXMatrixMultiply(&playerPrims[2].matrix, &locTransMat, &RotMat);
 	//D3DXMatrixRotationY(&RotMat, D3DXToRadian(90));
@@ -279,7 +281,7 @@ void Player::Render(DXFrame& DXVid) {
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
 	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
-	D3DXMatrixTranslation(&locTransMat, .5f, .75f, 0);
+	D3DXMatrixTranslation(&locTransMat, .3f, 1.0f, 0);
 	D3DXMatrixMultiply(&playerPrims[3].matrix, &locTransMat, &RotMat);
 	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&playerPrims[3].matrix, &playerPrims[3].matrix, &TransMat);
@@ -290,7 +292,7 @@ void Player::Render(DXFrame& DXVid) {
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
 	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
-	D3DXMatrixTranslation(&locTransMat, .5f, .5f, 0);
+	D3DXMatrixTranslation(&locTransMat, .15f, .5f, 0);
 	D3DXMatrixMultiply(&playerPrims[4].matrix, &locTransMat, &RotMat);
 	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&playerPrims[4].matrix, &playerPrims[4].matrix, &TransMat);
@@ -301,7 +303,7 @@ void Player::Render(DXFrame& DXVid) {
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
 	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
-	D3DXMatrixTranslation(&locTransMat, -.5f, .5f, 0);
+	D3DXMatrixTranslation(&locTransMat, -.15f, .5f, 0);
 	D3DXMatrixMultiply(&playerPrims[5].matrix, &locTransMat, &RotMat);
 	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&playerPrims[5].matrix, &playerPrims[5].matrix, &TransMat);
@@ -500,7 +502,7 @@ void Player::itemAccess(ItemBox &a_item){
 	// to be changed to list of accessable parts (maybe in area)
 	//for now just passes test item to player
 	ProsteticTestLimb=a_item.getPart();
-	a_item.toggleActive(false);
+	togglecheckItem(true);
 }
 
 

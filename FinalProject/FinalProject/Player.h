@@ -110,6 +110,9 @@ public:
 	PrimObj getPrimObj(int a_index);
 	void setPrimObj(PrimObj a_prim, int a_index);
 
+	Limb getProsteticTestLimb(){return ProsteticTestLimb;}
+	void setProsteticTestLimb(Limb a_limb){ProsteticTestLimb=a_limb;}
+
 
 };
 

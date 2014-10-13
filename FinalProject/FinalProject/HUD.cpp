@@ -17,6 +17,14 @@ void HUD::drawHud(Player& player, DXFrame& frame,GameMode& gMode,int camNum) {
 			hp.rec.top = .95f;
 			hp.rec.left = .01f;
 			hp.rec.right = .1f;
+
+			ss.str("");
+			ss<<player.getProsteticTestLimb().getPartName();
+			item.text = ss.str();
+			item.rec.bottom = 0.05f;
+			item.rec.top = 0.9f;
+			item.rec.left = 0.49f;
+			item.rec.right = 0.51f;
 		} else {
 			ss<<"RESPAWN IN "<<(int)player.getTimer();
 			hp.text = ss.str();
@@ -26,6 +34,8 @@ void HUD::drawHud(Player& player, DXFrame& frame,GameMode& gMode,int camNum) {
 			hp.rec.right = .4f;
 		}
 		ren.asset = &hp;
+		frame.addRen(ren);
+		ren.asset = &item;
 		frame.addRen(ren);
 	}
 
