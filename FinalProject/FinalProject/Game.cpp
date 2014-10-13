@@ -73,7 +73,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 
 
 	/////////////////////////////////////////
-	DXVid.setViewCount(4);
+	DXVid.setViewCount(2);
 	DXVid.toggleSS();
 	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();

@@ -28,7 +28,7 @@ InputHandler::InputHandler() {
 		sens[i].ySens = 1;
 	}
 	sens[4].xSens = 1;
-	sens[4].ySens = 1;
+	sens[4].ySens = -1;
 }
 
 bool InputHandler::setSens(int pNum, float xSens, float ySens) {

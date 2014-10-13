@@ -218,7 +218,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			//else {
 			//	onGround = false;
 			//}
-			if(pos.y < -200) {
+			if(pos.y < -40) {
 				alive = false;
 				timer = 3;
 			}
