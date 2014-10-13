@@ -261,8 +261,8 @@ bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 
 
 bool PhysicsSystem::SenseCollision(Player& a_player, Bullet &a_bullet) {
-	if(a_player.getProspectivePos().y < a_bullet.getPos().y) { // y,y,top
-		if(a_player.getProspectivePos().y > a_bullet.getPos().y-a_player.getBound().height) { //y,y,bottom
+	if(a_player.getProspectivePos().y < a_bullet.getPos().y - (.5f*a_player.getBound().height)) { // y,y,top
+		if(a_player.getProspectivePos().y > a_bullet.getPos().y-(1.5f*a_player.getBound().height)) { //y,y,bottom
 			float distX = 0;
 			float distZ = 0;
 			float tempDist = 0;

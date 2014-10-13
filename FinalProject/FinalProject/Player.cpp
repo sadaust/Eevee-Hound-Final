@@ -153,9 +153,11 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			//right attack Right Trigger
 			if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
 				if(Limbs.getRarm()==0){
-					D3DXVECTOR3 tempvec = getPos();
-					tempvec.y += 1.5f;
-					a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
+					D3DXVECTOR2 tempvec;
+					tempvec.y = boundingCyl.radius; // z
+					tempvec.x = boundingCyl.radius; // x
+					rotate2Dvector(&tempvec, D3DXToRadian(-facing));
+					a_bulvec.ActivateABullet(D3DXVECTOR3(tempvec.x + pos.x, 1.4f + pos.y, tempvec.y +pos.z),D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
 				}
 				else if(!Limbs.getRarm()==0){
 					part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle);
