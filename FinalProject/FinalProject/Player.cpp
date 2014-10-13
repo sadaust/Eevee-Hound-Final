@@ -239,17 +239,75 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
 
-	//bullets[i].setPrimObj(b_render[1]);
+	// body
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
 	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
-	D3DXMatrixTranslation(&locTransMat, 0, .25f, 0);
-	D3DXMatrixMultiply(&playerPrims[0].matrix, &RotMat, &locTransMat);
+	D3DXMatrixTranslation(&locTransMat, 0, .75f, 0);
+	D3DXMatrixMultiply(&playerPrims[0].matrix, &locTransMat, &RotMat);
 	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&playerPrims[0].matrix, &playerPrims[0].matrix, &TransMat);
 	tempRen.asset = &playerPrims[0];
 	DXVid.addRen(tempRen);
+	// head
+	D3DXMatrixIdentity(&TransMat);
+	D3DXMatrixIdentity(&RotMat);
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixTranslation(&locTransMat, 0, 1, 0);
+	D3DXMatrixMultiply(&playerPrims[1].matrix, &locTransMat, &RotMat);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&playerPrims[1].matrix, &playerPrims[1].matrix, &TransMat);
+	tempRen.asset = &playerPrims[1];
+	DXVid.addRen(tempRen);
+	// left arm
+	D3DXMatrixIdentity(&TransMat);
+	D3DXMatrixIdentity(&RotMat);
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixTranslation(&locTransMat, -.5f, 1.75f, 0);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixMultiply(&playerPrims[2].matrix, &locTransMat, &RotMat);
+	//D3DXMatrixRotationY(&RotMat, D3DXToRadian(90));
+	//D3DXMatrixMultiply(&playerPrims[2].matrix, &RotMat, &playerPrims[2].matrix);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&playerPrims[2].matrix, &playerPrims[2].matrix, &TransMat);
+	tempRen.asset = &playerPrims[2];
+	DXVid.addRen(tempRen);
+	// right arm
+	D3DXMatrixIdentity(&TransMat);
+	D3DXMatrixIdentity(&RotMat);
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixTranslation(&locTransMat, .5f, .75f, 0);
+	D3DXMatrixMultiply(&playerPrims[3].matrix, &locTransMat, &RotMat);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&playerPrims[3].matrix, &playerPrims[3].matrix, &TransMat);
+	tempRen.asset = &playerPrims[3];
+	DXVid.addRen(tempRen);
+	// left leg
+	D3DXMatrixIdentity(&TransMat);
+	D3DXMatrixIdentity(&RotMat);
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixTranslation(&locTransMat, .5f, .5f, 0);
+	D3DXMatrixMultiply(&playerPrims[4].matrix, &locTransMat, &RotMat);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&playerPrims[4].matrix, &playerPrims[4].matrix, &TransMat);
+	tempRen.asset = &playerPrims[4];
+	DXVid.addRen(tempRen);
+	// right leg
+	D3DXMatrixIdentity(&TransMat);
+	D3DXMatrixIdentity(&RotMat);
+	D3DXMatrixIdentity(&locTransMat);
+	D3DXMatrixRotationY(&RotMat, D3DXToRadian(facing));
+	D3DXMatrixTranslation(&locTransMat, -.5f, .5f, 0);
+	D3DXMatrixMultiply(&playerPrims[5].matrix, &locTransMat, &RotMat);
+	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&playerPrims[5].matrix, &playerPrims[5].matrix, &TransMat);
+	tempRen.asset = &playerPrims[5];
+	DXVid.addRen(tempRen);
+
 }
 
 
@@ -515,7 +573,7 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 	playerDefaultPrims[1].primInfo = resMan.loadPrim("Head",0.25f, 0.25f, .25f);
 	// limb
 	playerDefaultPrims[2]=playerDefaultPrims[0];
-	playerDefaultPrims[2].primInfo = resMan.loadPrim("Limb",-.5f,0,0.125f,-0.125f,0.125f,-0.125f);
+	playerDefaultPrims[2].primInfo = resMan.loadPrim("Limb",-.5f,0,-0.0625f,0.0625f,0.0625f,-0.0625f);
 
 
 
