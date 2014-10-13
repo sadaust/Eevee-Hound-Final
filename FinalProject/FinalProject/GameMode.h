@@ -6,6 +6,7 @@
 enum gameModeState {
 	warmUp,
 	mainRound,
+	transition,
 	battle,
 	end
 };

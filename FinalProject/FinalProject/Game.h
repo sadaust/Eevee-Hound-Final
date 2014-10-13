@@ -38,6 +38,8 @@ private:
 	cam camera[4];
 	HUD hud[4];
 	GameMode gameRules;
+	inputState iState[MAXPLAYERS];
+	int players;
 	//time
 	double dt;
 	int updatesPerSec;

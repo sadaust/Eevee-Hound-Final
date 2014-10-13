@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <ctime>
 void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
+	srand(timeGetTime());
 	DXVid.init(hWnd,hInst,bWindowed);
 	sFrame.Init();
 	resMan.changeDevice(&DXVid);
@@ -65,12 +66,16 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	/////////////////////////////////////////
 
 	playVec.ActivateAPlayer(mapSys);
+	playVec.ActivateAPlayer(mapSys);
+	playVec.ActivateAPlayer(mapSys);
+
 	itemVec.ActivateAItem(mapSys);
 
 
 	/////////////////////////////////////////
-
-	gameRules.intit(&mapSys,&DXVid,1,15);
+	DXVid.setViewCount(4);
+	DXVid.toggleSS();
+	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();
 }
 
@@ -79,7 +84,7 @@ bool Game::update() {
 	cTime = timeGetTime();
 	
 	input.update();
-	inputState iState;
+
 	if(cTime>=tTime) {
 		dt = (float)(cTime-lTime);
 		dt /= CLOCKS_PER_SEC;
@@ -90,13 +95,16 @@ bool Game::update() {
 			//playing as client
 		} else if(curState == server) {
 			//player as host
-			input.getState(0,iState);
+			//get inputs
+			players = 0;
+			for(int i = 0; i < MAXPLAYERS; ++i) {
+				if(input.getState(i,iState[players]))
+					++players;
+			}
 			playVec.Update(iState, dt, partList, bullVec);
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
-			
-
 		}
 		gameRules.update(dt,playVec);
 		draw();
@@ -114,7 +122,7 @@ void Game::draw() {
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map
 		itemVec.Render(DXVid);  // draws items
-		for(int i = 0; i < 1; ++i) {
+		for(int i = 0; i < players; ++i) {
 			camera[i].cam_look_pos = playVec.GetPlayer(i).getPos();
 			camera[i].cam_look_pos.y = playVec.GetPlayer(i).getPos().y+1;
 			DXVid.rotateCam(camera[i], 2,playVec.GetPlayer(i).getFacing(),playVec.GetPlayer(i).getAngle());

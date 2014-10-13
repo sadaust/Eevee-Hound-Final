@@ -27,8 +27,8 @@ InputHandler::InputHandler() {
 		sens[i].xSens = 1;
 		sens[i].ySens = 1;
 	}
-	sens[4].xSens = 10;
-	sens[4].ySens = 10;
+	sens[4].xSens = 1;
+	sens[4].ySens = 1;
 }
 
 bool InputHandler::setSens(int pNum, float xSens, float ySens) {
@@ -200,9 +200,9 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 		out.rY = temp;
 		//check all binds
 		if(getBoundKey(binds[binds::sprint]))
-			temp = 1;
-		else
 			temp = 0.5f;
+		else
+			temp = 1.0f;
 		//
 		if(getBoundKey(binds[binds::forward])) {
 			out.lY = temp;
@@ -217,7 +217,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			out.lX = -temp;
 		}
 		for(int i = 0; i < 9; ++i) {
-			out.buttons[i] = getBoundKey(i);
+			out.buttons[i] = getBoundKey(binds[i]);
 		}
 		state[controllerNum] = out;
 		return true;

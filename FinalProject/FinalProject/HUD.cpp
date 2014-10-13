@@ -34,7 +34,7 @@ void HUD::drawHud(Player& player, DXFrame& frame,GameMode& gMode,int camNum) {
 	timer.rec.bottom = 0.05;
 	timer.rec.left = 0.49;
 	timer.rec.right = 0.51;
-	if(gMode.getState() != battle) {
+	if(gMode.getState() != battle && gMode.getState()!= transition) {
 		if(gMode.getState() == warmUp) {
 			ss<<"Round Start In: ";
 		} else if(gMode.getState() == mainRound) {
@@ -45,9 +45,18 @@ void HUD::drawHud(Player& player, DXFrame& frame,GameMode& gMode,int camNum) {
 		temp = (int)((int)gMode.getTime())/60;
 		ss<<temp<<':';
 		temp = ((int)gMode.getTime())%60;
+		if(temp < 10)
+			ss<<'0';
 		ss<<temp;
 	} else {
-		ss<<"Players Alive: "<<gMode.getAliveCount();
+		ss<<"Players Alive: "<<gMode.getAliveCount()<<'\n';
+		if(gMode.getState() == transition) {
+			temp = ((int)gMode.getTime())%60;
+			ss<<"Get To The Arena: 0:";
+			if(temp<10)
+				ss<<'0';
+			ss<<temp;
+		}
 	}
 	timer.text = ss.str();
 	ren.asset = &timer;

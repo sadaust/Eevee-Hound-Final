@@ -128,7 +128,7 @@ public:
 	PlayerVec();
 	~PlayerVec();
 	void Init(Map& a_man, ResourceManager& resMan);
-	void Update(inputState& a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec);
+	void Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec);
 	void Render(DXFrame& DXVid);
 	bool GetActive(int a_index);
 	void ActivateAPlayer(Map& a_map);

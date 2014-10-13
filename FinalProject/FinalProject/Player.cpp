@@ -46,7 +46,7 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	onGround = false;
 	checkItem= false;
 	R_arm= false;
-	alive = true;
+	alive = false;
 	timer = 0;
 	jumpCount=0;
 	respawn(spawn);
@@ -522,11 +522,12 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 }
 
 
-void PlayerVec::Update(inputState& a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec) {
+void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec) {
 	int temp, maxHp, curHp;
+	temp = maxHp = curHp = 0;
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]) {
-			players[i].Update(a_input, a_dt, part_list, a_bulvec);
+			players[i].Update(a_input[i], a_dt, part_list, a_bulvec);
 			if(players[i].isSpectator()) {
 				if(players[i].getMaxHealth() != players[i].getHealth()) {
 					maxHp = players[i].getMaxHealth();
@@ -537,15 +538,19 @@ void PlayerVec::Update(inputState& a_input, double a_dt, Limbase part_list,Bulle
 					} else {
 						temp = -1;
 					}
+					if(maxHp<0)
+						maxHp = MAXPLAYERS-1;
+					else if(maxHp >= MAXPLAYERS)
+						maxHp = 0;
 					while(maxHp != curHp) {
 						if(players[maxHp].isAlive()&&active[maxHp]) {
 							curHp = maxHp;
 						} else {
 							maxHp += temp;
-							if(temp<0)
-								temp = MAXPLAYERS-1;
-							else if(temp >= MAXPLAYERS)
-								temp = 0;
+							if(maxHp<0)
+								maxHp = MAXPLAYERS-1;
+							else if(maxHp >= MAXPLAYERS)
+								maxHp = 0;
 						}
 					}
 					players[i].setCurHealth(curHp);
@@ -562,7 +567,7 @@ void PlayerVec::Update(inputState& a_input, double a_dt, Limbase part_list,Bulle
 void PlayerVec::Render(DXFrame& DXVid) {
 
 	for(int i = 0; i < MAXPLAYERS; ++i) {
-		if(active[i]) {
+		if(active[i]&&players[i].isAlive()) {
 			players[i].Render(DXVid);
 		}
 	}

@@ -233,7 +233,7 @@ void DXFrame::reSize(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 		m_pD3DDevice = tempDevice;
 
 		// Create a Font Object
-		D3DXCreateFont(m_pD3DDevice,30,0,FW_BOLD,0,false,DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,DEFAULT_PITCH | FF_DONTCARE, TEXT("Times New Roman"),&m_pD3DFont);
+		D3DXCreateFont(m_pD3DDevice,0.1,0.1,FW_THIN,0,false,DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,DEFAULT_PITCH | FF_DONTCARE, TEXT("times.ttf"),&m_pD3DFont);
 
 		// Create Sprite Object and Textures
 		D3DXCreateSprite(m_pD3DDevice, &m_pD3DSprite);
@@ -329,7 +329,7 @@ void DXFrame::Render() {
 	rect.bottom -= rect.top;
 	rect.top = 0;
 
-	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0))) {
+	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.0f), 1.0f, 0))) {
 		if(SUCCEEDED(m_pD3DDevice->BeginScene())) {
 			D3DXMATRIX TransMat;
 			RenInfo* tempRen;
