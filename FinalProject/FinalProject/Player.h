@@ -26,8 +26,6 @@ const int MAXPLAYERS = 16;
 const float jumpHeight  = 13.0f;
 const float gravity = 20.0f;
 
-
-
 class Player {
 private: 
 	PlayerLimbs Limbs;
@@ -41,7 +39,7 @@ private:
 		timer;
 	double velocityY;
 	cylinder boundingCyl;
-	bool onGround, checkItem, R_arm, alive;
+	bool onGround, checkItem, R_arm, alive, spectator;
 	int jumpCount;
 
 	Limb ProsteticTestLimb;
@@ -99,6 +97,8 @@ public:
 	bool getGrounded();
 	bool getcheckItem();
 	bool isAlive();
+	bool isSpectator();
+	void setSpec(bool);
 	void addLimb(Limb part);
 	void setJumpCount(int j_count);
 	int getJumpCount();

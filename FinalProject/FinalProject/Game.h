@@ -12,6 +12,7 @@
 #include "Menu.h"
 #include "Player.h"
 #include "Bullet.h"
+#include "GameMode.h"
 
 
 enum gameState {
@@ -36,7 +37,7 @@ private:
 	PhysicsSystem physSys;
 	cam camera[4];
 	HUD hud[4];
-	float test;
+	GameMode gameRules;
 	//time
 	double dt;
 	int updatesPerSec;

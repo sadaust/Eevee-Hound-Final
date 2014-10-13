@@ -61,6 +61,7 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	setPrimObj(a_primDefs[2],5);
 	facing = 0;
 	angle = 0;
+	spectator = false;
 }
 
 
@@ -91,8 +92,6 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 
 void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec) {
 	float tempfloat;
-
-	//check alive
 	tempfloat = a_state.rX;
 	facing += (tempfloat*a_dt)*turnspeedX;
 	tempfloat = a_state.rY;
@@ -101,125 +100,136 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 		angle = 89.9f;
 	else if(angle <=-90)
 		angle = -89.9f;
-
-	if(alive) {
-		//do if alive
-		pos.x = prospectivePos.x;
-		pos.y = prospectivePos.y;
-		pos.z = prospectivePos.z;
-
-
-		////////////////////////////////////////
-		// Takes inputs, sets prospective pos //
-		////////////////////////////////////////
-
-
-
-		tempfloat = a_state.lX;
-		velocityXZ.x = tempfloat*a_dt*speed;
-
-		tempfloat = a_state.lY;
-		velocityXZ.y = tempfloat*a_dt*speed;
-
-		velocityY -= gravity*a_dt;
-		if(velocityY < -terminalVelocity)
-			velocityY = -terminalVelocity;
-		if(velocityY > terminalVelocity)
-			velocityY = terminalVelocity;
-		//if(pos.y <= 0 && velocityY <= 0)
-		//	velocityY = 0;
-		/////////////////////////////////////
-		//////////PLAYER CONTROLS////////////
-		/////////////////////////////////////
-
-		// need to deal with object for bullet 
-		//left attack Left Trigger
+	if(spectator) {
+		curHealth = maxHealth;
+		//last player
 		if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
-			if (!Limbs.getLarm()==0){
-				part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,facing,angle);
-			}
+			--maxHealth;
 		}
-		//right attack Right Trigger
+		//next player
 		if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
-			if(Limbs.getRarm()==0){
-				D3DXVECTOR3 tempvec = getPos();
-				tempvec.y += 1.5f;
-				a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
-			}
-			else if(!Limbs.getRarm()==0){
-				part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle);
-			}
-		}
-		// jump  A
-		if(a_state.buttons[binds::jump] && onGround) {
-			velocityY = jumpHeight;
-			onGround = false;
-		}
-		//leg power B
-		if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
-			//get part !0 
-			if (!Limbs.getLeg()==0){
-				part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,facing,angle);
-				// find that part 
-				// execute that function
-			}
-		}
-		if(a_state.buttons[binds::use]) {
-			//if item is coliding with character
-			if(getcheckItem()){
-				addLimb(ProsteticTestLimb);
-			}
-			// make bool switch here.
-			//
-			//bring menue up 
-			// 
-		}
-
-
-
-		
-
-		//D3DXMATRIX matrixlovetemptest;
-		//D3DXVECTOR2 tempveloc = velocityXZ;
-		//float templength = D3DXVec2Length(&velocityXZ);
-		//D3DXVec2Normalize(&velocityXZ,&velocityXZ);
-		//D3DXMatrixTransformation2D(&matrixlovetemptest,NULL,NULL,NULL,&D3DXVECTOR2(pos.x,pos.z),facing,&velocityXZ);
-		//D3DXVECTOR4 matrixtemplove4;
-		//D3DXVec2Transform(&matrixtemplove4, &velocityXZ, &matrixlovetemptest);
-
-		//velocityXZ.x = matrixtemplove4.x;
-		//velocityXZ.y = matrixtemplove4.y;
-		//D3DXVECTOR2 tempveloc = velocityXZ;
-		//if(D3DXVec2Length(&velocityXZ) >= maxSpeed)
-		//	velocityXZ = tempveloc;
-		rotate2Dvector(&velocityXZ,-D3DXToRadian(facing));
-
-		prospectivePos.x += velocityXZ.x;
-		prospectivePos.y += velocityY*a_dt;;
-		prospectivePos.z += velocityXZ.y;
-
-		//if() {
-		//	onGround = true;
-		//	velocityY = 0;
-		//}
-		//else {
-		//	onGround = false;
-		//}
-		if(pos.y < -200) {
-			alive = false;
-			timer = 3;
-		}
-		if(curHealth <= 0) {
-			alive = false;
-			timer = 3;
+			++maxHealth;
 		}
 	} else {
-		//do if dead
-		if(timer>=0) {
-			timer -= a_dt;
+		//check alive
+		if(alive) {
+			//do if alive
+			pos.x = prospectivePos.x;
+			pos.y = prospectivePos.y;
+			pos.z = prospectivePos.z;
+
+
+			////////////////////////////////////////
+			// Takes inputs, sets prospective pos //
+			////////////////////////////////////////
+
+
+
+			tempfloat = a_state.lX;
+			velocityXZ.x = tempfloat*a_dt*speed;
+
+			tempfloat = a_state.lY;
+			velocityXZ.y = tempfloat*a_dt*speed;
+
+			velocityY -= gravity*a_dt;
+			if(velocityY < -terminalVelocity)
+				velocityY = -terminalVelocity;
+			if(velocityY > terminalVelocity)
+				velocityY = terminalVelocity;
+			//if(pos.y <= 0 && velocityY <= 0)
+			//	velocityY = 0;
+			/////////////////////////////////////
+			//////////PLAYER CONTROLS////////////
+			/////////////////////////////////////
+
+			// need to deal with object for bullet 
+			//left attack Left Trigger
+			if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
+				if (!Limbs.getLarm()==0){
+					part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,facing,angle);
+				}
+			}
+			//right attack Right Trigger
+			if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
+				if(Limbs.getRarm()==0){
+					D3DXVECTOR3 tempvec = getPos();
+					tempvec.y += 1.5f;
+					a_bulvec.ActivateABullet(tempvec,D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
+				}
+				else if(!Limbs.getRarm()==0){
+					part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle);
+				}
+			}
+			// jump  A
+			if(a_state.buttons[binds::jump] && onGround) {
+				velocityY = jumpHeight;
+				onGround = false;
+			}
+			//leg power B
+			if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
+				//get part !0 
+				if (!Limbs.getLeg()==0){
+					part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,facing,angle);
+					// find that part 
+					// execute that function
+				}
+			}
+			if(a_state.buttons[binds::use]) {
+				//if item is coliding with character
+				if(getcheckItem()){
+					addLimb(ProsteticTestLimb);
+				}
+				// make bool switch here.
+				//
+				//bring menue up 
+				// 
+			}
+
+
+
+
+
+			//D3DXMATRIX matrixlovetemptest;
+			//D3DXVECTOR2 tempveloc = velocityXZ;
+			//float templength = D3DXVec2Length(&velocityXZ);
+			//D3DXVec2Normalize(&velocityXZ,&velocityXZ);
+			//D3DXMatrixTransformation2D(&matrixlovetemptest,NULL,NULL,NULL,&D3DXVECTOR2(pos.x,pos.z),facing,&velocityXZ);
+			//D3DXVECTOR4 matrixtemplove4;
+			//D3DXVec2Transform(&matrixtemplove4, &velocityXZ, &matrixlovetemptest);
+
+			//velocityXZ.x = matrixtemplove4.x;
+			//velocityXZ.y = matrixtemplove4.y;
+			//D3DXVECTOR2 tempveloc = velocityXZ;
+			//if(D3DXVec2Length(&velocityXZ) >= maxSpeed)
+			//	velocityXZ = tempveloc;
+			rotate2Dvector(&velocityXZ,-D3DXToRadian(facing));
+
+			prospectivePos.x += velocityXZ.x;
+			prospectivePos.y += velocityY*a_dt;;
+			prospectivePos.z += velocityXZ.y;
+
+			//if() {
+			//	onGround = true;
+			//	velocityY = 0;
+			//}
+			//else {
+			//	onGround = false;
+			//}
+			if(pos.y < -200) {
+				alive = false;
+				timer = 3;
+			}
+			if(curHealth <= 0) {
+				alive = false;
+				timer = 3;
+			}
+		} else {
+			//do if dead
+			if(timer>=0) {
+				timer -= a_dt;
+			}
 		}
 	}
-
 }
 
 
@@ -246,6 +256,7 @@ void Player::Render(DXFrame& DXVid) {
 void Player::respawn(sPoint& spawn) {
 	if(spawn.isActive()) {
 		alive = true;
+		maxHealth = 100;
 		curHealth = maxHealth;
 		pos = spawn.getPos();
 		prospectivePos = pos;
@@ -444,6 +455,9 @@ void Player::setCurHealth(int c_health) {
 	curHealth=c_health;
 }
 
+void Player::setSpec(bool set) {
+	spectator = set;
+}
 
 int Player::getMaxHealth() {
 	return maxHealth;
@@ -460,6 +474,10 @@ void Player::setPrimObj(PrimObj a_prim, int a_index) {
 	playerPrims[a_index].matrix = a_prim.matrix;
 	playerPrims[a_index].primInfo = a_prim.primInfo;
 	playerPrims[a_index].Tex = a_prim.Tex;
+}
+
+bool Player::isSpectator() {
+	return spectator;
 }
 
 
@@ -505,9 +523,37 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 
 
 void PlayerVec::Update(inputState& a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec) {
+	int temp, maxHp, curHp;
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]) {
 			players[i].Update(a_input, a_dt, part_list, a_bulvec);
+			if(players[i].isSpectator()) {
+				if(players[i].getMaxHealth() != players[i].getHealth()) {
+					maxHp = players[i].getMaxHealth();
+					curHp = players[i].getHealth();
+
+					if(maxHp>curHp) {
+						temp = 1;
+					} else {
+						temp = -1;
+					}
+					while(maxHp != curHp) {
+						if(players[maxHp].isAlive()&&active[maxHp]) {
+							curHp = maxHp;
+						} else {
+							maxHp += temp;
+							if(temp<0)
+								temp = MAXPLAYERS-1;
+							else if(temp >= MAXPLAYERS)
+								temp = 0;
+						}
+					}
+					players[i].setCurHealth(curHp);
+					players[i].setMaxHealth(maxHp);
+				}
+				players[i].setPos(players[players[i].getHealth()].getPos());
+				players[i].setProspectivePos(players[i].getPos());
+			}
 		}
 	}
 }
@@ -527,7 +573,7 @@ void PlayerVec::ActivateAPlayer(Map& a_map) {
 	int random = rand() % a_map.numSpawn();
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(!active[i]) {
-			
+
 
 			players[i].Init(a_map.GetSpawn(random),playerDefaultPrims);
 			active[i] = true;

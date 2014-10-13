@@ -81,6 +81,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DXFrame.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="ItemBox.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="DXFrame.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="ItemBox.cpp" />

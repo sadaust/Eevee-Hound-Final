@@ -25,8 +25,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	m_Light.Attenuation1 = 0.05f;	// Linear
 	m_Light.Attenuation2 = 0.0f;	// Quadratic
 	//
-	test = 90;
-	m_Light.Phi = D3DXToRadian(test);
+	m_Light.Phi = D3DXToRadian(90.0f);
 	m_Light.Theta = m_Light.Phi;
 	// Set Light
 	DXVid.setLight(0, &m_Light);
@@ -71,7 +70,8 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 
 	/////////////////////////////////////////
 
-
+	gameRules.intit(&mapSys,&DXVid,1,15);
+	gameRules.Start();
 }
 
 bool Game::update() {
@@ -84,10 +84,6 @@ bool Game::update() {
 		dt = (float)(cTime-lTime);
 		dt /= CLOCKS_PER_SEC;
 		lTime = cTime;
-		test -= dt;
-		m_Light.Phi = D3DXToRadian(test);
-		m_Light.Theta = D3DXToRadian(test+10);
-		DXVid.setLight(0, &m_Light);
 		if(curState == mainMenu) {
 			//main menu
 		} else if(curState == client) {
@@ -102,6 +98,7 @@ bool Game::update() {
 			
 
 		}
+		gameRules.update(dt,playVec);
 		draw();
 		tTime = cTime+(CLOCKS_PER_SEC/updatesPerSec);
 	}
@@ -122,7 +119,7 @@ void Game::draw() {
 			camera[i].cam_look_pos.y = playVec.GetPlayer(i).getPos().y+1;
 			DXVid.rotateCam(camera[i], 2,playVec.GetPlayer(i).getFacing(),playVec.GetPlayer(i).getAngle());
 			DXVid.setCam(i+1,&camera[i]);
-			hud[i].drawHud(playVec.GetPlayer(i),DXVid,i+1);
+			hud[i].drawHud(playVec.GetPlayer(i),DXVid,gameRules,i+1);
 		}
 		DXVid.Render();
 	}
