@@ -34,7 +34,7 @@ void ItemBox::ItemBoxInit(sPoint& spawn,PrimObj a_itemObj){
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
 	onGround=false;
 	active=true;
-	pos.x = spawn.getPos().x;
+	pos.x = 10;//spawn.getPos().x;
 	pos.y = spawn.getPos().y;
 	pos.z = spawn.getPos().z;
 	prospectivePos.x = pos.x;

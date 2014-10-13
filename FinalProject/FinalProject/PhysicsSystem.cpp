@@ -106,8 +106,9 @@ void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec,
 				if(a_playerVec.GetActive(g)) {
 					if(a_playerVec.GetPlayer(g).isAlive()) {
 						if(SenseCollision(a_playerVec.GetPlayer(g), a_itemVec.GetItem(i))) { // if they're colliding
-							//a_playerVec.GetPlayer(g).itemAccess(a_itemVec.GetItem(i));
-							//a_itemVec.DeactivateAItem(i);     AJ I DON'T KNOW WHAT YOU WANT FROM ME BUT HERE IS THE SENSE COLLISION
+							a_playerVec.GetPlayer(g).itemAccess(a_itemVec.GetItem(i));
+							a_playerVec.GetPlayer(g).togglecheckItem(true);
+							//a_itemVec.DeactivateAItem(i);     //Aj: I find this ammusing keeping it here.//Josh: AJ I DON'T KNOW WHAT YOU WANT FROM ME BUT HERE IS THE SENSE COLLISION
 						}
 					}
 				}
