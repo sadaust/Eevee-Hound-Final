@@ -105,8 +105,8 @@ bool Game::update() {
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
+			gameRules.update(dt,playVec);
 		}
-		gameRules.update(dt,playVec);
 		draw();
 		tTime = cTime+(CLOCKS_PER_SEC/updatesPerSec);
 	}

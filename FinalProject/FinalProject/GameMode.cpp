@@ -17,6 +17,7 @@ void GameMode::intit(Map* map,DXFrame* DXVid,int warmUp,int round) {
 void GameMode::update(double dt,PlayerVec& playVec) {
 	Player* tempPlay;
 	int ran;
+	level->update(dt);
 	if(curState != battle && curState != transition) {
 		timeLeft -= dt;
 		for(int i = 0; i < MAXPLAYERS; ++i) {

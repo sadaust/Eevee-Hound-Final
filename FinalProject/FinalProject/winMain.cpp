@@ -123,8 +123,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	{ 
 		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if(msg.message == WM_QUIT)
+			if(msg.message == WM_QUIT) {
 				run = false;
+			}
 			DispatchMessage(&msg);
 		}
 		if(!game.update()) {

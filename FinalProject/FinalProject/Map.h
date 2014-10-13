@@ -26,6 +26,7 @@ public:
 	Terrain& GetFloor(int a_index);
 	sPoint& GetSpawn(int a_index);
 	void render(DXFrame&frame);
+	void update(double dt);
 	int numWalls() { return walls.size();}
 	int numFloors() {return floors.size();}
 	int numSpawn() {return spawnPoints.size();}

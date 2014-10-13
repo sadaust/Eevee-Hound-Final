@@ -329,6 +329,7 @@ void Player::respawn(sPoint& spawn) {
 		Limbs.setLarm(0);
 		Limbs.setRarm(0);
 		Limbs.setLeg(0);
+		spawn.toggle();
 	}
 }
 

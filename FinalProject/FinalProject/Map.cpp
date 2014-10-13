@@ -168,7 +168,11 @@ void Map::render(DXFrame& frame) {
 	}
 }
 
-
+void Map::update(double dt) {
+	for(int i = 0; i < spawnPoints.size();++i) {
+		spawnPoints[i].update(dt);
+	}
+}
 
 
 
