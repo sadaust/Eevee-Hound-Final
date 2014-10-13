@@ -20,6 +20,7 @@ private:
 	float velocityY;
 	D3DXVECTOR2 velocityXZ;
 	bool active;
+	float rot;
 
 public:
 	ItemBox();
@@ -39,7 +40,8 @@ public:
 	void setVelocityY(float a_velocityY);
 	void toggleActive(bool is_active);
 	bool getActive(){return active;}
-	void Render(DXFrame& DXVid,float dt);
+	void Render(DXFrame& DXVid);
+	float GetRot() {return rot;}
 	~ItemBox();
 
 };
@@ -57,7 +59,8 @@ public:
 	ItemVec();
 	void Init(Map& a_man, ResourceManager& resMan);
 	void Update(inputState& a_input, double a_dt, Limbase part_list);
-	void Render(DXFrame& DXVid,float dt);
+	void Render(DXFrame& DXVid);
+	bool GetActive(int a_index);
 	void ActivateAItem(Map& a_map);
 	void DeactivateAItem(int a_index);
 	ItemBox& GetItem(int a_index);

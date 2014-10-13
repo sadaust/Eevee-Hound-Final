@@ -94,7 +94,7 @@ bool Game::update() {
 			playVec.Update(iState, dt, partList, bullVec);
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
-			physSys.DoCollisions(playVec,bullVec,mapSys);
+			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
 			
 
 		}
@@ -113,7 +113,7 @@ void Game::draw() {
 		playVec.Render(DXVid);	// draws players
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map
-		itemVec.Render(DXVid,dt);  // draws items
+		itemVec.Render(DXVid);  // draws items
 		for(int i = 0; i < 1; ++i) {
 			camera[i].cam_look_pos = playVec.GetPlayer(i).getPos();
 			camera[i].cam_look_pos.y = playVec.GetPlayer(i).getPos().y+1;

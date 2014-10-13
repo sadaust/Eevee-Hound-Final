@@ -24,41 +24,43 @@ float PhysicsSystem::closestPoint(float a_point, float a_1, float a_2) {
 }
 
 
-void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map) {
+void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map, ItemVec& a_itemVec) {
 
 	// all player stuff but bullets
-	for(int i = 0; i < a_playerVec.GetNumPlayers(); ++i) {
-		if(a_playerVec.GetPlayer(i).isAlive()) { // if player A is alive
-			for(int g = 0; g < a_playerVec.GetNumPlayers(); ++g) { // PLAYER PLAYER COLLISION
-				if(i != g && a_playerVec.GetPlayer(g).isAlive()) { // if target player is alive and isn't player A
-					if(SenseCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g))) { // if they're colliding
-						ResolveCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g)); // resolve the collision
+	for(int i = 0; i < MAXPLAYERS; ++i) {
+		if(a_playerVec.GetActive(i)) {
+			if(a_playerVec.GetPlayer(i).isAlive()) { // if player A is alive
+				for(int g = 0; g < a_playerVec.GetNumPlayers(); ++g) { // PLAYER PLAYER COLLISION
+					if(i != g && a_playerVec.GetPlayer(g).isAlive()) { // if target player is alive and isn't player A
+						if(SenseCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g))) { // if they're colliding
+							ResolveCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g)); // resolve the collision
+						}
 					}
 				}
-			}
-			// END OF PLAYER PLAYER
+				// END OF PLAYER PLAYER
 
-			for(int g = 0; g < a_map.numWalls(); ++g) { // PLAYER WALLS
-				if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g))) { // if they're colliding
-					ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g)); // resolve the collision
+				for(int g = 0; g < a_map.numWalls(); ++g) { // PLAYER WALLS
+					if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g))) { // if they're colliding
+						ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetWall(g)); // resolve the collision
+					}
 				}
-			}
-			for(int g = 0; g < a_map.numFloors(); ++g) { // PLAYER FLOORS
-				if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g))) { // if they're colliding
-					ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g)); // resolve the collision
+				for(int g = 0; g < a_map.numFloors(); ++g) { // PLAYER FLOORS
+					if(SenseCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g))) { // if they're colliding
+						ResolveCollision(a_playerVec.GetPlayer(i), a_map.GetFloor(g)); // resolve the collision
+					}
 				}
+
+				// END OF MAP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADD ANOTHER FOR LOOP AND ANOTHER VECTOR FOR FLOORWALLS, MAYBE
+
+
+
+
+
+
+
+
+
 			}
-
-			// END OF MAP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADD ANOTHER FOR LOOP AND ANOTHER VECTOR FOR FLOORWALLS, MAYBE
-
-
-
-
-
-
-
-
-
 		}
 	}
 
@@ -88,13 +90,40 @@ void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec,
 				}
 			}
 
-			
 
 
 
 
 
 
+
+		}
+	}
+	
+	for(int i = 0; i < MAXITEMS; ++i) { // 
+		if(a_itemVec.GetActive(i)) {
+			for(int g = 0; g < MAXPLAYERS; ++g) {
+				if(a_playerVec.GetActive(g)) {
+					if(a_playerVec.GetPlayer(g).isAlive()) {
+						if(SenseCollision(a_playerVec.GetPlayer(g), a_itemVec.GetItem(i))) { // if they're colliding
+							//a_playerVec.GetPlayer(g).itemAccess(a_itemVec.GetItem(i));
+							//a_itemVec.DeactivateAItem(i);     AJ I DON'T KNOW WHAT YOU WANT FROM ME BUT HERE IS THE SENSE COLLISION
+						}
+					}
+				}
+			}
+			for(int g = 0; g < a_map.numWalls(); ++g) {
+				if(SenseCollision(a_itemVec.GetItem(i), a_map.GetWall(g))) {
+					ResolveCollision(a_itemVec.GetItem(i), a_map.GetWall(g));
+				}
+
+			}
+			for(int g = 0; g < a_map.numFloors(); ++g) {
+				if(SenseCollision(a_itemVec.GetItem(i), a_map.GetFloor(g))) {
+					ResolveCollision(a_itemVec.GetItem(i), a_map.GetFloor(g));
+				}
+
+			}
 		}
 	}
 }
@@ -108,8 +137,8 @@ bool PhysicsSystem::SenseCollision(ItemBox &a_item, Terrain &a_terrain) {
 	float tempDist = 0.0f;
 	if(a_item.getProspectivePos().y < a_terrain.getPos().y+a_terrain.getBound().top) { // y,y,top
 		if(a_item.getProspectivePos().y > a_terrain.getPos().y+a_terrain.getBound().bottom-a_item.getBound().height) { //y,y,bottom
-			  ////////////////////////
-			 // POSITION INSIDE    //
+			////////////////////////
+			// POSITION INSIDE    //
 			////////////////////////
 			if(a_item.getProspectivePos().x < a_terrain.getPos().x+a_terrain.getBound().right+a_item.getBound().radius) {//x,x,right
 				if(a_item.getProspectivePos().x > a_terrain.getPos().x+a_terrain.getBound().left-a_item.getBound().radius) {//x,x,left
@@ -119,8 +148,8 @@ bool PhysicsSystem::SenseCollision(ItemBox &a_item, Terrain &a_terrain) {
 							//a_item.setVelocityY(0.0f);
 							//a_item.toggleGrounded(true);
 							return true;
-							  //////////////////////////
-							 // Player is inside     //
+							//////////////////////////
+							// Player is inside     //
 							//////////////////////////
 						}
 					}
@@ -130,8 +159,8 @@ bool PhysicsSystem::SenseCollision(ItemBox &a_item, Terrain &a_terrain) {
 
 
 
-			  /////////////////
-			 // CORNER      //
+			/////////////////
+			// CORNER      //
 			/////////////////
 			closestX = closestPoint(a_item.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
 			closestZ = closestPoint(a_item.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
@@ -173,8 +202,8 @@ bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 	float tempDist = 0.0f;
 	if(a_player.getProspectivePos().y < a_terrain.getPos().y+a_terrain.getBound().top) { // y,y,top
 		if(a_player.getProspectivePos().y > a_terrain.getPos().y+a_terrain.getBound().bottom-a_player.getBound().height) { //y,y,bottom
-			  ////////////////////////
-			 // POSITION INSIDE    //
+			////////////////////////
+			// POSITION INSIDE    //
 			////////////////////////
 			if(a_player.getProspectivePos().x < a_terrain.getPos().x+a_terrain.getBound().right+a_player.getBound().radius) {//x,x,right
 				if(a_player.getProspectivePos().x > a_terrain.getPos().x+a_terrain.getBound().left-a_player.getBound().radius) {//x,x,left
@@ -184,8 +213,8 @@ bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 							//a_player.setVelocityY(0.0f);
 							//a_player.toggleGrounded(true);
 							return true;
-							  //////////////////////////
-							 // Player is inside     //
+							//////////////////////////
+							// Player is inside     //
 							//////////////////////////
 						}
 					}
@@ -195,8 +224,8 @@ bool PhysicsSystem::SenseCollision(Player &a_player, Terrain &a_terrain) {
 
 
 
-			  /////////////////
-			 // CORNER      //
+			/////////////////
+			// CORNER      //
 			/////////////////
 			closestX = closestPoint(a_player.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
 			closestZ = closestPoint(a_player.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
@@ -265,8 +294,8 @@ bool PhysicsSystem::SenseCollision(Terrain &a_terrain, Bullet &a_bullet) {
 							//a_player.setVelocityY(0.0f);
 							//a_player.toggleGrounded(true);
 							return true;
-							  //////////////////////////
-							 // Player is inside     //
+							//////////////////////////
+							// Player is inside     //
 							//////////////////////////
 						}
 					}
@@ -320,7 +349,7 @@ bool PhysicsSystem::SenseCollision(Player& a_player, Player& a_player2) {
 
 
 bool  PhysicsSystem::ResolveCollision(Player& a_player, Player& a_player2){
-	
+
 	a_player.setProspectivePos(a_player.getPos());
 	a_player.setJumpCount(0);
 	return true;
@@ -491,7 +520,7 @@ bool PhysicsSystem::ResolveCollision(Player& a_player, Bullet &a_bullet) {
 
 bool PhysicsSystem::ResolveCollision(Terrain &a_terrain, Bullet &a_bullet) {
 	a_bullet.HitWall();
-	
+
 	return true;
 }
 

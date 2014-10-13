@@ -569,6 +569,11 @@ void PlayerVec::Render(DXFrame& DXVid) {
 }
 
 
+bool PlayerVec::GetActive(int a_index) {
+	return active[a_index];
+}
+
+
 void PlayerVec::ActivateAPlayer(Map& a_map) {
 	int random = rand() % a_map.numSpawn();
 	for(int i = 0; i < MAXPLAYERS; ++i) {

@@ -43,6 +43,7 @@ void ItemBox::ItemBoxInit(sPoint& spawn,PrimObj a_itemObj){
 	bounding.height = 0.25f;
 	bounding.radius = 0.25f;
 	part.LimbInit(); //for testing
+	rot = 0;
 }
 
 D3DXVECTOR3 ItemBox::getPos() {
@@ -84,7 +85,7 @@ void ItemBox::toggleGrounded(bool a_grounded) {
 
 void ItemBox::Update(float a_dt) {
 	float tempfloat;
-
+	rot += a_dt;
 	pos.x = prospectivePos.x;
 	pos.y = prospectivePos.y;
 	pos.z = prospectivePos.z;
@@ -103,7 +104,7 @@ void ItemBox::toggleActive(bool is_active){
 	active=is_active;
 }
 
-void ItemBox::Render(DXFrame& DXVid,float dt) {
+void ItemBox::Render(DXFrame& DXVid) {
 	RenInfo tempRen;
 	D3DXMATRIX TransMat, RotMat, locTransMat;
 	tempRen.type = primitive;
@@ -113,7 +114,7 @@ void ItemBox::Render(DXFrame& DXVid,float dt) {
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
-	D3DXMatrixRotationY(&RotMat, dt);
+	D3DXMatrixRotationY(&RotMat, rot);
 	D3DXMatrixTranslation(&locTransMat, 0, 0.25f, 0);
 	D3DXMatrixMultiply(&a_box.matrix, &RotMat, &locTransMat);
 	D3DXMatrixTranslation(&TransMat, pos.x, pos.y, pos.z);
@@ -153,13 +154,18 @@ void ItemVec::Update(inputState& a_input, double a_dt, Limbase part_list) {
 }
 
 
-void ItemVec::Render(DXFrame& DXVid,float dt) {
+void ItemVec::Render(DXFrame& DXVid) {
 
 	for(int i = 0; i < MAXITEMS; ++i) {
 		if(active[i]) {
-			a_itembox[i].Render(DXVid,dt);
+			a_itembox[i].Render(DXVid);
 		}
 	}
+}
+
+
+bool ItemVec::GetActive(int a_index) {
+	return active[a_index];
 }
 
 

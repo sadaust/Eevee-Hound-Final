@@ -15,7 +15,7 @@ private:
 public:
 	PhysicsSystem();
 	~PhysicsSystem();
-	void DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map);
+	void DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec, Map& a_map, ItemVec& a_itemVec);
 	bool SenseCollision(Player& a_player, Terrain &a_terrain);
 	bool SenseCollision(ItemBox& a_item, Terrain &a_terrain);
 	bool SenseCollision(Player& a_player, Bullet &a_bullet);
