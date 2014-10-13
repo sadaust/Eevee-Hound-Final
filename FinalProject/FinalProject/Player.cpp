@@ -180,6 +180,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 				if(getcheckItem()){
 					addLimb(ProsteticTestLimb);
 					togglecheckItem(false);
+					ProsteticTestLimb.setName("None");
 				}
 				// make bool switch here.
 				//
