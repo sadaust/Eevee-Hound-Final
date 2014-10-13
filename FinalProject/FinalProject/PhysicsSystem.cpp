@@ -357,12 +357,28 @@ bool  PhysicsSystem::ResolveCollision(Player& a_player, Player& a_player2){
 
 bool PhysicsSystem::ResolveCollision(Player& a_player, Terrain &a_terrain) {
 	float closestX = 0, closestZ = 0, distX = 0, distZ = 0;
-	if(a_terrain.getType() == FLOOR) {
+
+	// player is falling into the top
+	if(a_player.getPos().y >= a_terrain.getPos().y+a_terrain.getBound().top) { // PLAYER WAS ABOVE
+		
 		a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getBound().top,a_player.getProspectivePos().z));
 		a_player.toggleGrounded(true);
 		a_player.setVelocityY(0);
+		return true;
 	}
-	else if(a_terrain.getType() == WALL) {
+
+
+	// player is jumping into the bottom
+	if(a_player.getPos().y <= a_terrain.getPos().y+a_terrain.getBound().bottom-a_player.getBound().height) { // PLAYER WAS BELOW
+		a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getBound().bottom-a_player.getBound().height,a_player.getProspectivePos().z));
+		a_player.setVelocityY(0);
+		return true;
+	}
+
+
+	// player is running into the side
+	if(a_player.getPos().y <= a_terrain.getPos().y+a_terrain.getBound().top) { // y,y,top
+		if(a_player.getPos().y >= a_terrain.getPos().y+a_terrain.getBound().bottom-a_player.getBound().height) { //y,y,bottom  YOU WERE ALREADY ON WITHIN Y, AND THEREFORE HAD TO BE OUTSIDE
 		//if(a_player.getProspectivePos().x-(a_terrain.getPos().x+a_terrain.getStruct()->right)
 		closestX = closestPoint(a_player.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
 		closestZ = closestPoint(a_player.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
@@ -409,17 +425,91 @@ bool PhysicsSystem::ResolveCollision(Player& a_player, Terrain &a_terrain) {
 			if(distZ < 0 && distZ < distX) {
 				a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_player.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().front + a_player.getBound().radius));
 			}
+			}
 		}
-	}
-	else if(a_terrain.getType() == CEILING) {
+		return true;
 
 	}
-	else if(a_terrain.getType() == FLOORWALL) {
 
-	}
-	else if(a_terrain.getType() == FLOORCEILING) {
 
-	}
+
+
+
+	
+
+
+	
+
+	
+
+
+
+
+
+
+	//if(a_terrain.getType() == FLOOR) {
+	//	a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_terrain.getPos().y+a_terrain.getBound().top,a_player.getProspectivePos().z));
+	//	a_player.toggleGrounded(true);
+	//	a_player.setVelocityY(0);
+	//}
+	//else if(a_terrain.getType() == WALL) {
+	//	//if(a_player.getProspectivePos().x-(a_terrain.getPos().x+a_terrain.getStruct()->right)
+	//	closestX = closestPoint(a_player.getProspectivePos().x,a_terrain.getPos().x+a_terrain.getBound().left,a_terrain.getPos().x+a_terrain.getBound().right);
+	//	closestZ = closestPoint(a_player.getProspectivePos().z,a_terrain.getPos().z+a_terrain.getBound().back,a_terrain.getPos().z+a_terrain.getBound().front);
+	//	//distX = a_player.getProspectivePos().x-closestX;
+	//	//distZ = a_player.getProspectivePos().z-closestZ;
+
+
+	//	if(closestX == a_terrain.getPos().x + a_terrain.getBound().right && closestZ == a_terrain.getPos().z + a_terrain.getBound().front) { // RIGHT and FRONT are closest
+	//		distX = closestX-a_player.getProspectivePos().x; // closest minus pos for right
+	//		distZ = closestZ-a_player.getProspectivePos().z; // closest minus pos for front
+	//		if(distX < 0 && distX < distZ) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().right + a_player.getBound().radius, a_player.getProspectivePos().y, a_player.getProspectivePos().z));
+	//		}
+	//		if(distZ < 0 && distZ < distX) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_player.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().front + a_player.getBound().radius));
+	//		}
+	//	}
+	//	else if(closestX == a_terrain.getPos().x + a_terrain.getBound().right && closestZ == a_terrain.getPos().z + a_terrain.getBound().back) { // RIGHT and BACK are closest
+	//		distX = closestX-a_player.getProspectivePos().x; // closest minus pos for right
+	//		distZ = a_player.getProspectivePos().z-closestZ; // pos minus closest for back
+	//		if(distX < 0 && distX < distZ) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().right + a_player.getBound().radius, a_player.getProspectivePos().y, a_player.getProspectivePos().z));
+	//		}
+	//		if(distZ < 0 && distZ < distX) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_player.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().back - a_player.getBound().radius));
+	//		}
+	//	}
+	//	else if(closestX == a_terrain.getPos().x + a_terrain.getBound().left && closestZ == a_terrain.getPos().z + a_terrain.getBound().back) { // LEFT and BACK are closest
+	//		distX = a_player.getProspectivePos().x-closestX; // pos minus closest for left
+	//		distZ = a_player.getProspectivePos().z-closestZ; // pos minus closest for back
+	//		if(distX < 0 && distX < distZ) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().left - a_player.getBound().radius, a_player.getProspectivePos().y, a_player.getProspectivePos().z));
+	//		}
+	//		if(distZ < 0 && distZ < distX) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_player.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().back - a_player.getBound().radius));
+	//		}
+	//	}
+	//	else if(closestX == a_terrain.getPos().x + a_terrain.getBound().left && closestZ == a_terrain.getPos().z + a_terrain.getBound().front) { // LEFT and FRONT are closest
+	//		distX = a_player.getProspectivePos().x-closestX; // pos minus closest for left
+	//		distZ = closestZ-a_player.getProspectivePos().z; // clsest minus pos for front
+	//		if(distX < 0 && distX < distZ) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_terrain.getPos().x + a_terrain.getBound().left - a_player.getBound().radius, a_player.getProspectivePos().y, a_player.getProspectivePos().z));
+	//		}
+	//		if(distZ < 0 && distZ < distX) {
+	//			a_player.setProspectivePos(D3DXVECTOR3(a_player.getProspectivePos().x,a_player.getProspectivePos().y,a_terrain.getPos().z+a_terrain.getBound().front + a_player.getBound().radius));
+	//		}
+	//	}
+	//}
+	//else if(a_terrain.getType() == CEILING) {
+
+	//}
+	//else if(a_terrain.getType() == FLOORWALL) {
+
+	//}
+	//else if(a_terrain.getType() == FLOORCEILING) {
+
+	//}
 
 
 
