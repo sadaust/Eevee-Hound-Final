@@ -31,6 +31,7 @@ private:
 	D3DLIGHT9 m_Light;
 	PlayerVec playVec;
 	BulletVec bullVec;
+	ItemVec itemVec;
 	Map mapSys;
 	PhysicsSystem physSys;
 	cam camera[4];

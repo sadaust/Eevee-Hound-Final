@@ -44,6 +44,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	mapSys.LoadMap("TestMap.txt",resMan);
 	bullVec.Init(resMan);
 	playVec.Init(mapSys,resMan);
+	itemVec.Init(mapSys,resMan);
 
 	for(int i = 0; i < 4; ++i) {
 		camera[i].drawDist = 200.0f;
@@ -65,6 +66,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	/////////////////////////////////////////
 
 	playVec.ActivateAPlayer(mapSys);
+	itemVec.ActivateAItem(mapSys);
 
 
 	/////////////////////////////////////////
@@ -95,6 +97,7 @@ bool Game::update() {
 			input.getState(0,iState);
 			playVec.Update(iState, dt, partList, bullVec);
 			bullVec.Update(dt);
+			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys);
 			
 
@@ -113,6 +116,7 @@ void Game::draw() {
 		playVec.Render(DXVid);	// draws players
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map
+		itemVec.Render(DXVid,dt);  // draws items
 		for(int i = 0; i < 1; ++i) {
 			camera[i].cam_look_pos = playVec.GetPlayer(i).getPos();
 			camera[i].cam_look_pos.y = playVec.GetPlayer(i).getPos().y+1;
