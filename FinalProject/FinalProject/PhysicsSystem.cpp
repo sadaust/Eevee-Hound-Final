@@ -31,7 +31,7 @@ void PhysicsSystem::DoCollisions(PlayerVec& a_playerVec, BulletVec& a_bulletVec,
 		if(a_playerVec.GetActive(i)) {
 			if(a_playerVec.GetPlayer(i).isAlive()) { // if player A is alive
 				for(int g = 0; g < a_playerVec.GetNumPlayers(); ++g) { // PLAYER PLAYER COLLISION
-					if(i != g && a_playerVec.GetPlayer(g).isAlive()) { // if target player is alive and isn't player A
+					if(i != g && a_playerVec.GetPlayer(g).isAlive()&&a_playerVec.GetActive(g)) { // if target player is alive and isn't player A
 						if(SenseCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g))) { // if they're colliding
 							ResolveCollision(a_playerVec.GetPlayer(i), a_playerVec.GetPlayer(g)); // resolve the collision
 						}
@@ -353,6 +353,9 @@ bool  PhysicsSystem::ResolveCollision(Player& a_player, Player& a_player2){
 
 	a_player.setProspectivePos(a_player.getPos());
 	a_player.setJumpCount(0);
+	a_player.toggleGrounded(true);
+	a_player2.setJumpCount(0);
+	a_player2.toggleGrounded(true);
 	return true;
 }
 

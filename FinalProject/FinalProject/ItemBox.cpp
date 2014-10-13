@@ -145,7 +145,7 @@ void ItemVec::Init(Map& a_map, ResourceManager& resMan) {
 }
 
 
-void ItemVec::Update(inputState& a_input, double a_dt, Limbase part_list) {
+void ItemVec::Update(inputState* a_input, double a_dt, Limbase part_list) {
 	for(int i = 0; i < MAXITEMS; ++i) {
 		if(active[i]) {
 			a_itembox[i].Update(a_dt);
