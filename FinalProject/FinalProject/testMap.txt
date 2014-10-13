@@ -8,16 +8,28 @@ f 50 50 5 0 -10 0 1
 
 #North South East West wall order
 #outer quads
-f 55 75 5 65 -10 0 2
-f 55 75 5 -65 -10 0 2 
-f 75 55 5 0 -10 65 2
-f 75 55 5 0 -10 -65 2
+f 25 75 5 50 -10 0 2
+f 25 75 5 -50 -10 0 2 
+f 75 25 5 0 -10 50 2
+f 75 25 5 0 -10 -50 2
 
 #connecting bridge to quads
 f 5 5 1 30 -5 0 2
 f 5 5 1 -30 -5 0 2 
 f 5 5 1 0 -5 30 2
 f 5 5 1 0 -5 -30 2
+#quad to half mountain 1
+f 2 1 1 -4 -2 30 2
+f 2 1 1 -6 -4 33 2
+f 1 1 1 -4 -2 35 2
+f 2 1 1 -8 -1 37 2
+f 1 1 1 -10 2 38 2
+#quad to half mountain 2
+f 2 1 1 4 -2 -30 2
+f 2 1 1 6 -4 -33 2
+f 1 1 1 4 -2 -35 2
+f 2 1 1 8 -1 -37 2
+f 1 1 1 10 2 -38 2
 
 #staircase 1
 f 5 5 1 -10 -3 -15 1
@@ -32,6 +44,29 @@ f 5 5 1 0 -5 15 1
 f 5 5 1 -5 -6 15 1
 f 5 5 1 -5 -7 10 1
 
+#sidesteps for half mountains
+f2 2 1 17 0 11.5 1
+f2 2 1 -17 0 -11.5 1
+#second sidesteps for half mountains
+f1 2 1 22 2 12 1
+f1 2 1 -22 2 -12 1
+
+
+#arena pillars
+w2 2 9 -5 -7 7 3 3
+w2 2 9 -5 -7 -7 3
+w2 2 9 5 -7 7 3 3
+w2 2 9 5 -7 -7 3 3
+
+#arena floor
+f15 15 2 0 -0 0 3
+
+
+#outer wall
+w125 20 100 0 -20 72.5 2
+w125 20 100 0 -20 -72.5 2
+w20 165 100 -72.5 -20 0 2
+w20 165 100 72.5 -20 0 2
 
 #mountain like segment walls
 w25 25 100 50 -20 50 2
@@ -44,6 +79,32 @@ f25 25 1 -50 30.5 -50 2
 f25 25 1 50 30.5 -50 2
 f25 25 1 -50 30.5 50 2
 
+#mountian like segmant wallways 1
+f25 2 1 50 8 36.5 2
+f3 2 1 55 12 36.5 2
+f1 2 1 48 16 36.5 2
+f1 2 1 48 20 36.5 2
+f1 2 1 48 24 36.5 2
+f1 2 1 55 27 36.5 2
+
+#mountian like segmant wallways 2
+f25 2 1 -50 8 -36.5 2
+f3 2 1 -55 12 -36.5 2
+f1 2 1 -48 16 -36.5 2
+f1 2 1 -48 20 -36.5 2
+f1 2 1 -48 24 -36.5 2
+f1 2 1 -55 27 -36.5 2
+
+#mountain bridge walkway 1
+f75 2 1 0 30.5 -50 2
+f2 75 1 -50 30.5 0 2
+#mountain bridge walkway 2
+f75 2 1 0 30.5 50 2
+f2 75 1 50 30.5 0 2
+
+#bottom floor
+f125 165 10 0 -70 0 2
+ 
 #half mountains walls
 w25 25 50 25 -20 25 2
 w25 25 50 -25 -20 -25 2
