@@ -36,7 +36,8 @@ Player::~Player() {
 }
 
 
-void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
+void Player::Init(sPoint& spawn, PrimObj a_primDefs[],SoundFrame *sound) {
+	sFrame = sound;
 	maxHealth = 100;
 	curHealth = 100;
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
@@ -63,6 +64,13 @@ void Player::Init(sPoint& spawn, PrimObj a_primDefs[]) {
 	angle = 0;
 	spectator = false;
 	ProsteticTestLimb.setName("None");
+	effectprop.pos.x=pos.x;
+	effectprop.pos.y=pos.y;
+	effectprop.pos.z=pos.z;
+	effectprop.vel.x=velocityXZ.x;
+	effectprop.vel.y=velocityXZ.y;
+	effectprop.up.y=velocityY;
+	
 }
 
 
@@ -91,7 +99,7 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 }
 
 
-void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec, ItemVec &a_items) {
+void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec, ItemVec &a_items,ResourceManager& resMan,SoundFrame* sFrame) {
 	float tempfloat;
 	tempfloat = a_state.rX;
 	facing += (tempfloat*a_dt)*turnspeedX;
@@ -118,6 +126,9 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			pos.x = prospectivePos.x;
 			pos.y = prospectivePos.y;
 			pos.z = prospectivePos.z;
+			effectprop.pos.x=pos.x;
+			effectprop.pos.y=pos.y;
+			effectprop.pos.z=pos.z;
 
 
 			////////////////////////////////////////
@@ -128,15 +139,19 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 
 			tempfloat = a_state.lX;
 			velocityXZ.x = tempfloat*a_dt*speed;
+			effectprop.vel.x=velocityXZ.x;
 
 			tempfloat = a_state.lY;
 			velocityXZ.y = tempfloat*a_dt*speed;
+			effectprop.vel.z=velocityXZ.y;
 
 			velocityY -= gravity*a_dt;
 			if(velocityY < -terminalVelocity)
 				velocityY = -terminalVelocity;
 			if(velocityY > terminalVelocity)
 				velocityY = terminalVelocity;
+			effectprop.up.y=velocityY;
+
 			//if(pos.y <= 0 && velocityY <= 0)
 			//	velocityY = 0;
 			/////////////////////////////////////
@@ -155,7 +170,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			//left attack Left Trigger
 			if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
 				if (!Limbs.getLarm()==0){
-					part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,facing,angle);
+					part_list.CaseAction(Limbs.getLarm(),*this,a_state,a_bulvec,facing,angle,resMan,sFrame);
 				}
 			}
 			//right attack Right Trigger
@@ -166,21 +181,28 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 					tempvec.x = boundingCyl.radius; // x
 					rotate2Dvector(&tempvec, D3DXToRadian(-facing));
 					a_bulvec.ActivateABullet(D3DXVECTOR3(tempvec.x + pos.x, 1.4f + pos.y, tempvec.y +pos.z),D3DXVECTOR3(0,0,-BulletSpeed),0,facing,angle,MeleeDefaultLifeSpan, testDamage);
+					
+					sFrame->setListenProp(0,effectprop);
+					soundeffect = resMan.loadSound("Bullet.mp3",1,5,1);
+					sFrame->Play(*soundeffect,getPos().x,getPos().y,getPos().z,getVelocityXZ().x,getVelocityY(),getVelocityXZ().y);
 				}
 				else if(!Limbs.getRarm()==0){
-					part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle);
+					part_list.CaseAction(Limbs.getRarm(),*this,a_state,a_bulvec,facing,angle,resMan,sFrame);
 				}
 			}
 			// jump  A
 			if(a_state.buttons[binds::jump] && onGround && !a_state.buttonLast[binds::jump]) {
 				velocityY = jumpHeight;
 				onGround = false;
+				sFrame->setListenProp(0,effectprop);
+				soundeffect = resMan.loadSound("Jump.mp3",1,5,1);
+				sFrame->Play(*soundeffect,getPos().x,getPos().y,getPos().z,getVelocityXZ().x,getVelocityY(),getVelocityXZ().y);
 			}
 			//leg power B
 			if(a_state.buttons[binds::legPower]&&!a_state.buttonLast[binds::legPower]) {
 				//get part !0 
 				if (!Limbs.getLeg()==0){
-					part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,facing,angle);
+					part_list.CaseAction(Limbs.getLeg(),*this,a_state,a_bulvec,facing,angle,resMan,sFrame);
 					// find that part 
 					// execute that function
 				}
@@ -598,12 +620,12 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 }
 
 
-void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items) {
+void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items,ResourceManager& resMan,SoundFrame* sFrame) {
 	int temp, maxHp, curHp;
 	temp = maxHp = curHp = 0;
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]) {
-			players[i].Update(a_input[i], a_dt, part_list, a_bulvec,a_items);
+			players[i].Update(a_input[i], a_dt, part_list, a_bulvec,a_items,resMan,sFrame);
 			if(players[i].isSpectator()) {
 				if(players[i].getMaxHealth() != players[i].getHealth()) {
 					maxHp = players[i].getMaxHealth();
@@ -661,7 +683,7 @@ void PlayerVec::ActivateAPlayer(Map& a_map) {
 		if(!active[i]) {
 
 
-			players[i].Init(a_map.GetSpawn(random),playerDefaultPrims);
+			players[i].Init(a_map.GetSpawn(random),playerDefaultPrims,sFrame);
 			active[i] = true;
 			++numPlayers;
 			return;

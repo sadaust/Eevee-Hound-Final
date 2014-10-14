@@ -42,6 +42,9 @@ private:
 	cylinder boundingCyl;
 	bool onGround, checkItem, R_arm, alive, spectator;
 	int jumpCount;
+	listenProp effectprop;
+	SoundFrame *sFrame;
+	SoundStruct *soundeffect;
 
 	Limb ProsteticTestLimb;
 
@@ -69,12 +72,13 @@ private:
 public:
 	Player();
 	~Player();
-	void Init(sPoint& spawn, PrimObj a_primDefs[]);
-	void Update(inputState& a_input, double a_dt,Limbase& part_list,BulletVec &a_bulvec,ItemVec &a_item);
+	void Init(sPoint& spawn, PrimObj a_primDefs[],SoundFrame* sound);
+	void Update(inputState& a_input, double a_dt,Limbase& part_list,BulletVec &a_bulvec,ItemVec &a_item,ResourceManager& resMan,SoundFrame* sFrame);
 	void Render(DXFrame& DXVid);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
+	listenProp getEffectprop(){return effectprop;}
 	float getFacing();
 	float getAngle();
 	float getMoving();
@@ -129,11 +133,12 @@ private:
 	int numPlayers;
 	PrimObj playerDefaultPrims[numPlayerPrims]; // 0 is body, 1 is head, 2 and 3 are arms, 4 and 5 are legs
 	D3DMATERIAL9  PlayMat; // used for the player primobj's
+	SoundFrame* sFrame;
 public:
 	PlayerVec();
 	~PlayerVec();
 	void Init(Map& a_man, ResourceManager& resMan);
-	void Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items);
+	void Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items,ResourceManager& resMan,SoundFrame* sFrame);
 	void Render(DXFrame& DXVid);
 	bool GetActive(int a_index);
 	void ActivateAPlayer(Map& a_map);
