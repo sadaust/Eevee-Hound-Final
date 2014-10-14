@@ -78,24 +78,29 @@ Limb Limbase::getPart(int partnum){
 
 void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle){
 	//partNumber=18;
+	int tempInt = 0;
 	switch (part[partNumber-1].getPartType()){
 	case arm:
 		{
 			if (part[partNumber-1].getPartName()=="Pheonix"){
 				//shoot fireball
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle);
+				tempInt = 0;
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt);
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger"){
 				//rock throw
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle);
+				tempInt = 2;
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt);
 			}
 			else if (part[partNumber-1].getPartName()=="Bear"){
 				//bear grab
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle);
+				tempInt = 3;
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt);
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle"){
 				//lazer beam
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle);
+				tempInt = 1;
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt);
 			}
 			else break;
 		}
@@ -173,23 +178,23 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 
 }
 
-void Limbase::armfire(Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle){
+void Limbase::armfire(Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle,int a_type){
 	if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
-		//D3DXVECTOR3 tempvec = p_data.getPos();
-		//tempvec.y += 1.5f;
-		D3DXVECTOR2 tempvec;
-		tempvec.y = p_data.getBound().radius; // z
-		tempvec.x = p_data.getBound().radius; // x
-		rotate2Dvector(&tempvec, D3DXToRadian(-p_data.getFacing()));
-		testBullVec.ActivateABullet(D3DXVECTOR3(tempvec.x + p_data.getPos().x, 1.4f + p_data.getPos().y, tempvec.y + p_data.getPos().z),D3DXVECTOR3(0,0,-BulletSpeed),2,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
-		}
-	else if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
 		//D3DXVECTOR3 tempvec = p_data.getPos();
 		//tempvec.y += 1.5f;
 		D3DXVECTOR2 tempvec;
 		tempvec.y = p_data.getBound().radius; // z
 		tempvec.x = -p_data.getBound().radius; // x
 		rotate2Dvector(&tempvec, D3DXToRadian(-p_data.getFacing()));
-		testBullVec.ActivateABullet(D3DXVECTOR3(tempvec.x + p_data.getPos().x, 1.4f + p_data.getPos().y, tempvec.y + p_data.getPos().z),D3DXVECTOR3(0,0,-BulletSpeed),2,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+		testBullVec.ActivateABullet(D3DXVECTOR3(tempvec.x + p_data.getPos().x, 1.4f + p_data.getPos().y, tempvec.y + p_data.getPos().z),D3DXVECTOR3(0,0,-BulletSpeed),a_type,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
+		}
+	else if(a_state.buttons[binds::rightAttack]&&!a_state.buttonLast[binds::rightAttack]) { 
+		//D3DXVECTOR3 tempvec = p_data.getPos();
+		//tempvec.y += 1.5f;
+		D3DXVECTOR2 tempvec;
+		tempvec.y = p_data.getBound().radius; // z
+		tempvec.x = +p_data.getBound().radius; // x
+		rotate2Dvector(&tempvec, D3DXToRadian(-p_data.getFacing()));
+		testBullVec.ActivateABullet(D3DXVECTOR3(tempvec.x + p_data.getPos().x, 1.4f + p_data.getPos().y, tempvec.y + p_data.getPos().z),D3DXVECTOR3(0,0,-BulletSpeed),a_type,a_rot,a_angle,RangedDefaultLifeSpan, testDamage);
 		}
 }

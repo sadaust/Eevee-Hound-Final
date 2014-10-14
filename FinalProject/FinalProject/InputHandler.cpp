@@ -22,6 +22,8 @@ InputHandler::InputHandler() {
 	setBind(binds::left,DIK_A);
 	setBind(binds::right,DIK_D);
 	setBind(binds::sprint,DIK_LSHIFT);
+	setBind(binds::leftSelect,DIK_Z);
+	setBind(binds::rightSelect,DIK_X);
 	//set sensitivity
 	for(int i = 0;i<4;++i) {
 		sens[i].xSens = 1;
@@ -90,7 +92,7 @@ void InputHandler::init(HWND& hWnd,HINSTANCE& hInst) {
 	m_pDIMouse->SetCooperativeLevel(hWnd,DISCL_FOREGROUND | DISCL_EXCLUSIVE);
 
 	for(int i = 0; i < 5;++i) {
-		for(int z = 0; z < 9; ++z) {
+		for(int z = 0; z < binds::last; ++z) {
 			state[i].buttonLast[z] = false;
 			state[i].buttons[z] = false;
 		}
@@ -129,13 +131,13 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 	XINPUT_STATE xInputState;
 	float temp;
 	//clear input
-	for(int i = 0; i < 9;++i)
+	for(int i = 0; i < binds::last;++i)
 		out.buttons[i] = false;
 	out.lX = 0;
 	out.lY = 0;
 	out.rX = 0;
 	out.rY = 0;
-	for(int i = 0; i < 9; ++i) {
+	for(int i = 0; i < binds::last; ++i) {
 		out.buttonLast[i] = state[controllerNum].buttons[i];
 	}
 	//get input
@@ -186,6 +188,10 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			out.buttons[binds::rightAttack] = xInputState.Gamepad.bRightTrigger > fireTriggerPoint;
 			//get right alt attack
 			out.buttons[binds::rightAltAttack] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_RIGHT_SHOULDER;
+			//get left select
+			out.buttons[binds::leftSelect] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_DPAD_LEFT;
+			//get right select
+			out.buttons[binds::rightSelect] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_DPAD_RIGHT; 
 			state[controllerNum] = out;
 			return true;
 		}
@@ -216,7 +222,7 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 		else if(getBoundKey(binds[binds::left])) {
 			out.lX = -temp;
 		}
-		for(int i = 0; i < 9; ++i) {
+		for(int i = 0; i < binds::last; ++i) {
 			out.buttons[i] = getBoundKey(binds[i]);
 		}
 		state[controllerNum] = out;

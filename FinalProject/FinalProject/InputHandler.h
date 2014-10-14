@@ -25,6 +25,8 @@ namespace binds {
 		left,
 		right,
 		sprint,
+		leftSelect,
+		rightSelect,
 		last
 	};
 };
@@ -34,8 +36,8 @@ struct inputState {
 	float lY;
 	float rX;
 	float rY;
-	bool buttons[9];
-	bool buttonLast[9];
+	bool buttons[binds::last];
+	bool buttonLast[binds::last];
 };
 
 struct sensitivity {
