@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Bullet" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAGEAAgAhAggQAAAAAAIACAAQoAQUEGAQiAABQAAI=</HashCode>
+      <FileName>Bullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BulletVec" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEQACAAAAIAAAAAAAAACAQAAAAAAAAgAABAKAAgAAQA=</HashCode>
+      <FileName>Bullet.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXFrame" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQ4AASRUAGAIAA8AAgCQBSIAYBhQAIIAR1cAQAwgACQ=</HashCode>
+      <FileName>DXFrame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAQkAQBBIIAAIAgAoAAATBAJIBIIQgBAgEAAg=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameMode" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UAIAAAgAACAAAAAAAAAAAAAAAANBAAAAQgQBAgEUAAA=</HashCode>
+      <FileName>GameMode.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HUD" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAACBAAAAAAAA=</HashCode>
+      <FileName>HUD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputHandler" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAQAiAAAAAAAEJBAiACAAAAIKAQAIMAARAEAAFAAI=</HashCode>
+      <FileName>InputHandler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemBox" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIYACACAQAgABCIACAAAAKBCIAAKEAAAABwgIAAQSAE=</HashCode>
+      <FileName>ItemBox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemVec" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAYAAAAAAEAAAgAASAAAAAAAAAAAABAKKEQAAAA=</HashCode>
+      <FileName>ItemBox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Limb" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAgAAAAAAEAAAAABQFAABgAAAAAIAACAA=</HashCode>
+      <FileName>Limb.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Limbase" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAIAAQAACAAAIAAAAAQICAACAAAgAAAAAAAIAA=</HashCode>
+      <FileName>Limbase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACAEAAAEBAAACAAAAAIAFMBEAAiAAAAAIAIAQAUAAA=</HashCode>
+      <FileName>Map.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Screen" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAJAIAIAAAAAAAAAAEAAACAAAAQAA=</HashCode>
+      <FileName>Menu.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Menu" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAABAAgAAAAAAAAAAAAAIgAAAAAACAAAAAAA=</HashCode>
+      <FileName>Menu.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhysicsSystem" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAABAAAAAAAgQAAAAABAABAAAAAAA=</HashCode>
+      <FileName>PhysicsSystem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJ+gSFCJRFhgBAKCAEBCAKAQBACKAQ6VcRRzAelaABA=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerVec" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAAAAAAEAAACACEAAAAAAACAQAAQIBAKIAgAAAA=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerLimbs" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kAEIAQAABUEQAIQAgAABAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>PlayerLimbs.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenVector" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAAAIAAAAgAAAAAQAAAAAIAAAAAAAAYQAACAAA=</HashCode>
+      <FileName>RenVector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ResourceManager" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAIABAAAACwAABqANAABAAAIAIBAAIAAFAIIAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundFrame" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAAAAAAAAIAAAAAAEMAAAAAQAQAEwAgEgAACAwAkAAA=</HashCode>
+      <FileName>SoundFrame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sPoint" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAAAAAAAAAAAJACAAAoAAAACAAQIAAEAAA=</HashCode>
+      <FileName>spawnPoint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Terrain" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAIAAAQAJAACgAEACAAAAAAA=</HashCode>
+      <FileName>Terrain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="cam" Collapsed="true">
+    <Position X="2.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAABAAAAAAQAAAAEAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>DXFrame.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="view" Collapsed="true">
+    <Position X="4" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>DXFrame.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="inputState" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABYAAAAAAAAIAAAAAgAAgAAAAAAAA=</HashCode>
+      <FileName>InputHandler.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="sensitivity" Collapsed="true">
+    <Position X="7.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAIAAA=</HashCode>
+      <FileName>InputHandler.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Button" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAIAAAAAAAAAAAIAAAgAAAAAAA=</HashCode>
+      <FileName>Menu.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="RenInfo" Collapsed="true">
+    <Position X="4" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAAAABACAAAAAAAAAAAAA=</HashCode>
+      <FileName>RenVector.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PrimStruct" Collapsed="true">
+    <Position X="2.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAAIBAAgQABAAgAAAAIAAAAAAAAAQAAgAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TextureStruct" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAABgAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ModelStruct" Collapsed="true">
+    <Position X="5.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAEAEAAAAAAAIAAgAAAAAABAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SoundStruct" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAEAAAAgAAAAAACAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MusicStruct" Collapsed="true">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PrimObj" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAEAAAAAAAgAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ModelObj" Collapsed="true">
+    <Position X="4" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABCAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SpriteObj" Collapsed="true">
+    <Position X="4" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAwAAAAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="frect" Collapsed="true">
+    <Position X="7.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAgAAAAIAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TextStruct" Collapsed="true">
+    <Position X="7.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIACAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex" Collapsed="true">
+    <Position X="2.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>ResDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SpriteStruct" Collapsed="true">
+    <Position X="5.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACIAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResourceDefinitions.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="resStruct" Collapsed="true">
+    <Position X="5.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAFAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cylinder" Collapsed="true">
+    <Position X="5.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShapeDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cube" Collapsed="true">
+    <Position X="4" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAAABAAAAAAAAgAAAAIAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>ShapeDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="sphere" Collapsed="true">
+    <Position X="2.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShapeDefs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="listenProp" Collapsed="true">
+    <Position X="2.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAACAAAIAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>SoundFrame.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="BulletType" Collapsed="true">
+    <Position X="2.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAACAAAAABAAACAA=</HashCode>
+      <FileName>Bullet.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="gameState" Collapsed="true">
+    <Position X="5.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAABAAAAAI=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="gameModeState" Collapsed="true">
+    <Position X="4" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAACAAAAAAAAAAAAgAAAAAQBAAAAAAAAA=</HashCode>
+      <FileName>GameMode.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Limbtype" Collapsed="true">
+    <Position X="7.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAACAAAAAgQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Limb.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="RenType" Collapsed="true">
+    <Position X="0.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQAAAAAAAAAAAAAAAAAAAAAAABAAAAAIAAAAAAAIAAA=</HashCode>
+      <FileName>RenVector.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="resType" Collapsed="true">
+    <Position X="2.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAABAAAAAAAAAAAAAAAAAgAEAAAAAABIAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TerrainType" Collapsed="true">
+    <Position X="4" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAABQAAAAAAAAAQAAAAAACAA=</HashCode>
+      <FileName>Terrain.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="binds::bindList" Collapsed="true">
+    <Position X="0.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAgEIAAAgAAAAgAAAIAAgAABIAAAABCAAAAAAogI=</HashCode>
+      <FileName>InputHandler.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

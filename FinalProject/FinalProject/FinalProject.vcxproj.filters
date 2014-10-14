@@ -139,6 +139,7 @@
     <None Include="fmodex.dll">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="testMap.txt">
