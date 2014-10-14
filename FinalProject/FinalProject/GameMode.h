@@ -17,6 +17,7 @@ private:
 	Map* level;
 	DXFrame* render;
 	double timeLeft;
+	double light;
 	int warmUpMins;
 	int roundMins;
 	int playersAlive;
@@ -28,5 +29,6 @@ public:
 	double getTime();
 	int getAliveCount();
 	void Start();
+	double getLight() {return light;}
 	void Restart(PlayerVec& playVec);
 };

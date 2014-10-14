@@ -9,9 +9,9 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	input.init(hWnd,hInst);
 
 	// Ambient light color emitted from this light
-	m_Light.Ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+	m_Light.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);
 	// Diffuse light color emitted from this light
-	m_Light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light.Diffuse = D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f);
 	// Specular light color emitted from this light
 	m_Light.Specular = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 	// Light Type (Point) Requires: Position, Range, Attenuation
@@ -161,6 +161,9 @@ void Game::draw() {
 			DXVid.setViewCount(4);
 			break;
 		}
+		m_Light.Phi = D3DXToRadian(gameRules.getLight());
+		m_Light.Theta = D3DXToRadian(gameRules.getLight()+20);
+		DXVid.setLight(0,&m_Light);
 		playVec.Render(DXVid);	// draws players
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map

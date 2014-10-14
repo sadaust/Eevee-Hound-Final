@@ -5,6 +5,7 @@ GameMode::GameMode() {
 	warmUpMins = 2;
 	roundMins = 15;
 	playersAlive = 0;
+	light = 70;
 }
 
 void GameMode::intit(Map* map,DXFrame* DXVid,int warmUp,int round) {
@@ -52,6 +53,7 @@ void GameMode::update(double dt,PlayerVec& playVec) {
 				}
 			} else if(curState == end) {
 				Restart(playVec);
+				light = 70;
 			}
 		}
 	} else if(curState == battle||curState == transition) {
@@ -68,13 +70,16 @@ void GameMode::update(double dt,PlayerVec& playVec) {
 		}
 		if(curState == transition) {
 			timeLeft -= dt;
+			light -= dt;
 			if(timeLeft <= 0) {
+				light = 10;
 				curState = battle;
 				timeLeft = 0;
 			}
 		}
 		if(playersAlive <= 1) {
 			curState = end;
+			light = 70;
 			timeLeft = 30;
 		}
 	} 
