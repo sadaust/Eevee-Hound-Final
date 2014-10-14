@@ -91,7 +91,7 @@ void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle) {
 }
 
 
-void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec) {
+void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletVec &a_bulvec, ItemVec &a_items) {
 	float tempfloat;
 	tempfloat = a_state.rX;
 	facing += (tempfloat*a_dt)*turnspeedX;
@@ -235,6 +235,7 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			if(curHealth <= 0) {
 				alive = false;
 				timer = 3;
+				a_items.ActivateAItem(*this,part_list);
 			}
 		} else {
 			//do if dead
@@ -597,12 +598,12 @@ void PlayerVec::Init(Map& a_map, ResourceManager& resMan) {
 }
 
 
-void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec) {
+void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items) {
 	int temp, maxHp, curHp;
 	temp = maxHp = curHp = 0;
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]) {
-			players[i].Update(a_input[i], a_dt, part_list, a_bulvec);
+			players[i].Update(a_input[i], a_dt, part_list, a_bulvec,a_items);
 			if(players[i].isSpectator()) {
 				if(players[i].getMaxHealth() != players[i].getHealth()) {
 					maxHp = players[i].getMaxHealth();

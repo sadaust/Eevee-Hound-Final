@@ -26,10 +26,9 @@ ItemBox::ItemBox(){
 	//active=true;
 }
 
-void ItemBox::ItemBoxInit(sPoint& spawn,PrimObj a_itemObj){
+void ItemBox::ItemBoxInit(sPoint& spawn,PrimObj a_itemObj,Limbase &a_limbase){
 	//(float a_x, float a_y, float a_z) 
 	a_box=a_itemObj;
-	part.LimbInit();
 	velocityY=0;
 	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
 	onGround=false;
@@ -42,7 +41,27 @@ void ItemBox::ItemBoxInit(sPoint& spawn,PrimObj a_itemObj){
 	prospectivePos.z = pos.z;
 	bounding.height = 0.25f;
 	bounding.radius = 0.25f;
-	part.LimbInit(); //for testing
+	
+	part=a_limbase.getPartRan();
+	
+	rot = 0;
+}
+
+void ItemBox::ItemBoxInit(Player& a_player, PrimObj a_itemObj,Limbase &a_limbase){
+	a_box=a_itemObj;
+	velocityY=0;
+	velocityXZ = D3DXVECTOR2(0.0f,0.0f);
+	onGround=false;
+	active=true;
+	pos.x = a_player.getPos().x;
+	pos.y = a_player.getPos().y;
+	pos.z = a_player.getPos().z;
+	prospectivePos.x = pos.x;
+	prospectivePos.y = pos.y;
+	prospectivePos.z = pos.z;
+	bounding.height = 0.25f;
+	bounding.radius = 0.25f;
+	part=a_limbase.getPartRan();
 	rot = 0;
 }
 
@@ -169,20 +188,29 @@ bool ItemVec::GetActive(int a_index) {
 }
 
 
-void ItemVec::ActivateAItem(Map& a_map) {
+void ItemVec::ActivateAItem(Map& a_map,Limbase &a_limbase) {
 	int random = rand() % a_map.numSpawn();
 	for(int i = 0; i < MAXITEMS; ++i) {
 		if(!active[i]) {
 			
 
-			a_itembox[i].ItemBoxInit(a_map.GetSpawn(random),itemObj);
+			a_itembox[i].ItemBoxInit(a_map.GetSpawn(random),itemObj,a_limbase);
 			active[i] = true;
 			++numItems;
 			return;
 		}
 	}
 }
-
+void ItemVec::ActivateAItem(Player& a_player,Limbase &a_limbase){
+	for(int i = 0; i < MAXITEMS; ++i) {
+		if(!active[i]) {
+			a_itembox[i].ItemBoxInit(a_player,itemObj,a_limbase);
+			active[i] = true;
+			++numItems;
+			return;
+		}
+	}
+}
 
 void ItemVec::DeactivateAItem(int a_index) {
 	active[a_index] = false;

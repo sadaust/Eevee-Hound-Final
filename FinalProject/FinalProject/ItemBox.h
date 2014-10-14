@@ -5,8 +5,10 @@
 #include "Limbase.h"
 #include "spawnPoint.h"
 #include "Map.h"
+#include "Player.h"
 
 class Limbase;
+class Player;
 
 const int MAXITEMS = 30;
 
@@ -24,7 +26,8 @@ private:
 
 public:
 	ItemBox();
-	void ItemBoxInit(sPoint& spawn, PrimObj a_primObj);
+	void ItemBoxInit(sPoint& spawn, PrimObj a_primObj,Limbase &a_limbase);
+	void ItemBoxInit(Player& a_player, PrimObj a_primObj,Limbase &a_limbase);
 		//(float a_x, float a_y, float a_z);
 	D3DXVECTOR3 getPos();
 	D3DXVECTOR3 getProspectivePos();
@@ -61,7 +64,8 @@ public:
 	void Update(inputState* a_input, double a_dt, Limbase part_list);
 	void Render(DXFrame& DXVid);
 	bool GetActive(int a_index);
-	void ActivateAItem(Map& a_map);
+	void ActivateAItem(Map& a_map,Limbase &a_limbase);
+	void ActivateAItem(Player& a_player,Limbase &a_limbase);
 	void DeactivateAItem(int a_index);
 	ItemBox& GetItem(int a_index);
 	int GetNumItems();

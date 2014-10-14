@@ -77,7 +77,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 		}
 	}
 
-	itemVec.ActivateAItem(mapSys);
+	itemVec.ActivateAItem(mapSys,partList);
 
 
 	/////////////////////////////////////////
@@ -131,7 +131,7 @@ bool Game::update() {
 					}
 				}
 			}
-			playVec.Update(iState, dt, partList, bullVec);
+			playVec.Update(iState, dt, partList, bullVec,itemVec);
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);

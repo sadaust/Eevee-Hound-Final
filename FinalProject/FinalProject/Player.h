@@ -14,6 +14,7 @@
 class Limbase;
 class ItemBox;
 class BulletVec;
+class ItemVec;
 
 void rotate2Dvector(D3DXVECTOR2* a_vector, float a_angle);
 void rotate3Dvector(D3DXVECTOR3* a_vector, float a_rot, float a_angle);
@@ -69,7 +70,7 @@ public:
 	Player();
 	~Player();
 	void Init(sPoint& spawn, PrimObj a_primDefs[]);
-	void Update(inputState& a_input, double a_dt,Limbase& part_list,BulletVec &a_bulvec);
+	void Update(inputState& a_input, double a_dt,Limbase& part_list,BulletVec &a_bulvec,ItemVec &a_item);
 	void Render(DXFrame& DXVid);
 	void testUpdate(float a_x, float a_z, float a_rot);
 	D3DXVECTOR3 getPos();
@@ -132,7 +133,7 @@ public:
 	PlayerVec();
 	~PlayerVec();
 	void Init(Map& a_man, ResourceManager& resMan);
-	void Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec);
+	void Update(inputState* a_input, double a_dt, Limbase part_list,BulletVec &a_bulvec,ItemVec &a_items);
 	void Render(DXFrame& DXVid);
 	bool GetActive(int a_index);
 	void ActivateAPlayer(Map& a_map);

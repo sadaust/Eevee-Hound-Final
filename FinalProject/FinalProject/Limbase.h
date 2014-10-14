@@ -12,8 +12,8 @@
 class Player;
 class BulletVec;
 
-#define NUMPARTS 20
-
+#define NUMPARTS 16
+#define TECHFAIR 6
 
 
 class Limbase {
@@ -27,6 +27,6 @@ public:
 	Limb getPartRan();
 	Limb getPart(int);
 	void CaseAction(int,Player&,inputState&,BulletVec&,float& a_rot,float& a_angle);
-	void armfire(Player&,inputState&,BulletVec&,float& a_rot,float& a_angle,int a_type);
-	//~Limbase();
+	void armfire(Player&,inputState&,BulletVec&,float& a_rot,float& a_angle,int a_type,int a_damage);
+	~Limbase();
 };

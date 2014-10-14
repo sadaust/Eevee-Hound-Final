@@ -29,7 +29,9 @@ void Bullet::Update(double a_dt) {
 	pos.x = prospectivePos.x;
 	pos.y = prospectivePos.y;
 	pos.z = prospectivePos.z;
-	
+	if(a_bultype==boulder){
+		prospectivePos.y -= gravity*a_dt*0.4f;
+	}
 	prospectivePos.x += velocity.x*a_dt;
 	prospectivePos.y += velocity.y*a_dt;
 	prospectivePos.z += velocity.z*a_dt;
