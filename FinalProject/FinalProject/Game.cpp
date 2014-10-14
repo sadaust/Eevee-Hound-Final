@@ -63,6 +63,19 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	camera[2] = camera[0];
 	camera[3] = camera[0];
 
+	//tempProp.pos.x = temp.cam_pos.x;
+	//tempProp.pos.y = temp.cam_pos.y;
+	//tempProp.pos.z = temp.cam_pos.z;
+	//tempProp.up.x = temp.cam_up_vec.x;
+	//tempProp.up.y = temp.cam_up_vec.y;
+	//tempProp.up.z = temp.cam_up_vec.z;
+	//tempProp.vel.x = tempProp.vel.y = tempProp.vel.z = 0;
+	//tempProp.forward.x = tempProp.forward.y = tempProp.forward.z = 0;
+	//sFrame.setListenProp(0,tempProp);
+	//testSound = resMan.loadSound("plinkhit.wav",1,5,1);
+	backMusic = resMan.loadMusic("battle.mp3",0.10f);
+	sFrame.PlayStream(*backMusic,false);
+
 	/////////////////////////////////////////
 	players = 0;
 	for(int i = 0; i < 5; ++i) {
@@ -131,7 +144,7 @@ bool Game::update() {
 					}
 				}
 			}
-			playVec.Update(iState, dt, partList, bullVec,itemVec);
+			playVec.Update(iState, dt, partList, bullVec,itemVec,resMan,&sFrame);
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);

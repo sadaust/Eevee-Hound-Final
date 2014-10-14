@@ -71,7 +71,7 @@ Limb Limbase::getPart(int partnum){
 	return part[partnum];
 }
 
-void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle){
+void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle,ResourceManager &resMan,SoundFrame* sFrame){
 	//partNumber=18;
 	int tempInt = 0;
 	int tempdamage=0;
@@ -82,25 +82,25 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 				//shoot fireball
 				tempInt = 0;
 				tempdamage=2;
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage);
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage,resMan,sFrame);
 			}
 			else if (part[partNumber-1].getPartName()=="Tiger Arm"){
 				//rock throw
 				tempInt = 2;
 				tempdamage=15;
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage);
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage,resMan,sFrame);
 			}
 			else if (part[partNumber-1].getPartName()=="Bear Arm"){
 				//bear grab
 				tempInt = 3;
 				tempdamage=5;
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage);
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage,resMan,sFrame);
 			}
 			else if (part[partNumber-1].getPartName()=="Turtle Arm"){
 				//lazer beam
 				tempInt = 1;
 				tempdamage=20;
-				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage);
+				armfire(p_data,a_state,testBullVec,a_rot,a_angle,tempInt,tempdamage,resMan,sFrame);
 			}
 			else break;
 		}
@@ -112,6 +112,8 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 				if(p_data.getGrounded()==false&&p_data.getJumpCount()<2){
 					p_data.setVelocityY(jumpHeight);
 					p_data.incrementJumpCount();
+					soundeffect = resMan.loadSound("Jump.mp3",1,5,1);
+					sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
 					//if(p_data.getJumpCount()==2){
 						//p_data.setJumpCount(0);
 					//}
@@ -127,6 +129,8 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 				tempfloat = a_state.lY;
 				move.y = tempfloat*5.0f;
 				p_data.setVelocityXZ(move);
+				soundeffect = resMan.loadSound("Jump.mp3",1,5,1);
+				sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
 			}
 			else if (part[partNumber-1].getPartName()=="Bear Leg"){
 				//
@@ -178,7 +182,7 @@ void Limbase::CaseAction(int partNumber,Player& p_data, inputState& a_state,Bull
 
 }
 
-void Limbase::armfire(Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle,int a_type,int a_damage){
+void Limbase::armfire(Player& p_data, inputState& a_state,BulletVec &testBullVec,float& a_rot,float& a_angle,int a_type,int a_damage,ResourceManager& resMan,SoundFrame* sFrame){
 	if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
 		//D3DXVECTOR3 tempvec = p_data.getPos();
 		//tempvec.y += 1.5f;
@@ -199,4 +203,24 @@ void Limbase::armfire(Player& p_data, inputState& a_state,BulletVec &testBullVec
 		testBullVec.ActivateABullet(D3DXVECTOR3(tempvec.x + p_data.getPos().x, 1.4f + p_data.getPos().y,
 			tempvec.y + p_data.getPos().z),D3DXVECTOR3(0,0,-BulletSpeed),a_type,a_rot,a_angle,RangedDefaultLifeSpan,a_damage);
 		}
+	if(a_type==0){
+		//sFrame.setListenProp(0,p_data.getEffectprop());
+		soundeffect = resMan.loadSound("Pheonix.mp3",1,5,1);
+		sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
+	}
+	else if(a_type==1){
+		//sFrame.setListenProp(0,p_data.getEffectprop());
+		soundeffect = resMan.loadSound("Turtle.mp3",1,5,1);
+		sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
+	}
+	else if(a_type==2){
+		//sFrame.setListenProp(0,p_data.getEffectprop());
+		soundeffect = resMan.loadSound("Tiger.mp3",1,5,1);
+		sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
+	}
+	else if(a_type==3){
+		//sFrame.setListenProp(0,p_data.getEffectprop());
+		soundeffect = resMan.loadSound("Bear.mp3",1,5,1);
+		sFrame->Play(*soundeffect,p_data.getPos().x,p_data.getPos().y,p_data.getPos().z,p_data.getVelocityXZ().x,p_data.getVelocityY(),p_data.getVelocityXZ().y);
+	}
 }

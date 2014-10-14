@@ -39,6 +39,7 @@ private:
 	HUD hud[4];
 	GameMode gameRules;
 	inputState iState[MAXPLAYERS];
+	MusicStruct *backMusic;
 	int players;
 	int pNum[5];
 	//time

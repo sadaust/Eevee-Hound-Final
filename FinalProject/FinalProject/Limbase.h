@@ -7,6 +7,8 @@
 #include "DXFrame.h"
 #include "InputHandler.h"
 #include "Bullet.h"
+#include "SoundFrame.h"
+#include "ResourceManager.h"
 //#include "Player.h"
 
 class Player;
@@ -19,14 +21,15 @@ class BulletVec;
 class Limbase {
 private:
 	Limb part[NUMPARTS];
-	bool bearactive;
+	bool bearactive;;
+	SoundStruct *soundeffect;
 public:
 	bool activebear(){return bearactive;}
 	void toggleBear(bool a_bear);
 	Limbase();
 	Limb getPartRan();
 	Limb getPart(int);
-	void CaseAction(int,Player&,inputState&,BulletVec&,float& a_rot,float& a_angle);
-	void armfire(Player&,inputState&,BulletVec&,float& a_rot,float& a_angle,int a_type,int a_damage);
+	void CaseAction(int,Player&,inputState&,BulletVec&,float& a_rot,float& a_angle,ResourceManager& resMan,SoundFrame* sFrame);
+	void armfire(Player&,inputState&,BulletVec&,float& a_rot,float& a_angle,int a_type,int a_damage,ResourceManager& resMan,SoundFrame* sFrame);
 	~Limbase();
 };
