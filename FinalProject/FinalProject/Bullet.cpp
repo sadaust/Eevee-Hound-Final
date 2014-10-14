@@ -30,7 +30,7 @@ void Bullet::Update(double a_dt) {
 	pos.y = prospectivePos.y;
 	pos.z = prospectivePos.z;
 	if(a_bultype==boulder){
-		prospectivePos.y -= gravity*a_dt*0.4f;
+		prospectivePos.y -= a_dt*4.55f;
 	}
 	prospectivePos.x += velocity.x*a_dt;
 	prospectivePos.y += velocity.y*a_dt;
@@ -140,7 +140,7 @@ void BulletVec::Init(ResourceManager& resMan) {
 	b_render[1].primInfo = resMan.loadPrim("LazerBeamz",0.25,0.25,10);
 	//rock bullet
 	b_render[2]=b_render[0];
-	b_render[2].primInfo = resMan.loadPrim("RockSolid",2.5,2.5,2.5);
+	b_render[2].primInfo = resMan.loadPrim("RockSolid",1.5,1.5,1.5);
 	//grab bullet
 	b_render[3]=b_render[0];
 	b_render[3].primInfo = resMan.loadPrim("Grabby",0.5,0.5,0.5);
