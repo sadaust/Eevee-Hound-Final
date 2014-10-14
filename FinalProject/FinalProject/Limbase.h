@@ -27,5 +27,6 @@ public:
 	Limb getPartRan();
 	Limb getPart(int);
 	void CaseAction(int,Player&,inputState&,BulletVec&,float& a_rot,float& a_angle);
+	void armfire(Player&,inputState&,BulletVec&,float& a_rot,float& a_angle);
 	//~Limbase();
 };

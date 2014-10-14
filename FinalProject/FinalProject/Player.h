@@ -93,6 +93,7 @@ public:
 	void setVelocityY(float a_velocityY);
 	void toggleGrounded(bool a_ground);
 	void toggleRarm(bool right_a);
+	bool getRarm(){return R_arm;}
 	void togglecheckItem(bool item);
 	bool getGrounded();
 	bool getcheckItem();

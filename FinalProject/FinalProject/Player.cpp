@@ -143,6 +143,14 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 			//////////PLAYER CONTROLS////////////
 			/////////////////////////////////////
 
+			//selecting item for left and right arm
+			if(a_state.buttons[binds::leftSelect]&&!a_state.buttonLast[binds::leftSelect]) {
+				toggleRarm(false);
+			}
+			if(a_state.buttons[binds::rightSelect]&&!a_state.buttonLast[binds::rightSelect]) {
+				toggleRarm(true);
+			}
+
 			// need to deal with object for bullet 
 			//left attack Left Trigger
 			if(a_state.buttons[binds::leftAttack]&&!a_state.buttonLast[binds::leftAttack]) { 
@@ -461,6 +469,9 @@ bool Player::isAlive() {
 	return alive;
 }
 
+void Player::toggleRarm(bool right_a){
+	R_arm=right_a;
+}
 
 void Player::addLimb(Limb part){
 	if(part.getPartType()==head){
