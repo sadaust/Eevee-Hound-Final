@@ -40,6 +40,7 @@ private:
 	GameMode gameRules;
 	inputState iState[MAXPLAYERS];
 	int players;
+	int pNum[5];
 	//time
 	double dt;
 	int updatesPerSec;
