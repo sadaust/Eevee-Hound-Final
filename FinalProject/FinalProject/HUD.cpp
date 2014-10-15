@@ -41,7 +41,7 @@ void HUD::drawHud(Player& player, DXFrame& frame,GameMode& gMode,int camNum) {
 
 	ss.str("");
 	timer.rec.top = 0.01;
-	timer.rec.bottom = 0.05;
+	timer.rec.bottom = 0.08;
 	timer.rec.left = 0.49;
 	timer.rec.right = 0.51;
 	if(gMode.getState() != battle && gMode.getState()!= transition) {

@@ -4,7 +4,7 @@
 #define W_SCREEN_WIDTH 800
 #define W_SCREEN_HEIGHT 600
 
-#define WINDOW_TITLE "DX Base"
+#define WINDOW_TITLE "ELimbination"
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 int					g_windowCount;  //keeps track of how many windows we have
