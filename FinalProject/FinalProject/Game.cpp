@@ -7,6 +7,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	resMan.changeDevice(&DXVid);
 	resMan.changeDevice(&sFrame);
 	input.init(hWnd,hInst);
+
 	//init small logo for filling 4th inactive screen
 	smallLogo.image = resMan.loadTexture("el.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,255,255),0);
 	
@@ -16,6 +17,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	smallLogo.posX = 0.2f;
 	smallLogo.posY = 0.1f;
 	//init full logo for filling screen when no players
+
 	logo.image = resMan.loadTexture("Elimbination.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,255,255),0);
 	
 	logo.scalX = 0.3f;
@@ -115,6 +117,8 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();
 	DXVid.displayFPS(false);
+	
+	
 }
 
 bool Game::update() {
@@ -211,7 +215,7 @@ void Game::draw() {
 		m_Light.Phi = D3DXToRadian(gameRules.getLight());
 		m_Light.Theta = D3DXToRadian(gameRules.getLight()+20);
 		DXVid.setLight(0,&m_Light);
-		playVec.Render(DXVid);	// draws players
+		playVec.Render(DXVid,resMan);	// draws players
 		bullVec.Render(DXVid);	// draws bullets
 		mapSys.render(DXVid);	// draws map
 		itemVec.Render(DXVid);  // draws items

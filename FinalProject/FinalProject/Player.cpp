@@ -269,13 +269,16 @@ void Player::Update(inputState& a_state, double a_dt, Limbase &part_list,BulletV
 }
 
 
-void Player::Render(DXFrame& DXVid) {
+void Player::Render(DXFrame& DXVid,ResourceManager &resMan) {
 	RenInfo tempRen;
 	D3DXMATRIX TransMat, RotMat, locTransMat;
 	tempRen.type = primitive;
 	tempRen.locCamNum = 0;
+	int tempint = 0;
 
 	// body
+	tempint=Limbs.getBody();
+	settexture(tempint,playerPrims[0],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -287,6 +290,8 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[0];
 	DXVid.addRen(tempRen);
 	// head
+	tempint=Limbs.getHead();
+	settexture(tempint,playerPrims[1],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -298,6 +303,8 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[1];
 	DXVid.addRen(tempRen);
 	// left arm
+	tempint=Limbs.getLarm();
+	settexture(tempint,playerPrims[2],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -311,6 +318,8 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[2];
 	DXVid.addRen(tempRen);
 	// right arm
+	tempint=Limbs.getRarm();
+	settexture(tempint,playerPrims[3],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -322,6 +331,8 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[3];
 	DXVid.addRen(tempRen);
 	// left leg
+	tempint=Limbs.getLeg();
+	settexture(tempint,playerPrims[4],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -333,6 +344,8 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[4];
 	DXVid.addRen(tempRen);
 	// right leg
+	tempint=Limbs.getLeg();
+	settexture(tempint,playerPrims[5],resMan);
 	D3DXMatrixIdentity(&TransMat);
 	D3DXMatrixIdentity(&RotMat);
 	D3DXMatrixIdentity(&locTransMat);
@@ -344,6 +357,30 @@ void Player::Render(DXFrame& DXVid) {
 	tempRen.asset = &playerPrims[5];
 	DXVid.addRen(tempRen);
 
+}
+void Player::settexture(int part,PrimObj &texture,ResourceManager &resMan){
+//tech fair jankyness to fix properly later
+//	2 turtle arm
+//	6 bear arm
+//	10 tiger arm
+//	11 tiger leg
+//	14  pheonix arm
+//	15 pheonix leg
+	if(part==2){
+		texture.Tex = resMan.loadTexture("Turtle.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	}
+	else if(part==6){
+		texture.Tex = resMan.loadTexture("Bear.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	}
+	else if(part==10||part==11){
+		texture.Tex = resMan.loadTexture("Tiger.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	}
+	else if(part==14||part==15){
+		texture.Tex = resMan.loadTexture("Pheonix.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	}
+	else{
+		texture.Tex = resMan.loadTexture("Default.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,0,255),0);
+	}
 }
 
 
@@ -662,11 +699,11 @@ void PlayerVec::Update(inputState* a_input, double a_dt, Limbase part_list,Bulle
 }
 
 
-void PlayerVec::Render(DXFrame& DXVid) {
+void PlayerVec::Render(DXFrame& DXVid,ResourceManager &resMan) {
 
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(active[i]&&players[i].isAlive()) {
-			players[i].Render(DXVid);
+			players[i].Render(DXVid,resMan);
 		}
 	}
 }
