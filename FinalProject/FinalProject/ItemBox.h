@@ -10,7 +10,11 @@
 class Limbase;
 class Player;
 
-const int MAXITEMS = 30;
+const int MAXITEMS = 100;
+const int numStartingItems = 20;
+const int time2Item = 5;
+
+
 
 class ItemBox{
 private:

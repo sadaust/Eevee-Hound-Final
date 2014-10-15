@@ -107,8 +107,8 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 			playVec.ActivateAPlayer(mapSys);
 		}
 	}*/
-
-	itemVec.ActivateAItem(mapSys,partList);
+	for(int i = 0; i < numStartingItems; ++i)
+		itemVec.ActivateAItem(mapSys,partList);
 
 
 	/////////////////////////////////////////
@@ -117,8 +117,8 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();
 	DXVid.displayFPS(false);
-	
-	
+	lastTime4Timer = timeGetTime();
+	timer = time2Item;
 }
 
 bool Game::update() {
@@ -128,6 +128,18 @@ bool Game::update() {
 	cTime = timeGetTime();
 	
 	input.update();
+
+
+	if(cTime >= lastTime4Timer+1000) {
+		--timer;
+		lastTime4Timer = timeGetTime();
+	}
+	if(timer <= 0) {
+		timer = time2Item;
+		itemVec.ActivateAItem(mapSys, partList);
+	}
+
+
 
 	if(cTime>=tTime) {
 		dt = (float)(cTime-lTime);

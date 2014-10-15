@@ -48,7 +48,8 @@ private:
 	//time
 	double dt;
 	int updatesPerSec;
-	DWORD cTime,lTime,tTime;
+	DWORD cTime,lTime,tTime, lastTime4Timer;
+	int timer;
 public:
 	bool devLost();
 	void resetDev(HWND& hWnd,HINSTANCE& hInsts);
