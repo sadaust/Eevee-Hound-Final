@@ -329,7 +329,7 @@ void DXFrame::Render() {
 	rect.bottom -= rect.top;
 	rect.top = 0;
 
-	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(0.2f, 0.2f, 0.5f, 1.0f), 1.0f, 0))) {
+	if(D3D_OK==(m_pD3DDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0))) {
 		if(SUCCEEDED(m_pD3DDevice->BeginScene())) {
 			D3DXMATRIX TransMat;
 			RenInfo* tempRen;
@@ -340,7 +340,7 @@ void DXFrame::Render() {
 			D3DXMATRIX scale,loc;
 			for(int i = 0;i<=numViewPorts;++i) {
 				//set viewport
-				if(m_bSplitScreen&&i!= 4)
+				if(m_bSplitScreen&&i!= numViewPorts)
 					m_pD3DDevice->SetViewport(&viewPorts[i].viewPort);
 				else
 					m_pD3DDevice->SetViewport(&defaultView);

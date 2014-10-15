@@ -128,6 +128,8 @@
     <Text Include="testMap.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="el.png" />
+    <Image Include="Elimbination.png" />
     <Image Include="Grass.png" />
     <Image Include="GrassFloor.png" />
     <Image Include="uvtest.png" />

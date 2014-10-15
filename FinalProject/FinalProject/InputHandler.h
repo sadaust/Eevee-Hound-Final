@@ -27,6 +27,7 @@ namespace binds {
 		sprint,
 		leftSelect,
 		rightSelect,
+		leave,
 		last
 	};
 };

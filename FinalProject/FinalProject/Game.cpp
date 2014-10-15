@@ -7,7 +7,22 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	resMan.changeDevice(&DXVid);
 	resMan.changeDevice(&sFrame);
 	input.init(hWnd,hInst);
+	//init small logo for filling 4th inactive screen
+	smallLogo.image = resMan.loadTexture("el.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,255,255),0);
+	
+	smallLogo.scalX = 0.5f;
+	smallLogo.scalY = 0.5f;
 
+	smallLogo.posX = 0.2f;
+	smallLogo.posY = 0.1f;
+	//init full logo for filling screen when no players
+	logo.image = resMan.loadTexture("Elimbination.png",0,0,0,0,D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_DEFAULT,D3DX_DEFAULT,D3DCOLOR_XRGB(255,255,255),0);
+	
+	logo.scalX = 0.3f;
+	logo.scalY = 0.3f;
+
+	logo.posX = 0.1f;
+	logo.posY = 0.2f;
 	// Ambient light color emitted from this light
 	m_Light.Ambient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);
 	// Diffuse light color emitted from this light
@@ -62,6 +77,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	camera[1] = camera[0];
 	camera[2] = camera[0];
 	camera[3] = camera[0];
+	defCam = camera[0];
 
 	//tempProp.pos.x = temp.cam_pos.x;
 	//tempProp.pos.y = temp.cam_pos.y;
@@ -81,20 +97,20 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	for(int i = 0; i < 5; ++i) {
 		pNum[i] = -1;
 	}
-
+	/*
 	for(int i = 0; i < 5; ++i) {
 		if(input.getState(i,iState[i])&&players<4) {
 			pNum[i] = players;
 			++players;
 			playVec.ActivateAPlayer(mapSys);
 		}
-	}
+	}*/
 
 	itemVec.ActivateAItem(mapSys,partList);
 
 
 	/////////////////////////////////////////
-	DXVid.setViewCount(2);
+	DXVid.setViewCount(players);
 	DXVid.toggleSS();
 	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();
@@ -125,7 +141,7 @@ bool Game::update() {
 			//set inputs
 			for(int i = 0; i < 5; ++i) {
 				if(pNum[i] >= 0) {
-					if(!input.getState(i,iState[pNum[i]])) {
+					if(!input.getState(i,iState[pNum[i]])||iState[pNum[i]].buttons[binds::leave]) {
 						playVec.DeactivateAPlayer(pNum[i]);
 						pNum[i] = -1;
 						--players;
@@ -159,22 +175,34 @@ bool Game::update() {
 
 void Game::draw() {
 	int renNum = 0;
+	RenInfo tempRen;
 	if(!DXVid.rendererLost()) {
 		DXVid.clearRen();
 		//add render code
 		switch(players) {
 		case 0:
+			tempRen.asset = &logo;
+			tempRen.type = sprite;
+			tempRen.locCamNum = 1;
+			DXVid.setCam(1,&defCam);
+			DXVid.addRen(tempRen);
 		case 1:
 			DXVid.setViewCount(1);
+
 			break;
 		case 2:
 			DXVid.setViewCount(2);
 			break;
 		case 3:
+			tempRen.asset = &smallLogo;
+			tempRen.type = sprite;
+			tempRen.locCamNum = 4;
+			DXVid.addRen(tempRen);
 		case 4:
 			DXVid.setViewCount(4);
 			break;
 		}
+		if(players > 0) {
 		m_Light.Phi = D3DXToRadian(gameRules.getLight());
 		m_Light.Theta = D3DXToRadian(gameRules.getLight()+20);
 		DXVid.setLight(0,&m_Light);
@@ -191,6 +219,7 @@ void Game::draw() {
 				hud[renNum].drawHud(playVec.GetPlayer(pNum[i]),DXVid,gameRules,renNum+1);
 				++renNum;
 			}
+		}
 		}
 		DXVid.Render();
 	}

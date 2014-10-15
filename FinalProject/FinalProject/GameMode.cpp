@@ -95,7 +95,7 @@ double GameMode::getTime() {
 
 void GameMode::Start() {
 	curState = warmUp;
-	timeLeft = warmUpMins*30;
+	timeLeft = warmUpMins*60;
 }
 
 int GameMode::getAliveCount() {

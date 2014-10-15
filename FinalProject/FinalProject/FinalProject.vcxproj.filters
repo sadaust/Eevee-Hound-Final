@@ -156,5 +156,11 @@
     <Image Include="GrassFloor.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="el.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Elimbination.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

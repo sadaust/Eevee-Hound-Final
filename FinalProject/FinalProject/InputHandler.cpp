@@ -24,6 +24,7 @@ InputHandler::InputHandler() {
 	setBind(binds::sprint,DIK_LSHIFT);
 	setBind(binds::leftSelect,DIK_Z);
 	setBind(binds::rightSelect,DIK_X);
+	setBind(binds::leave,DIK_BACKSPACE);
 	//set sensitivity
 	for(int i = 0;i<4;++i) {
 		sens[i].xSens = 1;
@@ -191,7 +192,9 @@ bool InputHandler::getState(int controllerNum,inputState& out) {
 			//get left select
 			out.buttons[binds::leftSelect] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_DPAD_LEFT;
 			//get right select
-			out.buttons[binds::rightSelect] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_DPAD_RIGHT; 
+			out.buttons[binds::rightSelect] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_DPAD_RIGHT;
+			//get leave
+			out.buttons[binds::leave] = xInputState.Gamepad.wButtons&XINPUT_GAMEPAD_BACK;
 			state[controllerNum] = out;
 			return true;
 		}

@@ -36,10 +36,13 @@ private:
 	Map mapSys;
 	PhysicsSystem physSys;
 	cam camera[4];
+	cam defCam;
 	HUD hud[4];
 	GameMode gameRules;
 	inputState iState[MAXPLAYERS];
 	MusicStruct *backMusic;
+	SpriteObj logo;
+	SpriteObj smallLogo;
 	int players;
 	int pNum[5];
 	//time
