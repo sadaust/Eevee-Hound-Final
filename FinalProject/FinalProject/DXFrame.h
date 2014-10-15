@@ -81,6 +81,7 @@ public:
 	void Render();
 	void toggleSS();
 	void setSSvSplit(bool);
+	void displayFPS(bool show) {showFPS = show;}
 	void resetDev(HWND& hWnd,HINSTANCE& hInsts);
 	void CreateUVCube(PrimStruct& obj,float height,float width,float depth);
 	void loadXFile(LPCSTR name,ModelStruct& obj);

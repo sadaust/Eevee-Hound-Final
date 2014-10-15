@@ -54,7 +54,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	lTime = cTime;
 	tTime = cTime;
 	dt = 0;
-	updatesPerSec = 600;
+	updatesPerSec = 100;
 
 	mapSys.LoadMap("TestMap.txt",resMan);
 	bullVec.Init(resMan);
@@ -114,6 +114,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	DXVid.toggleSS();
 	gameRules.intit(&mapSys,&DXVid,1,1);
 	gameRules.Start();
+	DXVid.displayFPS(false);
 }
 
 bool Game::update() {
@@ -145,6 +146,8 @@ bool Game::update() {
 						playVec.DeactivateAPlayer(pNum[i]);
 						pNum[i] = -1;
 						--players;
+						if(players<=0)
+							gameRules.Restart(playVec);
 					}
 				} else if(players<4&&input.getState(i,iTemp)){
 					if(iTemp.buttons[binds::pause]) {
@@ -160,11 +163,13 @@ bool Game::update() {
 					}
 				}
 			}
+			if(players > 0) {
 			playVec.Update(iState, dt, partList, bullVec,itemVec,resMan,&sFrame);
 			bullVec.Update(dt);
 			itemVec.Update(iState,dt,partList);
 			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
 			gameRules.update(dt,playVec);
+			}
 			sFrame.update();
 		}
 		draw();
