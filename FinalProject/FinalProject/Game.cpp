@@ -54,7 +54,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	lTime = cTime;
 	tTime = cTime;
 	dt = 0;
-	updatesPerSec = 100;
+	updatesPerSec = 600;
 
 	mapSys.LoadMap("TestMap.txt",resMan);
 	bullVec.Init(resMan);
