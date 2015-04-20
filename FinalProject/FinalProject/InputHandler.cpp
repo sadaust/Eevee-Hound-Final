@@ -27,8 +27,8 @@ InputHandler::InputHandler() {
 	setBind(binds::leave,DIK_BACKSPACE);
 	//set sensitivity
 	for(int i = 0;i<4;++i) {
-		sens[i].xSens = 1;
-		sens[i].ySens = 1;
+		sens[i].xSens = 2;
+		sens[i].ySens = 2;
 	}
 	sens[4].xSens = 1;
 	sens[4].ySens = -1;

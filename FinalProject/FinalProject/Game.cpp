@@ -1,5 +1,7 @@
 #include "Game.h"
 #include <ctime>
+#define camOffSet 1.0f
+
 void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	srand(timeGetTime());
 	DXVid.init(hWnd,hInst,bWindowed);
@@ -114,7 +116,7 @@ void Game::init(HWND& hWnd, HINSTANCE& hInst,bool bWindowed) {
 	/////////////////////////////////////////
 	DXVid.setViewCount(players);
 	DXVid.toggleSS();
-	gameRules.intit(&mapSys,&DXVid,1,1);
+	gameRules.intit(&mapSys,&DXVid,1,5);
 	gameRules.Start();
 	DXVid.displayFPS(false);
 	lastTime4Timer = timeGetTime();
@@ -145,6 +147,7 @@ bool Game::update() {
 		dt = (float)(cTime-lTime);
 		dt /= CLOCKS_PER_SEC;
 		lTime = cTime;
+		lPlayers = players;
 		if(curState == mainMenu) {
 			//main menu
 		} else if(curState == client) {
@@ -158,37 +161,45 @@ bool Game::update() {
 			//set inputs
 			for(int i = 0; i < 5; ++i) {
 				if(pNum[i] >= 0) {
+					//player quit
 					if(!input.getState(i,iState[pNum[i]])||iState[pNum[i]].buttons[binds::leave]) {
 						playVec.DeactivateAPlayer(pNum[i]);
 						pNum[i] = -1;
 						--players;
-						if(players<=0)
+						if(players<=0) {
 							gameRules.Restart(playVec);
-					}
-				} else if(players<4&&input.getState(i,iTemp)){
-					if(iTemp.buttons[binds::pause]) {
-						for(int z = 0; z < 5; ++z) {
-							if(pNum[z] == firstCon) {
-								++firstCon;
-								z = 0;
+							for(int i =0; i<MAXITEMS;++i) {
+								itemVec.DeactivateAItem(i);
 							}
 						}
-						pNum[i] = firstCon;
-						playVec.ActivateAPlayer(mapSys);
+					}
+				} else if(players<4&&input.getState(i,iTemp)){
+					//player join
+					if(iTemp.buttons[binds::pause]) {
+						pNum[i] = playVec.ActivateAPlayer(mapSys);
 						++players;
 					}
 				}
+				/*if(i == 4&&pNum[i] >=0) {
+					iState[pNum[i]].rX/=dt;
+					iState[pNum[i]].rY/=dt;
+				}*/
 			}
+
+			//update if players exist
 			if(players > 0) {
-			playVec.Update(iState, dt, partList, bullVec,itemVec,resMan,&sFrame);
-			bullVec.Update(dt);
-			itemVec.Update(iState,dt,partList);
-			physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
-			gameRules.update(dt,playVec);
+				playVec.Update(iState, dt, partList, bullVec,itemVec,resMan,&sFrame);
+				bullVec.Update(dt);
+				itemVec.Update(iState,dt,partList);
+				physSys.DoCollisions(playVec,bullVec,mapSys, itemVec);
+				gameRules.update(dt,playVec);
 			}
+			//update audio
 			sFrame.update();
 		}
+		//render
 		draw();
+		//set next update time
 		tTime = cTime+(CLOCKS_PER_SEC/updatesPerSec);
 	}
 	return true;
@@ -208,11 +219,14 @@ void Game::draw() {
 			DXVid.setCam(1,&defCam);
 			DXVid.addRen(tempRen);
 		case 1:
-			DXVid.setViewCount(1);
-
+			if(players != lPlayers) {
+				DXVid.setViewCount(1);
+			}
 			break;
 		case 2:
-			DXVid.setViewCount(2);
+			if(players != lPlayers) {
+				DXVid.setViewCount(2);
+			}
 			break;
 		case 3:
 			tempRen.asset = &smallLogo;
@@ -220,27 +234,29 @@ void Game::draw() {
 			tempRen.locCamNum = 4;
 			DXVid.addRen(tempRen);
 		case 4:
-			DXVid.setViewCount(4);
+			if(players != lPlayers) {
+				DXVid.setViewCount(4);
+			}
 			break;
 		}
 		if(players > 0) {
-		m_Light.Phi = D3DXToRadian(gameRules.getLight());
-		m_Light.Theta = D3DXToRadian(gameRules.getLight()+20);
-		DXVid.setLight(0,&m_Light);
-		playVec.Render(DXVid,resMan);	// draws players
-		bullVec.Render(DXVid);	// draws bullets
-		mapSys.render(DXVid);	// draws map
-		itemVec.Render(DXVid);  // draws items
-		for(int i = 0; i < 5; ++i) {
-			if(pNum[i] >= 0) {
-				camera[renNum].cam_look_pos = playVec.GetPlayer(pNum[i]).getPos();
-				camera[renNum].cam_look_pos.y = playVec.GetPlayer(pNum[i]).getPos().y+1;
-				DXVid.rotateCam(camera[renNum], 2,playVec.GetPlayer(pNum[i]).getFacing(),playVec.GetPlayer(pNum[i]).getAngle());
-				DXVid.setCam(renNum+1,&camera[renNum]);
-				hud[renNum].drawHud(playVec.GetPlayer(pNum[i]),DXVid,gameRules,renNum+1);
-				++renNum;
+			m_Light.Phi = D3DXToRadian(gameRules.getLight());
+			m_Light.Theta = D3DXToRadian(gameRules.getLight()+20);
+			DXVid.setLight(0,&m_Light);
+			playVec.Render(DXVid,resMan);	// draws players
+			bullVec.Render(DXVid);	// draws bullets
+			mapSys.render(DXVid);	// draws map
+			itemVec.Render(DXVid);  // draws items
+			for(int i = 0; i < 5; ++i) {
+				if(pNum[i] >= 0) {
+					camera[renNum].cam_look_pos = playVec.GetPlayer(pNum[i]).getPos();
+					camera[renNum].cam_look_pos.y = playVec.GetPlayer(pNum[i]).getPos().y+camOffSet;
+					DXVid.rotateCam(camera[renNum], 2,playVec.GetPlayer(pNum[i]).getFacing(),playVec.GetPlayer(pNum[i]).getAngle());
+					DXVid.setCam(renNum+1,&camera[renNum]);
+					hud[renNum].drawHud(playVec.GetPlayer(pNum[i]),DXVid,gameRules,renNum+1);
+					++renNum;
+				}
 			}
-		}
 		}
 		DXVid.Render();
 	}

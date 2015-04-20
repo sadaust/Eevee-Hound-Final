@@ -1,8 +1,8 @@
 #include <Windows.h>
 #include "Game.h"
 //windowed res
-#define W_SCREEN_WIDTH 800
-#define W_SCREEN_HEIGHT 600
+#define W_SCREEN_WIDTH 1280
+#define W_SCREEN_HEIGHT 720
 
 #define WINDOW_TITLE "ELimbination"
 int SCREEN_WIDTH;

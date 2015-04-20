@@ -714,16 +714,14 @@ bool PlayerVec::GetActive(int a_index) {
 }
 
 
-void PlayerVec::ActivateAPlayer(Map& a_map) {
+int PlayerVec::ActivateAPlayer(Map& a_map) {
 	int random = rand() % a_map.numSpawn();
 	for(int i = 0; i < MAXPLAYERS; ++i) {
 		if(!active[i]) {
-
-
 			players[i].Init(a_map.GetSpawn(random),playerDefaultPrims,sFrame);
 			active[i] = true;
 			++numPlayers;
-			return;
+			return i;
 		}
 	}
 }

@@ -43,7 +43,8 @@ private:
 	MusicStruct *backMusic;
 	SpriteObj logo;
 	SpriteObj smallLogo;
-	int players;
+	//keep track of number of players
+	int players, lPlayers;
 	int pNum[5];
 	//time
 	double dt;
